@@ -1,0 +1,56 @@
+.spinner {
+    display: none;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: auto auto;
+    z-index: 10000;
+}
+
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.iziToast {
+    border-radius: 8px !important;
+    box-shadow: none !important;
+}
+
+.iziToast:after {
+    box-shadow: none !important;
+}
+
+.iziToast-message {
+    font-family: Cambria, sans-serif !important;
+    font-size: 1rem !important;
+}
+
+.iziToast-color-red .iziToast-message {
+    color: white !important;
+}
+
+.iziToast.iziToast-color-red {
+    background: #ef233c !important;
+}
+
+.iziToast-color-red > .iziToast-body {
+    margin: unset !important;
+}
+
+.iziToast-color-red > .iziToast-body .iziToast-icon.ico-error {
+    display: none;
+}
+
+.iziToast-progressbar {
+    display: none !important;
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Конструктор расписания</title>
+        <link rel="stylesheet" href="../styles/constructor.css">
+    </head>
+    <body>
+        <h1>Конструктор расписания</h1>
+        <form id="scheduleForm">
+            <div class="form-group">
+                <label for="days">Количество дней в неделе:</label>
+                <select id="days" name="days">
+                    <option value="5">5 (пятидневка)</option>
+                    <option value="6">6 (шестидневка)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="lessons">Максимальное количество уроков в день:</label>
+                <input type="number" id="lessons" name="lessons" value="6" min="1" max="10">
+            </div>
+            <div class="form-group">
+                <label for="language">Язык:</label>
+                <select id="language" name="language">
+                    <option value="ru">Русский</option>
+                    <option value="en">Английский</option>
+                </select>
+            </div>
+            <button type="submit" class="btn">Создать расписание</button>
+            <button type="button" class="btn" id="editSchedule">Изменить расписание</button>
+            <button type="button" class="btn" id="saveSchedule">Сохранить расписание</button>
+            <button type="button" class="btn" id="loadSavedSchedule">Загрузить расписание</button>
+            <div id="modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Выберите расписание</h2>
+                    <ul id="scheduleListModal"></ul>
+                </div>
+            </div>
+        </form>
+        <div id="tableContainer"></div>
+        <script src="../scripts/scripts.js"></script>
+    </body>
+</html>

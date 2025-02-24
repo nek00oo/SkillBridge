@@ -1,0 +1,359 @@
+:root {
+    --font-family: 'Inter', sans-serif;
+    --color-dark-blue: #2b2d42;
+    --color-gray-blue: #8d99ae;
+    --color-light-gray: #edf2f4;
+    --color-red: #ef233c;
+    --color-dark-red: #d90429;
+}
+
+
+body {
+    font-family: var(--font-family), sans-serif;
+    background-color: var(--color-light-gray);
+    min-height: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Profile */
+.profile-section {
+    max-width: 1400px;
+    margin: 1rem auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+.profile__header {
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background-color: var(--color-dark-blue);
+    color: var(--color-light-gray);
+    position: relative;
+}
+
+.profile__image-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    flex-shrink: 0;
+}
+
+.profile__image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--color-light-gray);
+}
+
+.profile__info {
+    flex-grow: 1;
+}
+
+.profile__name-text {
+    font-size: 1.5rem;
+    color: var(--color-light-gray);
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.profile__age-text {
+    color: var(--color-gray-blue);
+}
+
+.profile__edit-btn {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background-color: var(--color-red);
+    color: white;
+    width: 140px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.profile__edit-btn:hover {
+    background-color: var(--color-dark-red);
+    transform: scale(1.1);
+}
+
+.edit-btn__penImage {
+    margin-left: 8px;
+    width: 20px;
+    height: 20px;
+}
+
+/* Grades */
+.grades {
+    padding: 2rem;
+}
+
+.grades__title {
+    color: var(--color-dark-blue);
+    margin-bottom: 1.5rem;
+}
+
+.subjects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Subject */
+.subject {
+    background-color: var(--color-light-gray);
+    padding: 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.subject:hover {
+    transform: translateY(-2px);
+}
+
+.subject__title {
+    color: var(--color-dark-blue);
+    margin-bottom: 1rem;
+}
+
+.subject__grades {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.subject__grade {
+    background-color: white;
+    color: var(--color-dark-blue);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+.subject__progress {
+    height: 8px;
+    background-color: white;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.subject__progress-bar {
+    height: 100%;
+    background-color: var(--color-red);
+    border-radius: 4px;
+}
+
+.subject__status {
+    color: var(--color-gray-blue);
+    font-size: 0.9rem;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal__content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-gray-blue);
+    background: none;
+    border: none;
+    padding: 0.5rem;
+}
+
+.modal__title {
+    color: var(--color-dark-blue);
+    margin-bottom: 1.5rem;
+}
+
+.modal__body {
+    margin-top: 1.5rem;
+}
+
+.modal__section {
+    margin-bottom: 2rem;
+}
+
+.modal__subtitle {
+    color: var(--color-dark-blue);
+    margin-bottom: 1rem;
+}
+
+.modal__chart {
+    height: 200px;
+    background-color: var(--color-light-gray);
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.modal__tasks {
+    list-style: none;
+    margin-top: 1rem;
+}
+
+.modal__tasks li {
+    padding: 1rem;
+    background-color: var(--color-light-gray);
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+}
+
+/* Edit Profile Modal */
+.edit-profile {
+    display: grid;
+    gap: 2rem;
+}
+
+.edit-profile__image {
+    text-align: center;
+}
+
+.edit-profile__image-preview {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid var(--color-light-gray);
+}
+
+.edit-profile__image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.edit-profile__image-input {
+    display: none;
+}
+
+.edit-profile__image-label {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: var(--color-dark-blue);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.edit-profile__image-label:hover {
+    background-color: var(--color-red);
+}
+
+.edit-profile__form {
+    display: grid;
+    gap: 1rem;
+}
+
+.edit-profile__field {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.edit-profile__label {
+    color: var(--color-dark-blue);
+    font-weight: bold;
+}
+
+.edit-profile__input {
+    padding: 0.5rem;
+    border: 1px solid var(--color-gray-blue);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.edit-profile__submit {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background-color: var(--color-red);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.edit-profile__submit:hover {
+    background-color: var(--color-dark-red);
+}
+
+@media (max-width: 560px) {
+    .profile__name-text {
+        font-size: 20px;
+    }
+
+    .profile__edit-btn {
+        width: 40px;
+        border-radius: 50%;
+    }
+
+    .profile__edit-btn span {
+        display: none;
+    }
+
+    .profile__edit-btn svg {
+        margin: unset;
+    }
+}
+
+@media (max-width: 426px) {
+    .profile__header {
+        flex-direction: column;
+    }
+
+    .profile__info {
+        text-align: center;
+    }
+
+    .grades, .subject {
+        padding: 1rem;
+    }
+
+}
