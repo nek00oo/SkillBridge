@@ -1,5 +1,3 @@
-import iziToast from 'izitoast';
-
 const container = document.getElementById("container");
 const registerBtn = document.getElementById("sign-up");
 const loginBtn = document.getElementById("login");
@@ -38,7 +36,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
                 console.log('Login successful:', user);
                 localStorage.setItem('userData', JSON.stringify(user));
                 setTimeout(() => {
-                    window.location.href = '/src/pages/profile.html'
+                    window.location.href = '../pages/profile.html'
                 }, 800);
             } else {
                 iziToast.error({

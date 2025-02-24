@@ -47,7 +47,7 @@ window.addEventListener('load', function() {
         const userData = JSON.parse(userDataString);
         studentNameDisplay.textContent = userData.name;
         studentAgeDisplay.textContent = userData.age ? userData.age : '';
-        profileImage.src = userData.image ? userData.image : '../../public/default-avatar.png';
+        profileImage.src = userData.image ? userData.image : '../images/default-avatar.png';
     }
 
 });
@@ -69,7 +69,7 @@ document.querySelectorAll('.subject').forEach(subject => {
 });
 
 editModeBtn.addEventListener('click', () => {
-    imagePreview.src = profileImage.src || '../../public/default-avatar.png';
+    imagePreview.src = profileImage.src || '../images/default-avatar.png';
     studentName.value = studentNameDisplay.textContent.trim();
     studentAge.value = studentAgeDisplay.textContent.trim();
     editProfileModal.classList.remove('hidden');

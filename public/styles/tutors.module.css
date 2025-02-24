@@ -32,11 +32,13 @@ body {
     font-weight: 900;
     letter-spacing: -1px;
 }
+
 .header__left-panel {
     display: flex;
+    flex-grow: 1;
     column-gap: 20px;
     align-items: center;
-    justify-content: space-between;
+    justify-content: end;
 }
 
 .header__search-container {
@@ -100,7 +102,7 @@ main {
 .tutors-section__tutor-card {
     display: grid;
     grid-row: span 8;
-    grid-template-rows: subgrid ;
+    grid-template-rows: subgrid;
     background-color: white;
     border: 1px solid var(--color-light);
     border-radius: 12px;
