@@ -1,6 +1,8 @@
 :root {
+    --main_card-background-color: #2b2d42;
     --color-dark: #2b2d42;
     --color-gray: #8d99ae;
+    --header-text-color: #edf2f4;
     --color-light: #edf2f4;
     --color-red: #ef233c;
     --color-dark-red: #d90429;
@@ -66,8 +68,10 @@ input[type="text"]:focus {
 
 main {
     max-width: 1200px;
+    max-height: 2400px;
     margin: 3rem auto;
     padding: 0 2rem;
+    overflow-y: auto;
 }
 
 .filters {
@@ -186,6 +190,63 @@ main {
     transform: translateY(-2px);
 }
 
+.footer {
+    background: var(--main_card-background-color);
+    padding: 60px 0 40px;
+    color: var(--header-text-color);
+}
+
+.footer__content {
+    max-width: 90%;
+    margin: 0 auto;
+    display: grid;
+    gap: 40px;
+}
+
+.footer__logo {
+    width: 100px;
+    height: auto;
+}
+
+.footer__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 36px;
+
+}
+
+.footer__column h3 {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer__link {
+    color: var(--header-text-color);
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.footer__link:hover {
+    opacity: 1;
+}
+
+.footer__bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 40px;
+    padding-top: 20px;
+    text-align: center;
+    opacity: 0.8;
+    font-size: 14px;
+}
+
+
 @media (max-width: 768px) {
     .header__nav {
         flex-direction: column;
@@ -200,5 +261,9 @@ main {
     .filters {
         flex-direction: column;
         align-items: stretch;
+    }
+
+    .footer__grid {
+        column-gap: 60px;
     }
 }

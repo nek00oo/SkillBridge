@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
             password: e.target.password.value,
         };
 
-        const spinner = document.getElementById('spinner');
-        spinner.style.display = 'block';
+        const overlay = document.getElementById('overlay');
+        overlay.style.display = 'block';
 
         fetch('https://jsonplaceholder.typicode.com/users', {
             method: 'POST',
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('User registered:', data);
                 localStorage.setItem('userData', JSON.stringify(data));
                 setTimeout(() => {
-                    window.location.href = '../pages/profile.html'
+                    window.location.href = '../pages/profile.html';
                 }, 800);
             })
             .catch(error => {
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error registering user:', error);
             })
             .finally(() => {
-            spinner.style.display = 'none';
-        });
+                overlay.style.display = 'none'; // Скрываем затемнение и спиннер
+            });
     });
 });

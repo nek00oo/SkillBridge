@@ -20,7 +20,7 @@ body {
 
 /* Profile */
 .profile-section {
-    max-width: 1400px;
+    max-width: 95%;
     margin: 1rem auto;
     background-color: white;
     border-radius: 10px;
@@ -229,6 +229,11 @@ body {
     background-color: var(--color-light-gray);
     border-radius: 8px;
     margin-top: 1rem;
+}
+
+.profile-footer {
+    background-color: purple;
+    height: 200px;
 }
 
 .modal__tasks {

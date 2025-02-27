@@ -1,21 +1,21 @@
-const container = document.getElementById("container");
-const registerBtn = document.getElementById("sign-up");
-const loginBtn = document.getElementById("login");
+const container = document.getElementById('container');
+const registerBtn = document.getElementById('sign-up');
+const loginBtn = document.getElementById('login');
 
-registerBtn.addEventListener("click", () => {
-    container.classList.add("active");
-    console.log("click");
-})
+registerBtn.addEventListener('click', () => {
+    container.classList.add('active');
+    console.log('click');
+});
 
-loginBtn.addEventListener("click", () => {
-    container.classList.remove("active");
-})
+loginBtn.addEventListener('click', () => {
+    container.classList.remove('active');
+});
 
-document.getElementById('loginForm').addEventListener('submit', function (e) {
+document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    const spinner = document.getElementById('spinner');
-    spinner.style.display = 'block';
+    const spinner = document.getElementById('overlay');
+    overlay.style.display = 'block';
     console.log(spinner);
 
     const email = e.target.email.value;
@@ -25,8 +25,8 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
         .then(response => response.json())
         .then(users => {
             const user = users.find(u => u.email === email);
-            console.log("User:", user)
-            console.log(email)
+            console.log('User:', user);
+            console.log(email);
 
             if (user) {
                 iziToast.success({
@@ -36,7 +36,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
                 console.log('Login successful:', user);
                 localStorage.setItem('userData', JSON.stringify(user));
                 setTimeout(() => {
-                    window.location.href = '../pages/profile.html'
+                    window.location.href = '../pages/profile.html';
                 }, 800);
             } else {
                 iziToast.error({
@@ -53,7 +53,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
             console.error('Error login user:', error);
         })
         .finally(() => {
-        spinner.style.display = 'none';
-    });
+            overlay.style.display = 'none';
+        });
 
 });
