@@ -89,16 +89,8 @@ function createTutorCard(tutor) {
                 <p class="tutor-card__description">${tutor.description}</p>
                 <p class="tutor-card__price">${tutor.price} ₽/час</p>
                 <a href="#" class="tutor-card__contact-button">Связаться</a>
-           
         </div>
     `;
-}
-
-function textVisible(text, wordLimit = 7) {
-    const textWords = text.split(' ');
-    const isLongText = textWords.length > wordLimit;
-
-    return isLongText ? textWords.slice(0, wordLimit).join(' ') + '...' : text;
 }
 
 function renderTutors(filteredTutors = tutors) {

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SkillBridge</title>
+        <link rel="stylesheet" href="/styles/normalize.css">
+        <link rel="stylesheet" href="/styles/tutors.module.css">
+    </head>
+    <body>
+        <header class="header">
+
+            <nav class="header__nav">
+                <div class="header__logo">SkillBridge</div>
+                <div class="header__left-panel">
+                    <div class="header__search-container">
+                        <input type="text" id="searchInput" placeholder="Поиск репетитора...">
+                    </div>
+                    <button class="header__btn">LALAL</button>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <div class="filters">
+                <select class="subject-filter" id="subjectFilter">
+                    <option value="">Все предметы</option>
+                    <option value="math">Математика</option>
+                    <option value="physics">Физика</option>
+                    <option value="english">Английский язык</option>
+                    <option value="chemistry">Химия</option>
+                </select>
+                <select class="price-filter" id="priceFilter">
+                    <option value="">Любая цена</option>
+                    <option value="low">До 1000 ₽</option>
+                    <option value="medium">1000-2000 ₽</option>
+                    <option value="high">Более 2000 ₽</option>
+                </select>
+            </div>
+
+            <section class="tutors-section" id="tutorsGrid">
+                {{#each tutors}}
+
+                    <div class="tutors-section__tutor-card">
+                        <img src="{{image}}" alt="{{name}}" class="tutor-card__image">
+                        <h2 class="tutor-card__name">{{name}}</h2>
+                        <div class="tutor-card__subject">{{subject}}</div>
+                        <div class="tutor-card__rating">
+                            {{rating}}
+                        </div>
+                        <p class="tutor-card__description">{{shortDescription}}</p>
+                        <p class="tutor-card__price">{{price}} ₽/час</p>
+                        <a href="#" class="tutor-card__contact-button">Связаться</a>
+                    </div>
+
+                {{/each}}
+            </section>
+        </main>
+
+        {{> footer }}
+
+    </body>
+</html>

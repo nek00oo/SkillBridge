@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error registering user:', error);
             })
             .finally(() => {
-                overlay.style.display = 'none'; // Скрываем затемнение и спиннер
+                overlay.style.display = 'none';
             });
     });
 });
