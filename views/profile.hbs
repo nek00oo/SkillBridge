@@ -4,23 +4,12 @@
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>Student Profile</title>
-        <link rel="stylesheet" href="../styles/normalize.css">
-        <link rel="stylesheet" href="../styles/header.css" />
-        <link rel="stylesheet" href="../styles/profile.css"/>
+        <link rel="stylesheet" href="/styles/normalize.css">
+        <link rel="stylesheet" href="/styles/header.css" />
+        <link rel="stylesheet" href="/styles/profile.css"/>
     </head>
     <body>
-        <header class="main-header">
-            <div class="main-header__container">
-                <a href="#" class="main-header__logo">SkillBridge</a>
-                <button class="main-header__mobile-toggle">☰</button>
-                <nav class="main-header__nav">
-                    <a href="/tutors" class="main-header__nav-link">Репетиторы</a>
-                    <a href="/pages/profile.html" class="main-header__nav-link">Профиль</a>
-                    <a href="#" class="main-header__nav-link">Курсы</a>
-                    <a href="#" class="main-header__nav-link">Контакты</a>
-                </nav>
-            </div>
-        </header>
+        {{> header }}
 
         <div class="profile-section">
             <div class="profile__header">
@@ -161,6 +150,7 @@
             </div>
         </div>
 
-        <script src="../scripts/profile.js"></script>
+        <script src="/scripts/profile.js"></script>
+        <script src="/scripts/header.js"></script>
     </body>
 </html>

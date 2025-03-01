@@ -15,6 +15,8 @@ async function bootstrap() {
 
     hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
 
+    app.set('view options', { extension: 'hbs' });
+
     const port = configService.get<number>('PORT', 3000);
     await app.listen(port, () => {
         console.log('App start at port: ', port);

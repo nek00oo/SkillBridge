@@ -23,6 +23,7 @@
         "@nestjs/common": "^11.0.1",
         "@nestjs/config": "^4.0.0",
         "@nestjs/core": "^11.0.1",
+        "@nestjs/mapped-types": "*",
         "@nestjs/platform-express": "^11.0.1",
         "hbs": "^4.2.0",
         "izitoast": "^1.4.0",

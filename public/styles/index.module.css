@@ -11,8 +11,8 @@
 }
 
 body {
-    font-family: var(--font-family), sans-serif;
-    /*font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;*/
+    /*font-family: var(--font-family), sans-serif;*/
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: white;
 }
 
@@ -200,14 +200,17 @@ body {
     margin-bottom: 30px;
 }
 
-.primary-button {
+.search-section__search-button {
     font-weight: 900;
     font-size: 32px;
+    border-radius: 20px;
+    padding: 4px 32px 6px;
+}
+
+.primary-button {
     letter-spacing: 0.05em;
     color: #fff;
     background: var(--primary-button-background-color);
-    border-radius: 20px;
-    padding: 4px 32px;
 }
 
 .primary-button:active {
@@ -390,9 +393,11 @@ body {
 
     .header__menu-button {
         font-weight: 500;
+        letter-spacing: 0.05em;
         padding: 9px 16px 11px;
         background: #4a4c5a;
         border-radius: 12px;
+        transition: all 0.2s;
     }
 
     .header__menu-button:last-child {
@@ -535,7 +540,7 @@ body {
         text-align: initial;
     }
 
-    .primary-button {
+    .search-section__search-button {
         align-self: flex-start;
     }
 }
@@ -623,6 +628,14 @@ body {
 }
 
 @media (any-hover: hover) {
+    .header__menu-button:hover {
+        background: #434455;
+    }
+
+    .header__menu-button:last-child:hover {
+        background: var(--primary-button-background-color-active);
+    }
+
     .main-card:hover,
     .main-card__large:hover {
         border: 1px solid var(--hover-border-color);

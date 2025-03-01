@@ -6,21 +6,10 @@
         <title>SkillBridge</title>
         <link rel="stylesheet" href="/styles/normalize.css">
         <link rel="stylesheet" href="/styles/tutors.module.css">
+        <link rel="stylesheet" href="/styles/header.css"/>
     </head>
     <body>
-        <header class="header">
-
-            <nav class="header__nav">
-                <div class="header__logo">SkillBridge</div>
-                <div class="header__left-panel">
-                    <div class="header__search-container">
-                        <input type="text" id="searchInput" placeholder="Поиск репетитора...">
-                    </div>
-                    <button class="header__btn">LALAL</button>
-                </div>
-            </nav>
-        </header>
-
+        {{> header }}
         <main>
             <div class="filters">
                 <select class="subject-filter" id="subjectFilter">
@@ -40,24 +29,12 @@
 
             <section class="tutors-section" id="tutorsGrid">
                 {{#each tutors}}
-
-                    <div class="tutors-section__tutor-card">
-                        <img src="{{image}}" alt="{{name}}" class="tutor-card__image">
-                        <h2 class="tutor-card__name">{{name}}</h2>
-                        <div class="tutor-card__subject">{{subject}}</div>
-                        <div class="tutor-card__rating">
-                            {{rating}}
-                        </div>
-                        <p class="tutor-card__description">{{shortDescription}}</p>
-                        <p class="tutor-card__price">{{price}} ₽/час</p>
-                        <a href="#" class="tutor-card__contact-button">Связаться</a>
-                    </div>
-
+                    {{> tutor_card}}
                 {{/each}}
             </section>
         </main>
 
         {{> footer }}
-
+        <script src="/scripts/header.js"></script>
     </body>
 </html>
