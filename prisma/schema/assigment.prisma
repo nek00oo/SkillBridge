@@ -1,0 +1,18 @@
+model Assignment {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  dueDate   DateTime
+  completed Boolean  @default(false)
+
+  tutor     User     @relation("Tutor_Assignments", fields: [tutorId], references: [id], onDelete: Cascade)
+  tutorId   String   @map("tutor_id")
+
+  student   User     @relation("Student_Assignments", fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String   @map("student_id")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("assignments")
+}

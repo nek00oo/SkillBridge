@@ -1,0 +1,60 @@
+model User {
+  id        String     @id @default(cuid())
+  role      Role       @default(STUDENT)
+
+  infoUser  UserInfo   @relation(fields: [infoUserId], references: [id], onDelete: Cascade)
+  infoUserId String @unique
+
+  tutorCard TutorCard?
+
+  tutors   StudentTutor[] @relation("Student_Tutors")
+  students StudentTutor[] @relation("Tutor_Students")
+
+  assignmentsGiven    Assignment[] @relation("Tutor_Assignments")
+  assignmentsReceived Assignment[] @relation("Student_Assignments")
+
+  reviewsGiven  Review[] @relation("Student_Reviews")
+  reviewsReceived Review[] @relation("Tutor_Reviews")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model UserInfo {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String
+  name      String
+  lastname  String?
+  birthDate DateTime?
+  profileImageUrl String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User?
+
+  @@map("user_info")
+}
+
+model StudentTutor {
+  id String @id @default(cuid())
+
+  student   User   @relation("Student_Tutors", fields: [studentId], references: [id], onDelete: Cascade)
+  studentId String @map("student_id")
+
+  tutor   User   @relation("Tutor_Students", fields: [tutorId], references: [id], onDelete: Cascade)
+  tutorId String @map("turor_id")
+
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, tutorId])
+  @@map("student_tutor")
+}
+
+enum Role {
+  STUDENT
+  TUTOR
+  ADMIN
+}
