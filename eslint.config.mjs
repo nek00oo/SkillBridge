@@ -30,7 +30,9 @@ export default tseslint.config(
             '@typescript-eslint/no-explicit-any': 'off',
             '@typescript-eslint/no-floating-promises': 'warn',
             '@typescript-eslint/no-unsafe-argument': 'warn',
-            indent: ['error', 4],
+            indent: ['error', 4, {
+                ignoredNodes: ['PropertyDefinition[decorators.length>0]'],
+            },],
             'prettier/prettier': [
                 'error',
                 { tabWidth: 4, useTabs: false, endOfLine: 'lf' },

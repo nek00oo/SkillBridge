@@ -1,9 +1,9 @@
 model User {
-  id        String     @id @default(cuid())
-  role      Role       @default(STUDENT)
+  id   Int  @id @default(autoincrement())
+  role Role @default(STUDENT)
 
-  infoUser  UserInfo   @relation(fields: [infoUserId], references: [id], onDelete: Cascade)
-  infoUserId String @unique
+  infoUser   UserInfo @relation(fields: [infoUserId], references: [id], onDelete: Cascade)
+  infoUserId Int      @unique
 
   tutorCard TutorCard?
 
@@ -13,7 +13,7 @@ model User {
   assignmentsGiven    Assignment[] @relation("Tutor_Assignments")
   assignmentsReceived Assignment[] @relation("Student_Assignments")
 
-  reviewsGiven  Review[] @relation("Student_Reviews")
+  reviewsGiven    Review[] @relation("Student_Reviews")
   reviewsReceived Review[] @relation("Tutor_Reviews")
 
   createdAt DateTime @default(now())
@@ -23,12 +23,12 @@ model User {
 }
 
 model UserInfo {
-  id        String    @id @default(cuid())
-  email     String    @unique
-  password  String
-  name      String
-  lastname  String?
-  birthDate DateTime?
+  id              Int       @id @default(autoincrement())
+  email           String    @unique
+  password        String
+  name            String
+  lastname        String?
+  birthDate       DateTime?
   profileImageUrl String?
 
   createdAt DateTime @default(now())
@@ -39,13 +39,13 @@ model UserInfo {
 }
 
 model StudentTutor {
-  id String @id @default(cuid())
+  id Int @id @default(autoincrement())
 
-  student   User   @relation("Student_Tutors", fields: [studentId], references: [id], onDelete: Cascade)
-  studentId String @map("student_id")
+  student   User @relation("Student_Tutors", fields: [studentId], references: [id], onDelete: Cascade)
+  studentId Int  @map("student_id")
 
-  tutor   User   @relation("Tutor_Students", fields: [tutorId], references: [id], onDelete: Cascade)
-  tutorId String @map("turor_id")
+  tutor   User @relation("Tutor_Students", fields: [tutorId], references: [id], onDelete: Cascade)
+  tutorId Int  @map("turor_id")
 
   createdAt DateTime @default(now())
 

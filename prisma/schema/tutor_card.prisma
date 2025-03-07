@@ -1,13 +1,15 @@
 model TutorCard {
-  id        String   @id @default(cuid())
+  id        Int   @id @default(autoincrement())
   title     String
   subject   String
+  rating    Decimal?
   price     Decimal
   content   String?
-  published Boolean  @default(false)
+  imgUrl    String?
+  isPublished Boolean  @default(false)
 
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  String   @unique @map("author_id")
+  authorId  Int   @unique @map("author_id")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
