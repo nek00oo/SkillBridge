@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTutorCardDto, UpdateTutorCardDto } from './dto/create-tutorCard.dto';
 import { PrismaService } from '../prisma.service';
-import { Prisma } from '@prisma/client';
+import { Category, Prisma } from '@prisma/client';
 
 @Injectable()
 export class TutorsService {
@@ -95,6 +95,27 @@ export class TutorsService {
             throw new NotFoundException(`Tutor card with ID ${id} not found`);
         }
         return tutorCard;
+    }
+
+    async getTutorListBySubjectCategory(category: Category) {
+        const tutorCards = await this.prisma.tutorCard.findMany({
+            where: {
+                subjectCategory: {
+                    some: {
+                        category: category,
+                    },
+                },
+            },
+            include: {
+                subjectCategory: true,
+            },
+        });
+
+        if (!tutorCards.length) {
+            throw new NotFoundException(`No tutor cards found for category ${category}`);
+        }
+
+        return tutorCards;
     }
 
     async createTutorCard(userId: number, createDto: CreateTutorCardDto) {

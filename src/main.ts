@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as hbs from 'hbs';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -16,6 +17,14 @@ async function bootstrap() {
     hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
 
     app.set('view options', { extension: 'hbs' });
+    app.useGlobalPipes(
+        new ValidationPipe({
+            transform: true,
+            whitelist: true,
+            // forbidNonWhitelisted: true,
+            skipMissingProperties: false,
+        }),
+    );
 
     const port = configService.get<number>('PORT', 3000);
     await app.listen(port, () => {

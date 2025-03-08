@@ -1,14 +1,17 @@
 model User {
-  id   Int  @id @default(autoincrement())
-  role Role @default(STUDENT)
-
-  infoUser   UserInfo @relation(fields: [infoUserId], references: [id], onDelete: Cascade)
-  infoUserId Int      @unique
+  id              Int       @id @default(autoincrement())
+  role            Role      @default(STUDENT)
+  email           String    @unique
+  password        String
+  firstname       String
+  lastname        String?
+  birthDate       DateTime?
+  profileImageUrl String?
 
   tutorCard TutorCard?
 
-  tutors   StudentTutor[] @relation("Student_Tutors")
-  students StudentTutor[] @relation("Tutor_Students")
+  tutors   Mentorship[] @relation("Student_Tutors")
+  students Mentorship[] @relation("Tutor_Students")
 
   assignmentsGiven    Assignment[] @relation("Tutor_Assignments")
   assignmentsReceived Assignment[] @relation("Student_Assignments")
@@ -22,23 +25,7 @@ model User {
   @@map("users")
 }
 
-model UserInfo {
-  id              Int       @id @default(autoincrement())
-  email           String    @unique
-  password        String
-  name            String
-  lastname        String?
-  birthDate       DateTime?
-  profileImageUrl String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  User      User?
-
-  @@map("user_info")
-}
-
-model StudentTutor {
+model Mentorship {
   id Int @id @default(autoincrement())
 
   student   User @relation("Student_Tutors", fields: [studentId], references: [id], onDelete: Cascade)
@@ -50,7 +37,7 @@ model StudentTutor {
   createdAt DateTime @default(now())
 
   @@unique([studentId, tutorId])
-  @@map("student_tutor")
+  @@map("mentorship")
 }
 
 enum Role {

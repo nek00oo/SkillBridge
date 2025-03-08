@@ -1,18 +1,49 @@
 model TutorCard {
-  id        Int   @id @default(autoincrement())
-  title     String
-  subject   String
-  rating    Decimal?
-  price     Decimal
-  content   String?
-  imgUrl    String?
+  id    Int    @id @default(autoincrement())
+  title String
+
+  subjectCategory SubjectCategory[] @relation("TutorCard_SubjectCategories")
+
+  rating      Decimal?
+  price       Decimal
+  content     String?
+  imgUrl      String?
   isPublished Boolean  @default(false)
 
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId  Int   @unique @map("author_id")
+  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId Int  @unique @map("author_id")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("tutor_cards")
+}
+
+model SubjectCategory {
+  id       Int      @id @default(autoincrement())
+  category Category
+
+  tutorCard TutorCard @relation("TutorCard_SubjectCategories", fields: [tutorId], references: [id])
+  tutorId   Int       @map("tutor_id")
+
+  @@unique([tutorId, category])
+  @@map("subject_category")
+}
+
+enum Category {
+  PHYSICS
+  MATHEMATICS
+  CHEMISTRY
+  BIOLOGY
+  ENGLISH
+  RUSSIAN
+  HISTORY
+  GEOGRAPHY
+  LITERATURE
+  PROGRAMMING
+  ECONOMICS
+  LAW
+  ART
+  MUSIC
+  COMPUTER_SCIENCE
 }

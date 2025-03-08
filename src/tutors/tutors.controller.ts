@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Render } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Render } from '@nestjs/common';
 import { TutorsService } from './tutors.service';
 import { CreateTutorCardDto, UpdateTutorCardDto } from './dto/create-tutorCard.dto';
 
@@ -6,7 +6,7 @@ import { CreateTutorCardDto, UpdateTutorCardDto } from './dto/create-tutorCard.d
 export class TutorsController {
     constructor(private readonly tutorsService: TutorsService) {}
 
-    @Post()
+    @Post('/add')
     async createTutorCard(@Body() createTutorCardDto: CreateTutorCardDto) {
         const authorId: number = 1; //TODO Будем брать из токена
         return this.tutorsService.createTutorCard(authorId, createTutorCardDto);
