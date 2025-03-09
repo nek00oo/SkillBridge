@@ -10,7 +10,9 @@
     </head>
     <body>
         <div class="sign-up">
-            <div class="spinner" id="spinner"></div>
+            <div class="overlay" id="overlay">
+                <div class="spinner" id="spinner"></div>
+            </div>
             <div class="sign-up__wrapper">
                 <form class="sign-up__form" id="signUpForm">
                     <span class="sign-up__title">Create Account</span>
@@ -32,6 +34,16 @@
                             required
                         >
                     </label>
+                    <div class="role-selector">
+                        <div class="role-option">
+                            <input type="radio" id="teacher" name="role" value="teacher" required />
+                            <label for="teacher">Преподаватель</label>
+                        </div>
+                        <div class="role-option">
+                            <input type="radio" id="student" name="role" value="student" required />
+                            <label for="student">Студент</label>
+                        </div>
+                    </div>
                     <button class="primary-button" type="submit">Создать аккаунт</button>
                 </form>
             </div>

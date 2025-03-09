@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Render } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Render } from '@nestjs/common';
 import { TutorsService } from './tutors.service';
 import { CreateTutorCardDto, UpdateTutorCardDto } from './dto/create-tutorCard.dto';
+import { Category } from '@prisma/client';
 
 @Controller('tutors')
 export class TutorsController {
@@ -18,12 +19,17 @@ export class TutorsController {
         return { tutors: this.tutorsService.getAllTutorCards() };
     }
 
+    @Get('filter')
+    async getTutorListBySubjectCategory(@Query('category') category: Category) {
+        return this.tutorsService.getTutorListBySubjectCategory(category);
+    }
+
     @Get(':id')
     async getTutorCardById(@Param('id') id: number) {
         return this.tutorsService.getTutorCardById(id);
     }
 
-    @Patch(':id')
+    @Patch(':id/edit')
     async updateTutorCard(@Param('id') id: number, @Body() createTutorCardDto: UpdateTutorCardDto) {
         return this.tutorsService.updateTutorCard(id, createTutorCardDto);
     }

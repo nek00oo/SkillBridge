@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Render } from '@nestjs/common';
-import { ProfileService } from './profile.service';
+import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
 
 @Controller('profile')
-export class ProfileController {
-    constructor(private readonly profileService: ProfileService) {}
+export class UsersController {
+    constructor(private readonly userService: UsersService) {}
 
     @Get()
     @Render('profile')
@@ -15,21 +15,26 @@ export class ProfileController {
     //TODO сделать проверку (пользователь с такой почтой уже существует)
     @Get(':id')
     async getUser(@Param('id') id: number) {
-        return this.profileService.getUserById(id);
+        return this.userService.getUserById(id);
     }
+
+    // @Get(':id')
+    // async getUserByEmail(@Param('email') email: string) {
+    //     return this.
+    // }
 
     @Post('/add')
     async createUser(@Body() createUserDto: CreateUserDto) {
-        return this.profileService.createUser(createUserDto);
+        return this.userService.createUser(createUserDto);
     }
 
-    @Patch(':id')
+    @Patch(':id/edit')
     async updateUser(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-        return this.profileService.updateUser(id, updateUserDto);
+        return this.userService.updateUser(id, updateUserDto);
     }
 
     @Delete(':id')
     async deleteUser(@Param('id', ParseIntPipe) id: number) {
-        return this.profileService.deleteUserById(id);
+        return this.userService.deleteUserById(id);
     }
 }

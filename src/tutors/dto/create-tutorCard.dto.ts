@@ -1,4 +1,5 @@
-import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Category } from '@prisma/client';
 
 export class CreateTutorCardDto {
     @IsNotEmpty()
@@ -6,8 +7,9 @@ export class CreateTutorCardDto {
     title: string;
 
     @IsNotEmpty()
-    @IsString()
-    subject: string;
+    @IsArray()
+    @IsEnum(Category, { each: true })
+    subjectCategories: Category[];
 
     @IsNotEmpty()
     @IsNumber({ maxDecimalPlaces: 2 })

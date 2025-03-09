@@ -1,10 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
-import { parse } from 'date-fns';
+import { isValid, parse } from 'date-fns';
 
 @Injectable()
-export class ProfileService {
+export class UsersService {
+    private readonly logger = new Logger(UsersService.name);
+
     constructor(private readonly prisma: PrismaService) {}
 
     //TODO сделать проверки на наличие объекта
@@ -12,15 +14,18 @@ export class ProfileService {
     async createUser(createUserDto: CreateUserDto) {
         const { birthDate, ...userData } = createUserDto;
 
-        const parsedDate = parse(birthDate, 'dd-MM-yyyy', new Date());
-        if (isNaN(parsedDate.getTime())) {
-            throw new BadRequestException('Invalid date format. Expected format: DD-MM-YYYY');
+        let parsedBirthDate: Date | null = null;
+        if (birthDate) {
+            parsedBirthDate = parse(birthDate, 'dd-MM-yyyy', new Date());
+            if (!isValid(parsedBirthDate)) {
+                throw new BadRequestException('Invalid date format. Expected format: DD-MM-YYYY');
+            }
         }
 
         return this.prisma.user.create({
             data: {
                 ...userData,
-                birthDate: parsedDate.toISOString(),
+                birthDate: parsedBirthDate?.toISOString() || null,
             },
         });
     }
@@ -28,6 +33,12 @@ export class ProfileService {
     async getUserById(id: number) {
         return this.prisma.user.findUnique({
             where: { id: id },
+        });
+    }
+
+    async getUserByEmail(email: string) {
+        return this.prisma.user.findUnique({
+            where: { email },
         });
     }
 

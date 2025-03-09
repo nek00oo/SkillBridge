@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTutorCardDto, UpdateTutorCardDto } from './dto/create-tutorCard.dto';
 import { PrismaService } from '../prisma.service';
 import { Category, Prisma } from '@prisma/client';
@@ -90,6 +90,10 @@ export class TutorsService {
     async getTutorCardById(id: number) {
         const tutorCard = await this.prisma.tutorCard.findUnique({
             where: { id: id },
+            include: {
+                subjectCategories: true,
+                author: true,
+            },
         });
         if (!tutorCard) {
             throw new NotFoundException(`Tutor card with ID ${id} not found`);
@@ -100,14 +104,15 @@ export class TutorsService {
     async getTutorListBySubjectCategory(category: Category) {
         const tutorCards = await this.prisma.tutorCard.findMany({
             where: {
-                subjectCategory: {
+                subjectCategories: {
                     some: {
                         category: category,
                     },
                 },
             },
             include: {
-                subjectCategory: true,
+                subjectCategories: true,
+                author: true,
             },
         });
 
@@ -119,26 +124,44 @@ export class TutorsService {
     }
 
     async createTutorCard(userId: number, createDto: CreateTutorCardDto) {
-        return this.prisma.tutorCard.create({
-            data: {
-                ...createDto,
-                authorId: userId, //TODO Установим из токена
-                price: new Prisma.Decimal(createDto.price),
-                rating: createDto.rating,
-            },
-        });
+        const { subjectCategories, ...rest } = createDto;
+
+        const subjectCategoryData = subjectCategories.map((category: Category) => ({
+            category: category,
+        }));
+
+        try {
+            return this.prisma.tutorCard.create({
+                data: {
+                    ...rest,
+                    authorId: userId,
+                    subjectCategories: { create: subjectCategoryData },
+                },
+            });
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientValidationError) {
+                throw new BadRequestException('Invalid data provided');
+            }
+            throw error;
+        }
     }
 
     async updateTutorCard(id: number, updateTutorCardDto: UpdateTutorCardDto) {
-        const { rating, price, ...rest } = updateTutorCardDto;
+        const { subjectCategories, ...rest } = updateTutorCardDto;
 
+        const subjectCategoryData = subjectCategories?.map((category: Category) => ({
+            category: category,
+        }));
+
+        //TODO проверить, что subjectCategories не обнулится и не перезапишется
         return this.prisma.tutorCard.update({
             where: { id: id },
             data: {
                 ...rest,
-                price: price !== undefined ? new Prisma.Decimal(price) : undefined,
-                rating: rating !== undefined ? new Prisma.Decimal(rating) : undefined,
-                imgUrl: updateTutorCardDto.imgUrl || null,
+                subjectCategories: { create: subjectCategoryData },
+            },
+            include: {
+                subjectCategories: true,
             },
         });
     }

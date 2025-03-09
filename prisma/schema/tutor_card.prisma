@@ -2,7 +2,7 @@ model TutorCard {
   id    Int    @id @default(autoincrement())
   title String
 
-  subjectCategory SubjectCategory[] @relation("TutorCard_SubjectCategories")
+  subjectCategories SubjectCategory[] @relation("TutorCard_SubjectCategories")
 
   rating      Decimal?
   price       Decimal

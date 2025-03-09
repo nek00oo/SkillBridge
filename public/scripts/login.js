@@ -14,9 +14,8 @@ loginBtn.addEventListener('click', () => {
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    const spinner = document.getElementById('overlay');
+    const overlay = document.getElementById('overlay');
     overlay.style.display = 'block';
-    console.log(spinner);
 
     const email = e.target.email.value;
     const password = e.target.password.value;

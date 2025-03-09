@@ -1,10 +1,8 @@
-import { IsEmail, IsNotEmpty, IsString, IsUrl, Validate } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUrl, Validate } from 'class-validator';
 import { Role } from '@prisma/client';
 import { CustomDateString } from '../../common/decorators/date-string.decorator';
 
 export class CreateUserDto {
-    role: Role;
-
     @IsNotEmpty()
     @IsEmail()
     email: string;
@@ -17,12 +15,18 @@ export class CreateUserDto {
     @IsString()
     firstname: string;
 
+    @IsEnum(Role)
+    role: Role;
+
+    @IsOptional()
     @IsString()
     lastname: string;
 
+    @IsOptional()
     @Validate(CustomDateString, ['dd-MM-yyyy'])
     birthDate: string;
 
+    @IsOptional()
     @IsUrl()
     profileImageUrl: string;
 }

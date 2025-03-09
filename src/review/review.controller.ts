@@ -19,7 +19,7 @@ export class ReviewController {
         return this.reviewService.findReviewByStudentId(id);
     }
 
-    @Patch(':id')
+    @Patch(':id/edit')
     async updateReview(@Param('id') id: number, @Body() updateReviewDto: UpdateReviewDto) {
         return this.reviewService.updateReviewById(id, updateReviewDto);
     }
