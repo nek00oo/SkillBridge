@@ -1,24 +1,22 @@
-import { Controller, Post, UseGuards, Request, Get, Logger, Body } from '@nestjs/common';
+import { Controller, Post, UseGuards, Request, Get, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import { RequestWithUser } from './interfaces/requestWithUser';
 
 @Controller('auth')
 export class AuthController {
-    private readonly logger = new Logger(AuthController.name);
     constructor(private readonly authService: AuthService) {}
 
     @UseGuards(LocalAuthGuard)
     @Post('/login')
-    async login(@Request() req) {
+    login(@Request() req: RequestWithUser) {
         return this.authService.login(req.user);
     }
 
     @Post('/registration')
     async registration(@Body() createUserDto: CreateUserDto) {
-        this.logger.log(`st1 CrUser email: ${createUserDto.email}`);
-        this.logger.log(`st1 CrUser password: ${createUserDto.password}`);
         return this.authService.registration(createUserDto);
     }
 
