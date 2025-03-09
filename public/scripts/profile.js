@@ -9,25 +9,25 @@ const subjectData = {
         tasks: [
             'Контрольная работа по алгебре - 20.05',
             'Домашнее задание №5 - 22.05',
-            'Тест по геометрии - 25.05'
-        ]
+            'Тест по геометрии - 25.05',
+        ],
     },
     physics: {
         title: 'Физика',
         tasks: [
             'Лабораторная работа №3 - 21.05',
             'Проект "Механика" - 27.05',
-            'Тест по электричеству - 30.05'
-        ]
+            'Тест по электричеству - 30.05',
+        ],
     },
     russian: {
         title: 'Русский язык',
         tasks: [
             'Сочинение - 19.05',
             'Диктант - 23.05',
-            'Тест по пунктуации - 26.05'
-        ]
-    }
+            'Тест по пунктуации - 26.05',
+        ],
+    },
 };
 
 const editModeBtn = document.getElementById('editModeBtn');
@@ -41,15 +41,34 @@ const studentAgeDisplay = document.getElementById('studentAgeDisplay');
 const saveProfileBtn = document.getElementById('saveProfileBtn');
 
 window.addEventListener('load', function() {
-    const userDataString = localStorage.getItem('userData');
+    const studentNameDisplay = document.getElementById('studentNameDisplay');
+    const studentAgeDisplay = document.getElementById('studentAgeDisplay');
+    const profileImage = document.getElementById('profileImage');
 
-    if (userDataString) {
-        const userData = JSON.parse(userDataString);
-        studentNameDisplay.textContent = userData.name;
-        studentAgeDisplay.textContent = userData.age ? userData.age : '';
-        profileImage.src = userData.image ? userData.image : '../images/default-avatar.png';
+    async function fetchUserData() {
+        await fetch('http://localhost:8080/profile/get-user', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+                'Content-Type': 'application/json',
+            },
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error('Ошибка при загрузке данных пользователя');
+            }
+            console.log(response);
+            return response.json();
+        }).then(data => {
+            console.log(data);
+            studentNameDisplay.textContent = data.firstname || 'Имя не указано';
+            studentAgeDisplay.textContent = data.birthDate ? `${data.birthDate} лет` : 'Возраст не указан';
+            profileImage.src = data.profileImageUrl ? data.profileImageUrl : '../images/default-avatar.png';
+        }).catch(error => {
+            console.error(error);
+        });
     }
 
+    fetchUserData();
 });
 
 document.querySelectorAll('.subject').forEach(subject => {
@@ -88,18 +107,26 @@ imageUpload.addEventListener('change', function(event) {
     }
 });
 
+//TODO доделать
 saveProfileBtn.addEventListener('click', () => {
     profileImage.src = imagePreview.src;
     studentNameDisplay.textContent = studentName.value.trim();
     studentAgeDisplay.textContent = studentAge.value.trim();
 
     const user = {
-        name: studentName.value.trim(),
-        age: studentAge.value.trim(),
-        image: imagePreview.src
+        firstname: studentName.value.trim(),
+        profileImageUrl: imagePreview.src,
     };
 
-    localStorage.setItem('userData', JSON.stringify(user));
+    async function updateUser(){
+        await fetch('http://localhost:8080/profile/update', {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+                'Content-Type': 'application/json',
+            },
+        })
+    };
 
     editProfileModal.classList.add('hidden');
 });

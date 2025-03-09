@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Set active class based on current page
     const currentPage = window.location.pathname;
     const navLinks = document.querySelectorAll('.main-header__nav-link');
 

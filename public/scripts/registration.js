@@ -3,37 +3,62 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
 
         const userData = {
-            name: e.target.username.value,
+            firstname: e.target.firstname.value,
             email: e.target.email.value,
             password: e.target.password.value,
+            role: e.target.role.value,
         };
+
+
+        const password = e.target.password.value;
+        const confirmPassword = e.target.confirmPassword.value;
+        if (password !== confirmPassword) {
+            iziToast.error({
+                message: 'Пароли не совпадают!',
+                position: 'bottomRight',
+            });
+            return;
+        }
 
         const overlay = document.getElementById('overlay');
         overlay.style.display = 'block';
 
-        fetch('https://jsonplaceholder.typicode.com/users', {
+
+        fetch('http://localhost:8080/auth/registration', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(userData),
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message || 'Ошибка регистрации');
+                    });
+                }
+                return response.json();
+            })
             .then(data => {
                 iziToast.success({
-                    message: 'Вы успешно вошли!',
-                    position: 'bottomRight'
+                    message: 'Вы успешно зарегистрировались!',
+                    position: 'bottomRight',
                 });
+
                 console.log('User registered:', data);
-                localStorage.setItem('userData', JSON.stringify(data));
+
+                if (data.access_token) {
+                    localStorage.setItem('authToken', data.access_token);
+                }
+
                 setTimeout(() => {
                     window.location.href = '../pages/profile.html';
                 }, 800);
             })
             .catch(error => {
                 iziToast.error({
-                    message: 'Что-то пошло не так, попробуйте позже.',
-                    position: 'bottomRight'
+                    message: error.message || 'Что-то пошло не так, попробуйте позже.',
+                    position: 'bottomRight',
                 });
                 console.error('Error registering user:', error);
             })

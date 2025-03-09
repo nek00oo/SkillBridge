@@ -4,7 +4,6 @@ const loginBtn = document.getElementById('login');
 
 registerBtn.addEventListener('click', () => {
     container.classList.add('active');
-    console.log('click');
 });
 
 loginBtn.addEventListener('click', () => {
@@ -17,23 +16,35 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     const overlay = document.getElementById('overlay');
     overlay.style.display = 'block';
 
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+    const userData = {
+        email: e.target.email.value,
+        password: e.target.password.value,
+    }
 
-    fetch('https://jsonplaceholder.typicode.com/users')
-        .then(response => response.json())
-        .then(users => {
-            const user = users.find(u => u.email === email);
-            console.log('User:', user);
-            console.log(email);
+    fetch('http://localhost:8080/auth/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || 'Ошибка входа');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            const accessToken = data.access_token;
 
-            if (user) {
+            if (accessToken) {
                 iziToast.success({
                     message: 'Вы успешно вошли!',
                     position: 'bottomRight',
                 });
-                console.log('Login successful:', user);
-                localStorage.setItem('userData', JSON.stringify(user));
+                localStorage.setItem('authToken', data.access_token);
                 setTimeout(() => {
                     window.location.href = '../pages/profile.html';
                 }, 800);
@@ -54,5 +65,4 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
         .finally(() => {
             overlay.style.display = 'none';
         });
-
 });
