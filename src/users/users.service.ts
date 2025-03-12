@@ -1,8 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { User } from '@prisma/client';
 import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
-import { isValid, parse } from 'date-fns';
+import { parseDateOrNull } from '../common/utils/date-parser.util';
 
 @Injectable()
 export class UsersService {
@@ -13,13 +13,7 @@ export class UsersService {
     async createUser(createUserDto: CreateUserDto): Promise<User> {
         const { birthDate, ...userData } = createUserDto;
 
-        let parsedBirthDate: Date | null = null;
-        if (birthDate) {
-            parsedBirthDate = parse(birthDate, 'dd-MM-yyyy', new Date());
-            if (!isValid(parsedBirthDate)) {
-                throw new BadRequestException('Invalid date format. Expected format: DD-MM-YYYY');
-            }
-        }
+        const parsedBirthDate = parseDateOrNull(birthDate, 'dd-MM-yyyy');
 
         return this.prisma.user.create({
             data: {
@@ -42,9 +36,16 @@ export class UsersService {
     }
 
     async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+        const { birthDate, ...userData } = updateUserDto;
+
+        const parsedBirthDate = parseDateOrNull(birthDate, 'dd-MM-yyyy');
+
         return this.prisma.user.update({
             where: { id: id },
-            data: updateUserDto,
+            data: {
+                ...userData,
+                birthDate: parsedBirthDate?.toISOString() || null,
+            },
         });
     }
 

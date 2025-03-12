@@ -1,15 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Render } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Render, Req, UseGuards } from '@nestjs/common';
 import { TutorsService } from './tutors.service';
 import { CreateTutorCardDto, UpdateTutorCardDto } from './dto/create-tutorCard.dto';
 import { Category } from '@prisma/client';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 
 @Controller('tutors')
 export class TutorsController {
     constructor(private readonly tutorsService: TutorsService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Post('/add')
-    async createTutorCard(@Body() createTutorCardDto: CreateTutorCardDto) {
-        const authorId: number = 1; //TODO Будем брать из токена
+    async createTutorCard(@Req() req: RequestWithUser, @Body() createTutorCardDto: CreateTutorCardDto) {
+        const authorId = req.user.id;
         return this.tutorsService.createTutorCard(authorId, createTutorCardDto);
     }
 
@@ -29,9 +32,11 @@ export class TutorsController {
         return this.tutorsService.getTutorCardById(id);
     }
 
-    @Patch(':id/edit')
-    async updateTutorCard(@Param('id') id: number, @Body() createTutorCardDto: UpdateTutorCardDto) {
-        return this.tutorsService.updateTutorCard(id, createTutorCardDto);
+    @UseGuards(JwtAuthGuard)
+    @Patch('/edit')
+    async updateTutorCard(@Req() req: RequestWithUser, @Body() createTutorCardDto: UpdateTutorCardDto) {
+        const authorId = req.user.id;
+        return this.tutorsService.updateTutorCard(authorId, createTutorCardDto);
     }
 
     @Delete(':id')

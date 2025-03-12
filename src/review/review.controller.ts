@@ -1,15 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 
 @Controller('review')
 export class ReviewController {
     constructor(private readonly reviewService: ReviewService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Post()
-    async createReview(@Body() createReviewDto: CreateReviewDto) {
-        const studentId: number = 1; //TODO из токена
+    async createReview(@Req() req: RequestWithUser, @Body() createReviewDto: CreateReviewDto) {
+        const studentId = req.user.id;
         const tutorId: number = 1; //TODO из карточки, куда оставляют отзыв
         return this.reviewService.createReview(studentId, tutorId, createReviewDto);
     }

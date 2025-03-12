@@ -30,6 +30,7 @@ export class UsersController {
     @Get()
     @Render('profile')
     getProfile(@Req() req: RequestWithUser) {
+        console.log(req.user);
         const userId = req.user.id;
         return this.userService.getUserById(userId);
     }
@@ -46,9 +47,11 @@ export class UsersController {
         return this.userService.getUserById(id);
     }
 
-    @Patch(':id/edit')
-    async updateUser(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-        return this.userService.updateUser(id, updateUserDto);
+    @UseGuards(JwtAuthGuard)
+    @Patch('/edit')
+    async updateUser(@Req() req: RequestWithUser, @Body() updateUserDto: UpdateUserDto) {
+        const userId = req.user.id;
+        return this.userService.updateUser(userId, updateUserDto);
     }
 
     @Delete(':id')

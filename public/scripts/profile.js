@@ -3,7 +3,7 @@ const editProfileModal = document.getElementById('editProfileModal');
 const modalTitle = document.getElementById('modalTitle');
 const tasksList = document.getElementById('tasksList');
 
-const subjectData = {
+const assigmentData = {
     math: {
         title: 'Математика',
         tasks: [
@@ -45,11 +45,19 @@ window.addEventListener('load', function() {
     const studentAgeDisplay = document.getElementById('studentAgeDisplay');
     const profileImage = document.getElementById('profileImage');
 
+    const token = localStorage.getItem('authToken');
+
+    if (!token) {
+        window.location.href = '/login'; // Отправляем пользователя на страницу входа
+    } else {
+        fetchUserData(); // Загружаем данные пользователя
+    }
+
     async function fetchUserData() {
-        await fetch('http://localhost:8080/profile/get-user', {
+        await fetch('http://localhost:8080/profile', {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         }).then((response) => {
@@ -67,16 +75,14 @@ window.addEventListener('load', function() {
             console.error(error);
         });
     }
-
-    fetchUserData();
 });
 
 document.querySelectorAll('.subject').forEach(subject => {
     subject.addEventListener('click', () => {
         const subjectType = subject.dataset.subject;
-        if (!subjectType || !subjectData[subjectType]) return;
+        if (!subjectType || !assigmentData[subjectType]) return;
 
-        const data = subjectData[subjectType];
+        const data = assigmentData[subjectType];
 
         modalTitle.textContent = data.title;
         tasksList.innerHTML = data.tasks
@@ -101,7 +107,7 @@ imageUpload.addEventListener('change', function(event) {
     if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            imagePreview.src = e.target.result; // Сохраняем base64
+            imagePreview.src = e.target.result; // base64
         };
         reader.readAsDataURL(file);
     }
@@ -119,14 +125,27 @@ saveProfileBtn.addEventListener('click', () => {
     };
 
     async function updateUser(){
-        await fetch('http://localhost:8080/profile/update', {
+        await fetch('http://localhost:8080/profile/edit', {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify(user),
+        }).then(async response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || 'Ошибка регистрации');
+                });
+            }
+            return response.json();
+        }).then((userData) => {
+            studentNameDisplay.textContent = userData.firstname;
+            profileImage.src = userData.profileImageUrl ? userData.profileImageUrl : '../images/default-avatar.png';
         })
-    };
+    }
+
+    updateUser();
 
     editProfileModal.classList.add('hidden');
 });

@@ -46,7 +46,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
                 });
                 localStorage.setItem('authToken', data.access_token);
                 setTimeout(() => {
-                    window.location.href = '../pages/profile.html';
+                    window.location.href = "/profile";
                 }, 800);
             } else {
                 iziToast.error({

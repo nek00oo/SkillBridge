@@ -16,7 +16,11 @@ async function bootstrap() {
 
     hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
 
-    app.set('view options', { extension: 'hbs' });
+    app.set('view options', {
+        extension: 'hbs',
+        map: { html: 'hbs' },
+    });
+
     app.useGlobalPipes(
         new ValidationPipe({
             transform: true,
