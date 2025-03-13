@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(userData),
+            credentials: 'include',
         })
             .then(response => {
                 if (!response.ok) {
@@ -39,17 +40,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 return response.json();
             })
-            .then(data => {
+            .then(() => {
                 iziToast.success({
                     message: 'Вы успешно зарегистрировались!',
                     position: 'bottomRight',
                 });
-
-                console.log('User registered:', data);
-
-                if (data.access_token) {
-                    localStorage.setItem('authToken', data.access_token);
-                }
 
                 setTimeout(() => {
                     window.location.href = '/profile';

@@ -39,37 +39,37 @@ const studentNameDisplay = document.getElementById('studentNameDisplay');
 const studentAge = document.getElementById('studentAge');
 const studentAgeDisplay = document.getElementById('studentAgeDisplay');
 const saveProfileBtn = document.getElementById('saveProfileBtn');
-
-window.addEventListener('load', function() {
-    const studentNameDisplay = document.getElementById('studentNameDisplay');
-    const studentAgeDisplay = document.getElementById('studentAgeDisplay');
-    const profileImage = document.getElementById('profileImage');
-
-    async function fetchUserData() {
-        await fetch('http://localhost:8080/profile/get-user', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((response) => {
-            //TODO почему не работает, а выдаёт 401 статус ? Хотя в postman работает
-            // if (response.status === 401) {
-            //     window.location.href = '../pages/login.html';
-            //     return;
-            // }
-            return response.json();
-        }).then(data => {
-            studentNameDisplay.textContent = data.firstname || 'Имя не указано';
-            // studentAgeDisplay.textContent = data.birthDate ? `${data.birthDate} лет` : 'Возраст не указан';
-            profileImage.src = data.profileImageUrl ? data.profileImageUrl : '../images/default-avatar.png';
-        }).catch(error => {
-            console.error(error);
-        });
-    }
-
-    fetchUserData();
-});
+//
+// window.addEventListener('load', function() {
+//     const studentNameDisplay = document.getElementById('studentNameDisplay');
+//     const studentAgeDisplay = document.getElementById('studentAgeDisplay');
+//     const profileImage = document.getElementById('profileImage');
+//
+//     async function fetchUserData() {
+//         await fetch('http://localhost:8080/profile', {
+//             method: 'GET',
+//             credentials: 'include',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             }
+//         }).then((response) => {
+//             //TODO почему не работает, а выдаёт 401 статус ? Хотя в postman работает
+//             if (response.status === 401) {
+//                 window.location.href = '../pages/login.html';
+//                 return;
+//             }
+//             return response.json();
+//         }).then(data => {
+//             studentNameDisplay.textContent = data.firstname || 'Имя не указано';
+//             // studentAgeDisplay.textContent = data.birthDate ? `${data.birthDate} лет` : 'Возраст не указан';
+//             profileImage.src = data.profileImageUrl ? data.profileImageUrl : '../images/default-avatar.png';
+//         }).catch(error => {
+//             console.error(error);
+//         });
+//     }
+//
+//     fetchUserData();
+// });
 
 document.querySelectorAll('.subject').forEach(subject => {
     subject.addEventListener('click', () => {

@@ -26,21 +26,13 @@ export class UsersController {
         return this.userService.createUser(createUserDto);
     }
 
-    //@UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Get()
     @Render('profile')
-    getProfile(@Req() req: RequestWithUser) {
-        // const userId = req.user.id;
-        const userId = 16;
-        return this.userService.getUserById(userId);
-    }
-
-    @UseGuards(JwtAuthGuard)
-    @Get('get-user')
-    async getUserByJwt(@Req() req: RequestWithUser) {
+    async getProfile(@Req() req: RequestWithUser) {
         const userId = req.user.id;
-        console.log('UserId:', userId);
-        return this.userService.getUserById(userId);
+        const user = await this.userService.getUserById(userId);
+        return { user };
     }
 
     @Get(':id')
