@@ -16,15 +16,25 @@ export class AuthController {
 
         res.cookie('authToken', access_token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: false,
             maxAge: 3600000,
+            domain: 'localhost',
         });
 
         return res.status(200).json({ message: 'Authenticated successfully' });
     }
 
     @Post('/registration')
-    async registration(@Body() createUserDto: CreateUserDto) {
-        return this.authService.registration(createUserDto);
+    async registration(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
+        const { access_token } = await this.authService.registration(createUserDto);
+
+        res.cookie('authToken', access_token, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 3600000,
+            domain: 'localhost',
+        });
+
+        return res.status(200).json({ message: 'Authenticated successfully' });
     }
 }

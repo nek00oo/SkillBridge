@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 setTimeout(() => {
-                    window.location.href = '../pages/profile.html';
+                    window.location.href = '/profile';
                 }, 800);
             })
             .catch(error => {

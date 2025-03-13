@@ -45,36 +45,30 @@ window.addEventListener('load', function() {
     const studentAgeDisplay = document.getElementById('studentAgeDisplay');
     const profileImage = document.getElementById('profileImage');
 
-    const token = localStorage.getItem('authToken');
-
-    if (!token) {
-        window.location.href = '/login'; // Отправляем пользователя на страницу входа
-    } else {
-        fetchUserData(); // Загружаем данные пользователя
-    }
-
     async function fetchUserData() {
-        await fetch('http://localhost:8080/profile', {
+        await fetch('http://localhost:8080/profile/get-user', {
             method: 'GET',
+            credentials: 'include',
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => {
-            if (!response.ok) {
-                throw new Error('Ошибка при загрузке данных пользователя');
+                'Content-Type': 'application/json'
             }
-            console.log(response);
+        }).then((response) => {
+            //TODO почему не работает, а выдаёт 401 статус ? Хотя в postman работает
+            // if (response.status === 401) {
+            //     window.location.href = '../pages/login.html';
+            //     return;
+            // }
             return response.json();
         }).then(data => {
-            console.log(data);
             studentNameDisplay.textContent = data.firstname || 'Имя не указано';
-            studentAgeDisplay.textContent = data.birthDate ? `${data.birthDate} лет` : 'Возраст не указан';
+            // studentAgeDisplay.textContent = data.birthDate ? `${data.birthDate} лет` : 'Возраст не указан';
             profileImage.src = data.profileImageUrl ? data.profileImageUrl : '../images/default-avatar.png';
         }).catch(error => {
             console.error(error);
         });
     }
+
+    fetchUserData();
 });
 
 document.querySelectorAll('.subject').forEach(subject => {

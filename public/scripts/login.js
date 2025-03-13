@@ -10,7 +10,7 @@ loginBtn.addEventListener('click', () => {
     container.classList.remove('active');
 });
 
-document.getElementById('loginForm').addEventListener('submit', function(e) {
+document.getElementById('loginForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
     const overlay = document.getElementById('overlay');
@@ -19,7 +19,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     const userData = {
         email: e.target.email.value,
         password: e.target.password.value,
-    }
+    };
 
     fetch('http://localhost:8080/auth/login', {
         method: 'POST',
@@ -27,6 +27,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(userData),
+        credentials: 'include',
     })
         .then(response => {
             if (!response.ok) {
@@ -36,33 +37,25 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
             }
             return response.json();
         })
-        .then(data => {
-            const accessToken = data.access_token;
+        .then(() => {
+            iziToast.success({
+                message: 'Вы успешно вошли!',
+                position: 'bottomRight',
+            });
 
-            if (accessToken) {
-                iziToast.success({
-                    message: 'Вы успешно вошли!',
-                    position: 'bottomRight',
-                });
-                localStorage.setItem('authToken', data.access_token);
-                setTimeout(() => {
-                    window.location.href = "/profile";
-                }, 800);
-            } else {
-                iziToast.error({
-                    message: 'Пользователь не найден',
-                    position: 'bottomRight',
-                });
-            }
+            setTimeout(() => {
+                window.location.href = "/profile";
+            }, 800);
         })
         .catch(error => {
             iziToast.error({
                 message: 'Что-то пошло не так, попробуйте позже.',
                 position: 'bottomRight',
             });
-            console.error('Error login user:', error);
+            console.error(error);
         })
         .finally(() => {
             overlay.style.display = 'none';
         });
 });
+
