@@ -53,7 +53,7 @@ const saveProfileBtn = document.getElementById('saveProfileBtn');
 //                 'Content-Type': 'application/json'
 //             }
 //         }).then((response) => {
-//             //TODO почему не работает, а выдаёт 401 статус ? Хотя в postman работает
+//
 //             if (response.status === 401) {
 //                 window.location.href = '../pages/login.html';
 //                 return;
@@ -119,7 +119,7 @@ saveProfileBtn.addEventListener('click', () => {
     };
 
     async function updateUser(){
-        await fetch('http://localhost:8080/profile/edit', {
+        await fetch('/profile/edit', {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`,

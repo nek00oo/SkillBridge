@@ -21,7 +21,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
         password: e.target.password.value,
     };
 
-    fetch('http://localhost:8080/auth/login', {
+    fetch('/auth/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

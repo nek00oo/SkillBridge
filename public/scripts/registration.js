@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         overlay.style.display = 'block';
 
 
-        fetch('http://localhost:8080/auth/registration', {
+        fetch('/auth/registration', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
