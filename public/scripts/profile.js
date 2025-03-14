@@ -36,6 +36,8 @@ const imagePreview = document.getElementById('imagePreview');
 const profileImage = document.getElementById('profileImage');
 const studentName = document.getElementById('studentName');
 const studentNameDisplay = document.getElementById('studentNameDisplay');
+const studentSurname = document.getElementById('studentSurname');
+const studentSurnameDisplay = document.getElementById('studentSurnameDisplay');
 const studentAge = document.getElementById('studentAge');
 const studentAgeDisplay = document.getElementById('studentAgeDisplay');
 const saveProfileBtn = document.getElementById('saveProfileBtn');
@@ -109,32 +111,29 @@ imageUpload.addEventListener('change', function(event) {
 
 //TODO доделать
 saveProfileBtn.addEventListener('click', () => {
-    profileImage.src = imagePreview.src;
-    studentNameDisplay.textContent = studentName.value.trim();
-    studentAgeDisplay.textContent = studentAge.value.trim();
-
     const user = {
         firstname: studentName.value.trim(),
-        profileImageUrl: imagePreview.src,
+        lastname: studentSurname.value.trim(),
     };
 
     async function updateUser(){
         await fetch('/profile/edit', {
             method: 'PATCH',
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify(user),
         }).then(async response => {
             if (!response.ok) {
                 return response.json().then(errorData => {
-                    throw new Error(errorData.message || 'Ошибка регистрации');
+                    throw new Error(errorData.message || 'Ошибка обновления');
                 });
             }
             return response.json();
         }).then((userData) => {
             studentNameDisplay.textContent = userData.firstname;
+            studentSurnameDisplay.textContent = userData.lastname;
             profileImage.src = userData.profileImageUrl ? userData.profileImageUrl : '../images/default-avatar.png';
         })
     }

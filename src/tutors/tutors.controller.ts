@@ -18,8 +18,8 @@ export class TutorsController {
 
     @Get()
     @Render('tutors')
-    getTutorCards() {
-        return { tutors: this.tutorsService.getAllTutorCards() };
+    async getTutorCards() {
+        return { tutors: await this.tutorsService.getAllTutorCard() };
     }
 
     @Get('filter')

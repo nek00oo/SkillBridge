@@ -58,11 +58,14 @@ body {
     flex-grow: 1;
 }
 
+.profile__name {
+    margin-bottom: 1rem;
+}
+
 .profile__name-text {
     font-size: 1.5rem;
     color: var(--color-light-gray);
-    margin-bottom: 1rem;
-    display: block;
+    margin-right: 5px;
 }
 
 .profile__age-text {

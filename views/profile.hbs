@@ -25,6 +25,7 @@
                 <div class="profile__info">
                     <div class="profile__name">
                         <span id="studentNameDisplay" class="profile__name-text">{{user.firstname}}</span>
+                        <span id="studentSurnameDisplay" class="profile__name-text">{{user.lastname}}</span>
                     </div>
                     <div class="profile__age">
                         <span id="studentAgeDisplay" class="profile__age-text"></span>
@@ -124,12 +125,21 @@
                         </div>
                         <div class="edit-profile__form">
                             <div class="edit-profile__field">
-                                <label for="studentName" class="edit-profile__label">ФИО</label>
+                                <label for="studentName" class="edit-profile__label">Имя</label>
                                 <input
                                     type="text"
                                     id="studentName"
                                     class="edit-profile__input"
-                                    placeholder="Введите ФИО"
+                                    placeholder="Введите имя"
+                                />
+                            </div>
+                            <div class="edit-profile__field">
+                                <label for="studentSurname" class="edit-profile__label">Фамилия</label>
+                                <input
+                                    type="text"
+                                    id="studentSurname"
+                                    class="edit-profile__input"
+                                    placeholder="Введите фамилию"
                                 />
                             </div>
                             <div class="edit-profile__field">
