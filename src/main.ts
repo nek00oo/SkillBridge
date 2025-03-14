@@ -43,6 +43,9 @@ async function bootstrap() {
     await app.listen(port, () => {
         console.log('App start at port: ', port);
     });
+
+    console.log('JWT_SECRET_KEY:', process.env.JWT_SECRET_KEY);
+    console.log('NODE_ENV:', process.env.NODE_ENV);
 }
 
 bootstrap();
