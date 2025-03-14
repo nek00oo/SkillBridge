@@ -39,13 +39,6 @@ async function bootstrap() {
 
     app.use(cookieParser());
 
-    // app.enableCors({
-    //     origin: 'http://localhost:8080',
-    //     credentials: true,
-    //     exposedHeaders: ['Set-Cookie'],
-    //     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-    // });
-
     const port = configService.get<number>('PORT', 3000);
     await app.listen(port, () => {
         console.log('App start at port: ', port);
