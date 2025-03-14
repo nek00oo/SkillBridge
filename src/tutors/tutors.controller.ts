@@ -7,7 +7,8 @@ import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 
 @Controller('tutors')
 export class TutorsController {
-    constructor(private readonly tutorsService: TutorsService) {}
+    constructor(private readonly tutorsService: TutorsService) {
+    }
 
     @UseGuards(JwtAuthGuard)
     @Post('/add')
@@ -19,7 +20,15 @@ export class TutorsController {
     @Get()
     @Render('tutors')
     async getTutorCards() {
-        return { tutors: await this.tutorsService.getAllTutorCard() };
+        return {
+            title: 'Репетиторы',
+            styles: ['tutors.module', 'header'],
+            scripts: ['header'],
+            mainClass: 'tutors-page',
+            header: 'header',
+            footer: 'footer',
+            tutors: await this.tutorsService.getAllTutorCard(),
+        };
     }
 
     @Get('filter')

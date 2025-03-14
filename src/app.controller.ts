@@ -4,7 +4,14 @@ import { Controller, Get, Render } from '@nestjs/common';
 export class AppController {
     @Get()
     @Render('index')
-    getIndex() {
-        return {};
+    getHome() {
+        return {
+            title: 'SkillBridge',
+            styles: ['index.module'],
+            scripts: ['main_page'],
+            mainClass: 'main',
+            header: 'header_main',
+            footer: 'footer',
+        };
     }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Body, Req, Res } from '@nestjs/common';
+import { Controller, Post, UseGuards, Body, Req, Res, Render, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { LocalAuthGuard } from './local-auth.guard';
@@ -34,5 +34,27 @@ export class AuthController {
         });
 
         return res.status(200).json({ message: 'Authenticated successfully' });
+    }
+
+    @Render('login')
+    @Get()
+    getAuth() {
+        return {
+            title: 'Login',
+            styles: ['login.module', 'response', 'iziToast.min'],
+            scripts: ['login', 'registration', 'iziToast.min'],
+            mainClass: 'auth',
+        };
+    }
+
+    @Render('register_mobile')
+    @Get('register_mobile')
+    getRegisterForMobile() {
+        return {
+            title: 'Register',
+            styles: ['register_mobile', 'response', 'iziToast.min'],
+            scripts: ['registration', 'iziToast.min'],
+            mainClass: 'sign-up',
+        };
     }
 }

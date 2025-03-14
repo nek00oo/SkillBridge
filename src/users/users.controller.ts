@@ -32,7 +32,14 @@ export class UsersController {
     async getProfile(@Req() req: RequestWithUser) {
         const userId = req.user.id;
         const user = await this.userService.getUserById(userId);
-        return { user };
+        return {
+            title: 'Профиль',
+            styles: ['profile', 'header'],
+            scripts: ['profile', 'header'],
+            mainClass: 'profile-section',
+            header: 'header',
+            user,
+        };
     }
 
     @Get(':id')

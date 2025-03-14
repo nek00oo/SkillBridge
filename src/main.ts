@@ -17,6 +17,13 @@ async function bootstrap() {
 
     hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
 
+    app.use((req, res, next) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        res.locals.layout = 'layouts/layout';
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        next();
+    });
+
     app.set('view options', {
         extension: 'hbs',
         map: { html: 'hbs' },

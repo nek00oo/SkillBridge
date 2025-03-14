@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{title}}</title>
+        <link rel="stylesheet" href="/styles/normalize.css">
+        {{#if styles}}
+            {{#each styles}}
+                <link rel="stylesheet" href="/styles/{{this}}.css">
+            {{/each}}
+        {{/if}}
+    </head>
+    <body>
+        {{#if header}}
+            {{> (lookup . 'header') }}
+        {{/if}}
+
+        <main class="{{mainClass}}">
+            {{{body}}}
+        </main>
+
+        {{#if footer}}
+            {{> (lookup . 'footer') }}
+        {{/if}}
+
+        {{#if scripts}}
+            {{#each scripts}}
+                <script type="module" src="/scripts/{{this}}.js"></script>
+            {{/each}}
+        {{/if}}
+    </body>
+</html>
