@@ -1,17 +1,25 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Render, Req } from '@nestjs/common';
+import { AuthService } from './auth/auth.service';
+import { RequestWithCookies } from './auth/interfaces/requestWithCookies';
 
 @Controller()
 export class AppController {
+    constructor(private readonly authService: AuthService) {}
+
     @Get()
     @Render('index')
-    getHome() {
+    async getHome(@Req() req: RequestWithCookies) {
+        const isAuthenticated = await this.authService.IsAuthenticated(req);
+
         return {
             title: 'SkillBridge',
             styles: ['index.module'],
             scripts: ['main_page'],
-            mainClass: 'main',
+            mainClass: 'home-page',
             header: 'header_main',
             footer: 'footer',
+            authButtonLabel: isAuthenticated ? 'Профиль' : 'Войти',
+            authButtonLink: isAuthenticated ? '/profile' : '/auth',
         };
     }
 }

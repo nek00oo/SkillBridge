@@ -24,5 +24,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
             inject: [ConfigService],
         }),
     ],
+    exports: [AuthService],
 })
 export class AuthModule {}

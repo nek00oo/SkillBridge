@@ -5,6 +5,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { UserInterface } from './interfaces/user.interface';
+import { RequestWithCookies } from './interfaces/requestWithCookies';
 
 @Injectable()
 export class AuthService {
@@ -41,6 +42,23 @@ export class AuthService {
         const user = await this.usersService.createUser({ ...createUserDto, password: hashedPassword });
 
         return this.login(user);
+    }
+
+    async IsAuthenticated(req: RequestWithCookies): Promise<boolean> {
+        const token = req.cookies['authToken'];
+
+        if (!token) {
+            return false;
+        }
+
+        try {
+            const { email } = this.jwtService.verify<JwtPayload>(token);
+            const user = await this.usersService.getUserByEmail(email);
+
+            return !!user;
+        } catch {
+            return false;
+        }
     }
 
     private validatePassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
