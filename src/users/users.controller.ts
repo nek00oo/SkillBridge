@@ -34,8 +34,8 @@ export class UsersController {
         const user = await this.userService.getUserById(userId);
         return {
             title: 'Профиль',
-            styles: ['profile', 'header'],
-            scripts: ['profile', 'header'],
+            styles: ['profile', 'header', 'iziToast.min'],
+            scripts: ['profile', 'header', 'iziToast.min'],
             mainClass: 'profile-section',
             header: 'header',
             user,

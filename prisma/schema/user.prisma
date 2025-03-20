@@ -32,7 +32,7 @@ model Mentorship {
   studentId Int  @map("student_id")
 
   tutor   User @relation("Tutor_Students", fields: [tutorId], references: [id], onDelete: Cascade)
-  tutorId Int  @map("turor_id")
+  tutorId Int  @map("tutor_id")
 
   createdAt DateTime @default(now())
 

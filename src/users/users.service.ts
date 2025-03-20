@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { User } from '@prisma/client';
 import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
-import { parseDateOrNull } from '../common/utils/date-parser.util';
+import { parseDate } from '../common/utils/date-parser.util';
 
 @Injectable()
 export class UsersService {
@@ -13,12 +13,10 @@ export class UsersService {
     async createUser(createUserDto: CreateUserDto): Promise<User> {
         const { birthDate, ...userData } = createUserDto;
 
-        const parsedBirthDate = parseDateOrNull(birthDate, 'dd-MM-yyyy');
-
         return this.prisma.user.create({
             data: {
                 ...userData,
-                birthDate: parsedBirthDate?.toISOString() || null,
+                birthDate: birthDate ? parseDate(birthDate, 'dd-MM-yyyy').toISOString() : null,
             },
         });
     }
@@ -38,13 +36,11 @@ export class UsersService {
     async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
         const { birthDate, ...userData } = updateUserDto;
 
-        const parsedBirthDate = parseDateOrNull(birthDate, 'dd-MM-yyyy');
-
         return this.prisma.user.update({
             where: { id: id },
             data: {
                 ...userData,
-                birthDate: parsedBirthDate?.toISOString() || null,
+                birthDate: birthDate ? parseDate(birthDate, 'dd-MM-yyyy').toISOString() : null,
             },
         });
     }

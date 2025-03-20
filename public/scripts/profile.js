@@ -41,37 +41,29 @@ const studentSurnameDisplay = document.getElementById('studentSurnameDisplay');
 const studentAge = document.getElementById('studentAge');
 const studentAgeDisplay = document.getElementById('studentAgeDisplay');
 const saveProfileBtn = document.getElementById('saveProfileBtn');
-//
-// window.addEventListener('load', function() {
-//     const studentNameDisplay = document.getElementById('studentNameDisplay');
-//     const studentAgeDisplay = document.getElementById('studentAgeDisplay');
-//     const profileImage = document.getElementById('profileImage');
-//
-//     async function fetchUserData() {
-//         await fetch('http://localhost:8080/profile', {
-//             method: 'GET',
-//             credentials: 'include',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             }
-//         }).then((response) => {
-//
-//             if (response.status === 401) {
-//                 window.location.href = '../pages/login.html';
-//                 return;
-//             }
-//             return response.json();
-//         }).then(data => {
-//             studentNameDisplay.textContent = data.firstname || 'Имя не указано';
-//             // studentAgeDisplay.textContent = data.birthDate ? `${data.birthDate} лет` : 'Возраст не указан';
-//             profileImage.src = data.profileImageUrl ? data.profileImageUrl : '../images/default-avatar.png';
-//         }).catch(error => {
-//             console.error(error);
-//         });
-//     }
-//
-//     fetchUserData();
-// });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const eventSource = new EventSource('/assignments/sse', { withCredentials: true });
+    console.log("LOG")
+    eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        console.log(data)
+        if (data.type === 'new') {
+            console.log("LOG2")
+            iziToast.success({
+                title: 'Новое задание!',
+                message: `Преподаватель добавил задание: "${data.assignment.title}". Срок сдачи: ${data.assignment.dueDate}`,
+                position: 'bottomRight',
+                timeout: 500000,
+            });
+        }
+    };
+
+    eventSource.onerror = (error) => {
+        console.error('Ошибка SSE:', error);
+    };
+});
+
 
 document.querySelectorAll('.subject').forEach(subject => {
     subject.addEventListener('click', () => {

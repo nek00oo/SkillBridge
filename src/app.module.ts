@@ -5,6 +5,7 @@ import { TutorsModule } from './tutors/tutors.module';
 import { UsersModule } from './users/users.module';
 import { ReviewModule } from './review/review.module';
 import { AuthModule } from './auth/auth.module';
+import { AssignmentsModule } from './assignments/assignments.module';
 import * as process from 'node:process';
 
 @Module({
@@ -14,6 +15,7 @@ import * as process from 'node:process';
         UsersModule,
         ReviewModule,
         AuthModule,
+        AssignmentsModule,
     ],
     controllers: [AppController],
     providers: [],

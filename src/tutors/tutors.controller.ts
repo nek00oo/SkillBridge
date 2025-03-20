@@ -7,8 +7,7 @@ import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 
 @Controller('tutors')
 export class TutorsController {
-    constructor(private readonly tutorsService: TutorsService) {
-    }
+    constructor(private readonly tutorsService: TutorsService) {}
 
     @UseGuards(JwtAuthGuard)
     @Post('/add')
