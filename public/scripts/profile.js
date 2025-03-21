@@ -44,18 +44,20 @@ const saveProfileBtn = document.getElementById('saveProfileBtn');
 
 document.addEventListener('DOMContentLoaded', () => {
     const eventSource = new EventSource('/assignments/sse', { withCredentials: true });
-    console.log("LOG")
+
     eventSource.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        console.log(data)
-        if (data.type === 'new') {
-            console.log("LOG2")
-            iziToast.success({
-                title: 'Новое задание!',
-                message: `Преподаватель добавил задание: "${data.assignment.title}". Срок сдачи: ${data.assignment.dueDate}`,
-                position: 'bottomRight',
-                timeout: 500000,
-            });
+        try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'new') {
+                iziToast.success({
+                    title: `Новое задание ${data.assignment.title}`,
+                    message: `Срок сдачи: ${new Date(data.assignment.dueDate).toLocaleDateString()}`,
+                    position: 'bottomRight',
+                    timeout: 5000,
+                });
+            }
+        } catch (error) {
+            console.error('Ошибка парсинга данных:', error);
         }
     };
 

@@ -4,7 +4,6 @@ import { AssignmentsService } from './assignments.service';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { Observable } from 'rxjs';
-import { UpdateAssignment } from './dto/update-assignment.dto';
 
 @Controller('assignments')
 export class AssignmentsController {
@@ -14,8 +13,6 @@ export class AssignmentsController {
     @Post('/add')
     async createAssignment(@Body() createAssignmentDto: CreateAssignmentDto, @Request() req: RequestWithUser) {
         const tutorId = req.user.id;
-
-        // Создаём задание
         const assignment = await this.assignmentsService.createAssignment(createAssignmentDto, tutorId);
 
         return { message: 'Assignment created successfully', assignment };
@@ -24,9 +21,8 @@ export class AssignmentsController {
     @UseGuards(JwtAuthGuard)
     @Get('sse')
     @Sse()
-    getAssignmentsUpdates(@Request() req: RequestWithUser): Observable<UpdateAssignment> {
+    getAssignmentsUpdates(@Request() req: RequestWithUser): Observable<{ data: string }> {
         const studentId = req.user.id;
-        console.log('studentId: ', studentId);
         return this.assignmentsService.getAssignmentsUpdates(studentId);
     }
 }

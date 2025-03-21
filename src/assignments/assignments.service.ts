@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { filter, Observable, Subject } from 'rxjs';
+import { filter, map, Observable, Subject } from 'rxjs';
 import { PrismaService } from '../prisma.service';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignment } from './dto/update-assignment.dto';
@@ -12,17 +12,21 @@ export class AssignmentsService {
     private assignmentStream = new Subject<UpdateAssignment>();
 
     emitAssignmentUpdate(update: UpdateAssignment) {
-        console.log(update);
         this.assignmentStream.next(update);
     }
 
-    getAssignmentsUpdates(studentId: number): Observable<UpdateAssignment> {
-        return this.assignmentStream.pipe(filter((assignment) => assignment.studentId === studentId));
+    getAssignmentsUpdates(studentId: number): Observable<{ data: string }> {
+        return this.assignmentStream.pipe(
+            filter((data: UpdateAssignment) => data.studentId === studentId),
+            map((data: UpdateAssignment) => ({
+                data: JSON.stringify(data),
+            })),
+        );
     }
 
     async createAssignment(data: CreateAssignmentDto, tutorId: number) {
         const { dueDate, ...assignmentData } = data;
-        // Проверяем, существует ли связь между преподавателем и студентом
+
         const mentorship = await this.prisma.mentorship.findFirst({
             where: {
                 studentId: data.studentId,
@@ -31,10 +35,9 @@ export class AssignmentsService {
         });
 
         if (!mentorship) {
-            throw new Error('Студент не связан с этим преподавателем');
+            throw new Error(`Студент ${data.studentId} не связан с преподавателем ${tutorId}`);
         }
 
-        // Создаём задание
         const assignment = await this.prisma.assignment.create({
             data: {
                 ...assignmentData,
@@ -42,7 +45,7 @@ export class AssignmentsService {
                 dueDate: parseDate(dueDate, 'dd-MM-yyyy').toISOString(),
             },
         });
-        // Отправляем уведомление
+
         this.emitAssignmentUpdate({
             type: 'new',
             assignment: assignment,
