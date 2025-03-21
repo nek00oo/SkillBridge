@@ -111,7 +111,7 @@ saveProfileBtn.addEventListener('click', () => {
     };
 
     async function updateUser(){
-        await fetch('/profile/edit', {
+        await fetch('api/v1/users/edit', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',

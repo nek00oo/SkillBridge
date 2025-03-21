@@ -6,6 +6,7 @@ import * as bcrypt from 'bcryptjs';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { UserInterface } from './interfaces/user.interface';
 import { RequestWithCookies } from './interfaces/requestWithCookies';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -14,11 +15,11 @@ export class AuthService {
         private jwtService: JwtService,
     ) {}
 
-    async validateUser(email: string, password: string): Promise<any> {
+    async validateUser(email: string, password: string): Promise<SanitizedUser | null> {
         const user = await this.usersService.getUserByEmail(email);
 
         if (user && (await this.validatePassword(password, user.password))) {
-            const { password, ...result } = user;
+            const { password: _, ...result } = user;
             return result;
         }
 
@@ -65,3 +66,5 @@ export class AuthService {
         return bcrypt.compare(plainPassword, hashedPassword);
     }
 }
+
+type SanitizedUser = Omit<User, 'password'>;
