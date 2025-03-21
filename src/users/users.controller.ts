@@ -9,12 +9,14 @@ import {
     Post,
     Render,
     Req,
+    UseFilters,
     UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
+import { UnauthorizedRedirectFilter } from '../auth/filters/unauthorized-redirect.filter';
 
 @Controller('profile')
 export class UsersController {
@@ -26,6 +28,7 @@ export class UsersController {
         return this.userService.createUser(createUserDto);
     }
 
+    @UseFilters(UnauthorizedRedirectFilter)
     @UseGuards(JwtAuthGuard)
     @Get()
     @Render('profile')
@@ -47,6 +50,7 @@ export class UsersController {
         return this.userService.getUserById(id);
     }
 
+    @UseFilters(UnauthorizedRedirectFilter)
     @UseGuards(JwtAuthGuard)
     @Patch('/edit')
     async updateUser(@Req() req: RequestWithUser, @Body() updateUserDto: UpdateUserDto) {
