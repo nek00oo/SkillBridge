@@ -1,6 +1,6 @@
 import { Controller, Get, Render, Req } from '@nestjs/common';
-import { AuthService } from './auth/auth.service';
-import { RequestWithCookies } from './auth/interfaces/requestWithCookies';
+import { AuthService } from './modules/auth/auth.service';
+import { RequestWithCookies } from './modules/auth/interfaces/requestWithCookies';
 
 @Controller()
 export class AppController {

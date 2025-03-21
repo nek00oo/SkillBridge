@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { filter, map, Observable, Subject } from 'rxjs';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../../prisma.service';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignment } from './dto/update-assignment.dto';
-import { parseDate } from '../common/utils/date-parser.util';
+import { parseDate } from '../../common/utils/date-parser.util';
 
 @Injectable()
 export class AssignmentsService {

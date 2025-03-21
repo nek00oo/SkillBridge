@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTutorCardDto, UpdateTutorCardDto } from './dto/create-tutorCard.dto';
-import { PrismaService } from '../prisma.service';
 import { Category, Prisma } from '@prisma/client';
+import { PrismaService } from '../../prisma.service';
 
 @Injectable()
 export class TutorsService {

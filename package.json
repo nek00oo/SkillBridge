@@ -55,7 +55,7 @@
         "@swc/core": "^1.10.7",
         "@types/bcryptjs": "^2.4.6",
         "@types/cookie-parser": "^1.4.8",
-        "@types/express": "^5.0.0",
+        "@types/express": "^5.0.1",
         "@types/handlebars": "^4.1.0",
         "@types/hbs": "^4.0.4",
         "@types/jest": "^29.5.14",

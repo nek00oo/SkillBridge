@@ -7,10 +7,9 @@ import {
     ParseIntPipe,
     Patch,
     Post,
-    Render,
+    UseGuards,
     Req,
     UseFilters,
-    UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
@@ -18,31 +17,13 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { UnauthorizedRedirectFilter } from '../auth/filters/unauthorized-redirect.filter';
 
-@Controller('profile')
-export class UsersController {
+@Controller('api/v1/users')
+export class ApiUsersController {
     constructor(private readonly userService: UsersService) {}
 
-    //TODO сделать проверку (пользователь с такой почтой уже существует)
-    @Post('/add')
+    @Post()
     async createUser(@Body() createUserDto: CreateUserDto) {
         return this.userService.createUser(createUserDto);
-    }
-
-    @UseFilters(UnauthorizedRedirectFilter)
-    @UseGuards(JwtAuthGuard)
-    @Get()
-    @Render('profile')
-    async getProfile(@Req() req: RequestWithUser) {
-        const userId = req.user.id;
-        const user = await this.userService.getUserById(userId);
-        return {
-            title: 'Профиль',
-            styles: ['profile', 'header', 'iziToast.min'],
-            scripts: ['profile', 'header', 'iziToast.min'],
-            mainClass: 'profile-section',
-            header: 'header',
-            user,
-        };
     }
 
     @Get(':id')

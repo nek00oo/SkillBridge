@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
 import { User } from '@prisma/client';
 import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
-import { parseDate } from '../common/utils/date-parser.util';
+import { PrismaService } from '../../prisma.service';
+import { parseDate } from '../../common/utils/date-parser.util';
 
 @Injectable()
 export class UsersService {

@@ -9,8 +9,8 @@ import { RequestWithUser } from './interfaces/requestWithUser';
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
-    @UseGuards(LocalAuthGuard)
     @Post('/login')
+    @UseGuards(LocalAuthGuard)
     login(@Req() req: RequestWithUser, @Res() res: Response) {
         const { access_token } = this.authService.login(req.user);
 
@@ -36,8 +36,8 @@ export class AuthController {
         return res.status(200).json({ message: 'Authenticated successfully' });
     }
 
-    @Render('login')
     @Get()
+    @Render('login')
     getAuth() {
         return {
             title: 'Login',

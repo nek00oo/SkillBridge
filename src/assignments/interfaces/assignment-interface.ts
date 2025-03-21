@@ -1,3 +1,0 @@
-interface AssignmentInterface {
-    id: number;
-}

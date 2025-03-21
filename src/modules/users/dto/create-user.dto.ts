@@ -1,6 +1,6 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUrl, Validate } from 'class-validator';
 import { Role } from '@prisma/client';
-import { CustomDateString } from '../../common/decorators/date-string.decorator';
+import { CustomDateString } from '../../../common/decorators/date-string.decorator';
 
 export class CreateUserDto {
     @IsNotEmpty()

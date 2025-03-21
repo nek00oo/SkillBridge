@@ -1,12 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Render, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { TutorsService } from './tutors.service';
-import { CreateTutorCardDto, UpdateTutorCardDto } from './dto/create-tutorCard.dto';
-import { Category } from '@prisma/client';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
+import { CreateTutorCardDto, UpdateTutorCardDto } from './dto/create-tutorCard.dto';
+import { Category } from '@prisma/client';
 
-@Controller('tutors')
-export class TutorsController {
+@Controller('/api/v1/tutors')
+export class ApiTutorsController {
     constructor(private readonly tutorsService: TutorsService) {}
 
     @UseGuards(JwtAuthGuard)
@@ -14,20 +14,6 @@ export class TutorsController {
     async createTutorCard(@Req() req: RequestWithUser, @Body() createTutorCardDto: CreateTutorCardDto) {
         const authorId = req.user.id;
         return this.tutorsService.createTutorCard(authorId, createTutorCardDto);
-    }
-
-    @Get()
-    @Render('tutors')
-    async getTutorCards() {
-        return {
-            title: 'Репетиторы',
-            styles: ['tutors.module', 'header'],
-            scripts: ['header'],
-            mainClass: 'tutors-page',
-            header: 'header',
-            footer: 'footer',
-            tutors: await this.tutorsService.getAllTutorCard(),
-        };
     }
 
     @Get('filter')

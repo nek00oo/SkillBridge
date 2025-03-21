@@ -6,6 +6,9 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as hbs from 'hbs';
 import * as cookieParser from 'cookie-parser';
 import { ValidationPipe } from '@nestjs/common';
+import { AllExceptionFilter } from './common/filters/exception.filter';
+import { NextFunction, Request } from 'express';
+import { IResponseWithLayout } from './common/interfaces/IResponseWithLayout';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -17,10 +20,8 @@ async function bootstrap() {
 
     hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
 
-    app.use((req, res, next) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    app.use((req: Request, res: IResponseWithLayout, next: NextFunction) => {
         res.locals.layout = 'layouts/layout';
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         next();
     });
 
@@ -36,6 +37,8 @@ async function bootstrap() {
             skipMissingProperties: true,
         }),
     );
+
+    app.useGlobalFilters(new AllExceptionFilter());
 
     app.use(cookieParser());
 

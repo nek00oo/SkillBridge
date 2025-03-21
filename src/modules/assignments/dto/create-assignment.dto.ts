@@ -1,5 +1,5 @@
 import { IsString, IsNumber, IsNotEmpty, Validate } from 'class-validator';
-import { CustomDateString } from '../../common/decorators/date-string.decorator';
+import { CustomDateString } from '../../../common/decorators/date-string.decorator';
 
 export class CreateAssignmentDto {
     @IsString()
