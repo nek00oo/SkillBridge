@@ -29,7 +29,7 @@ export class UsersService {
 
     async getUserByEmail(email: string): Promise<User | null> {
         return this.prisma.user.findUnique({
-            where: { email },
+            where: { email: email },
         });
     }
 
@@ -37,7 +37,7 @@ export class UsersService {
         const { birthDate, ...userData } = updateUserDto;
 
         return this.prisma.user.update({
-            where: { id: id },
+            where: { id },
             data: {
                 ...userData,
                 birthDate: birthDate ? parseDate(birthDate, 'dd-MM-yyyy').toISOString() : null,

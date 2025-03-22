@@ -90,7 +90,7 @@ export class TutorsService {
         }
     }
 
-    async updateTutorCard(id: number, updateTutorCardDto: UpdateTutorCardDto) {
+    async updateTutorCard(authorId: number, updateTutorCardDto: UpdateTutorCardDto) {
         const { subjectCategories, ...rest } = updateTutorCardDto;
 
         const subjectCategoryData = subjectCategories?.map((category: Category) => ({
@@ -98,8 +98,9 @@ export class TutorsService {
         }));
 
         //TODO проверить, что subjectCategories не обнулится и не перезапишется
+        //TODO Нужно сверять с id автора, а не как сейчас, с id карточки
         return this.prisma.tutorCard.update({
-            where: { id: id },
+            where: { id: authorId },
             data: {
                 ...rest,
                 subjectCategories: { create: subjectCategoryData },
@@ -114,7 +115,7 @@ export class TutorsService {
     async deleteTutorCardById(id: number) {
         try {
             return this.prisma.tutorCard.delete({
-                where: { id },
+                where: { id: id },
             });
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {

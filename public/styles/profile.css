@@ -117,7 +117,7 @@ body {
 }
 
 /* Subject */
-.subject {
+.task {
     background-color: var(--color-light-gray);
     padding: 1.5rem;
     border-radius: 8px;
@@ -125,7 +125,7 @@ body {
     transition: transform 0.2s;
 }
 
-.subject:hover {
+.task:hover {
     transform: translateY(-2px);
 }
 

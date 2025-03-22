@@ -1,6 +1,7 @@
 model Assignment {
   id        Int      @id @default(autoincrement())
   title     String
+  category  Category
   grade     Float?
   content   String
   dueDate   DateTime

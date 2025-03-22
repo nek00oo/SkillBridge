@@ -10,13 +10,13 @@ export class ApiTutorsController {
     constructor(private readonly tutorsService: TutorsService) {}
 
     @UseGuards(JwtAuthGuard)
-    @Post('/add')
+    @Post()
     async createTutorCard(@Req() req: RequestWithUser, @Body() createTutorCardDto: CreateTutorCardDto) {
         const authorId = req.user.id;
         return this.tutorsService.createTutorCard(authorId, createTutorCardDto);
     }
 
-    @Get('filter')
+    @Get()
     async getTutorListBySubjectCategory(@Query('category') category: Category) {
         return this.tutorsService.getTutorListBySubjectCategory(category);
     }
@@ -26,8 +26,13 @@ export class ApiTutorsController {
         return this.tutorsService.getTutorCardById(id);
     }
 
+    @Patch(':id')
+    async updateTutorCardById(@Param('id') authorId: number, @Body() createTutorCardDto: UpdateTutorCardDto) {
+        return this.tutorsService.updateTutorCard(authorId, createTutorCardDto);
+    }
+
     @UseGuards(JwtAuthGuard)
-    @Patch('/edit')
+    @Patch()
     async updateTutorCard(@Req() req: RequestWithUser, @Body() createTutorCardDto: UpdateTutorCardDto) {
         const authorId = req.user.id;
         return this.tutorsService.updateTutorCard(authorId, createTutorCardDto);

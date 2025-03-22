@@ -1,5 +1,6 @@
-import { IsString, IsNumber, IsNotEmpty, Validate } from 'class-validator';
+import { IsString, IsNumber, IsNotEmpty, Validate, IsEnum } from 'class-validator';
 import { CustomDateString } from '../../../common/decorators/date-string.decorator';
+import { Category } from '@prisma/client';
 
 export class CreateAssignmentDto {
     @IsString()
@@ -8,6 +9,9 @@ export class CreateAssignmentDto {
     @IsString()
     content: string;
 
+    @IsEnum(Category)
+    category: Category;
+
     @Validate(CustomDateString, ['dd-MM-yyyy'])
     dueDate: string;
 
@@ -15,3 +19,5 @@ export class CreateAssignmentDto {
     @IsNumber()
     studentId: number;
 }
+
+export type UpdateAssignmentDto = Partial<CreateAssignmentDto>;

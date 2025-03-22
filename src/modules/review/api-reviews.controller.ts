@@ -22,7 +22,7 @@ export class ApiReviewsController {
         return this.reviewService.findReviewByStudentId(id);
     }
 
-    @Patch(':id/edit')
+    @Patch(':id')
     async updateReview(@Param('id') id: number, @Body() updateReviewDto: UpdateReviewDto) {
         return this.reviewService.updateReviewById(id, updateReviewDto);
     }

@@ -3,33 +3,6 @@ const editProfileModal = document.getElementById('editProfileModal');
 const modalTitle = document.getElementById('modalTitle');
 const tasksList = document.getElementById('tasksList');
 
-const assigmentData = {
-    math: {
-        title: 'Математика',
-        tasks: [
-            'Контрольная работа по алгебре - 20.05',
-            'Домашнее задание №5 - 22.05',
-            'Тест по геометрии - 25.05',
-        ],
-    },
-    physics: {
-        title: 'Физика',
-        tasks: [
-            'Лабораторная работа №3 - 21.05',
-            'Проект "Механика" - 27.05',
-            'Тест по электричеству - 30.05',
-        ],
-    },
-    russian: {
-        title: 'Русский язык',
-        tasks: [
-            'Сочинение - 19.05',
-            'Диктант - 23.05',
-            'Тест по пунктуации - 26.05',
-        ],
-    },
-};
-
 const editModeBtn = document.getElementById('editModeBtn');
 const imageUpload = document.getElementById('imageUpload');
 const imagePreview = document.getElementById('imagePreview');
@@ -66,8 +39,49 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 });
 
+// document.addEventListener('DOMContentLoaded', () => {
+//     const assignmentsData = []
+//     fetch('api/v1/assignments/student', {
+//         method: 'GET',
+//         withCredentials: true
+//     }).then(response => {
+//         if (!response.ok) {
+//             console.error(`Ошибка получения заданий для студентов, Error: ${response.error}`)
+//         }
+//         return response.json()
+//     }).then(data => {
+//
+//     })
+// });
 
-document.querySelectorAll('.subject').forEach(subject => {
+const assigmentData = {
+    math: {
+        title: 'Математика',
+        tasks: [
+            'Контрольная работа по алгебре - 20.05',
+            'Домашнее задание №5 - 22.05',
+            'Тест по геометрии - 25.05',
+        ],
+    },
+    physics: {
+        title: 'Физика',
+        tasks: [
+            'Лабораторная работа №3 - 21.05',
+            'Проект "Механика" - 27.05',
+            'Тест по электричеству - 30.05',
+        ],
+    },
+    russian: {
+        title: 'Русский язык',
+        tasks: [
+            'Сочинение - 19.05',
+            'Диктант - 23.05',
+            'Тест по пунктуации - 26.05',
+        ],
+    },
+};
+
+document.querySelectorAll('.task').forEach(subject => {
     subject.addEventListener('click', () => {
         const subjectType = subject.dataset.subject;
         if (!subjectType || !assigmentData[subjectType]) return;
@@ -86,6 +100,7 @@ document.querySelectorAll('.subject').forEach(subject => {
 editModeBtn.addEventListener('click', () => {
     imagePreview.src = profileImage.src || '../images/default-avatar.png';
     studentName.value = studentNameDisplay.textContent.trim();
+    studentSurname.value = studentSurnameDisplay.textContent.trim();
     studentAge.value = studentAgeDisplay.textContent.trim();
     editProfileModal.classList.remove('hidden');
 });
@@ -110,8 +125,8 @@ saveProfileBtn.addEventListener('click', () => {
         lastname: studentSurname.value.trim(),
     };
 
-    async function updateUser(){
-        await fetch('api/v1/users/edit', {
+    async function updateUser() {
+        await fetch('api/v1/users', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -129,7 +144,7 @@ saveProfileBtn.addEventListener('click', () => {
             studentNameDisplay.textContent = userData.firstname;
             studentSurnameDisplay.textContent = userData.lastname;
             profileImage.src = userData.profileImageUrl ? userData.profileImageUrl : '../images/default-avatar.png';
-        })
+        });
     }
 
     updateUser();

@@ -31,9 +31,15 @@ export class ApiUsersController {
         return this.userService.getUserById(id);
     }
 
+    //TODO Argument `id`: Invalid value provided. Expected Int, provided Object.
+    @Patch(':id')
+    async updateUserById(@Param() userId: number, @Body() updateUserDto: UpdateUserDto) {
+        return this.userService.updateUser(userId, updateUserDto);
+    }
+
     @UseFilters(UnauthorizedRedirectFilter)
     @UseGuards(JwtAuthGuard)
-    @Patch('/edit')
+    @Patch()
     async updateUser(@Req() req: RequestWithUser, @Body() updateUserDto: UpdateUserDto) {
         const userId = req.user.id;
         return this.userService.updateUser(userId, updateUserDto);
