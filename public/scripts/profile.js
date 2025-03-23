@@ -56,14 +56,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             tasksList.innerHTML = ''
             assignments.forEach(assignment => {
-                const title = createHtmlElement('span', 'task-title', assignment.title)
-                const date = createHtmlElement('span', 'task-date',
-                    `До: ${new Date(assignment.dueDate).toLocaleDateString()}`)
                 const statusIcon = createHtmlElement('span', 'status-icon',
                     assignment.completed ? '✓' : '⌛'
                 );
+                const title = createHtmlElement('span', 'task-title', assignment.title)
+                const date = createHtmlElement('span', 'task-date',
+                    `До: ${new Date(assignment.dueDate).toLocaleDateString()}`)
+                console.log(assignment.grade)
+                const grade = createHtmlElement('div', 'task-grade', assignment.grade ? assignment.grade.toFixed(2).toString() : null);
+
                 const contentWrapper = createHtmlElement('div', 'task-content', [title, date]);
-                const li = createHtmlElement('li', ['task-item', assignment.completed ? 'completed' : null], [statusIcon, contentWrapper]);
+
+                const li = createHtmlElement('li', ['task-item', assignment.completed ? 'completed' : null], [statusIcon, contentWrapper, grade]);
 
                 tasksList.appendChild(li);
             });

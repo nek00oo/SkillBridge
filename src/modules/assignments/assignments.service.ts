@@ -59,6 +59,7 @@ export class AssignmentsService {
                 title: true,
                 dueDate: true,
                 completed: true,
+                grade: true,
             },
             orderBy: [{ completed: 'asc' }, { dueDate: 'asc' }],
         });
