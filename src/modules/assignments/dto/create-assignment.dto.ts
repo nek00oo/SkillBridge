@@ -3,15 +3,19 @@ import { CustomDateString } from '../../../common/decorators/date-string.decorat
 import { Category } from '@prisma/client';
 
 export class CreateAssignmentDto {
+    @IsNotEmpty()
     @IsString()
     title: string;
 
+    @IsNotEmpty()
     @IsString()
     content: string;
 
+    @IsNotEmpty()
     @IsEnum(Category)
     category: Category;
 
+    @IsNotEmpty()
     @Validate(CustomDateString, ['dd-MM-yyyy'])
     dueDate: string;
 

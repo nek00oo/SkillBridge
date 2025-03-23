@@ -4,7 +4,7 @@ import { PrismaService } from '../../prisma.service';
 import { CreateAssignmentDto, UpdateAssignmentDto } from './dto/create-assignment.dto';
 import { UpdateAssignment } from './dto/update-assignment.dto';
 import { parseDate } from '../../common/utils/date-parser.util';
-import { Assignment } from '@prisma/client';
+import { Category } from '@prisma/client';
 
 @Injectable()
 export class AssignmentsService {
@@ -49,32 +49,35 @@ export class AssignmentsService {
         });
     }
 
-    async getAssignmentsByStudentId(studentId: number) {
-        // const assignmentsForStudent: Assignment[] = await this.prisma.assignment.findMany({
-        //     where: { studentId: studentId },
-        // });
+    async getTitleCategoryByStudentId(studentId: number, category?: Category) {
+        return this.prisma.assignment.findMany({
+            where: {
+                studentId: studentId,
+                ...(category && { category }),
+            },
+            select: {
+                title: true,
+                dueDate: true,
+                completed: true,
+            },
+            orderBy: [{ completed: 'asc' }, { dueDate: 'asc' }],
+        });
+    }
 
-        return this.prisma.$queryRaw<Array<{ category: string; data: Assignment[] }>>`
+    async getAssignmentsByStudentId(studentId: number) {
+        return this.prisma.$queryRaw<
+            Array<{
+                category: string;
+                total: number;
+                completed_count: number;
+            }>
+        >`
             SELECT category,
-                   JSONB_AGG(assignments) as data
+                   COUNT(*)::int as total, COUNT(*) FILTER (WHERE completed = true)::int as completed_count
             FROM assignments
-            WHERE "studentId" = ${studentId}
+            WHERE "student_id" = ${studentId}
             GROUP BY category;
         `;
-
-        // const groupAssignments: Record<string, Assignment[]> = {};
-        //
-        // for (const assignment of assignmentsForStudent) {
-        //     const categoryKey = assignment.category.toString();
-        //
-        //     if (!groupAssignments[categoryKey]) {
-        //         groupAssignments[categoryKey] = [];
-        //     }
-        //
-        //     groupAssignments[categoryKey].push(assignment);
-        // }
-
-        // return groupAssignments;
     }
 
     emitAssignmentUpdate(update: UpdateAssignment) {

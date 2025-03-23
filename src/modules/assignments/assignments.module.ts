@@ -7,5 +7,6 @@ import { ApiAssignmentsController } from './api-assignments.controller';
 @Module({
     controllers: [AssignmentsController, ApiAssignmentsController],
     providers: [AssignmentsService, PrismaService],
+    exports: [AssignmentsService],
 })
 export class AssignmentsModule {}

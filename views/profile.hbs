@@ -38,44 +38,9 @@
 <div class="grades">
     <h2 class="grades__title">Успеваемость</h2>
     <div class="subjects">
-        <div class="task" data-subject="math">
-            <h3 class="subject__title">Математика</h3>
-            <div class="subject__grades">
-                <span class="subject__grade">5</span>
-                <span class="subject__grade">4</span>
-                <span class="subject__grade">5</span>
-            </div>
-            <div class="subject__progress">
-                <div class="subject__progress-bar" style="width: 85%"></div>
-            </div>
-            <p class="subject__status">Выполнено задач: 15/20</p>
-        </div>
-
-        <div class="task" data-subject="physics">
-            <h3 class="subject__title">Физика</h3>
-            <div class="subject__grades">
-                <span class="subject__grade">4</span>
-                <span class="subject__grade">4</span>
-                <span class="subject__grade">5</span>
-            </div>
-            <div class="subject__progress">
-                <div class="subject__progress-bar" style="width: 75%"></div>
-            </div>
-            <p class="subject__status">Выполнено задач: 12/20</p>
-        </div>
-
-        <div class="task" data-subject="russian">
-            <h3 class="subject__title">Русский язык</h3>
-            <div class="subject__grades">
-                <span class="subject__grade">5</span>
-                <span class="subject__grade">5</span>
-                <span class="subject__grade">4</span>
-            </div>
-            <div class="subject__progress">
-                <div class="subject__progress-bar" style="width: 90%"></div>
-            </div>
-            <p class="subject__status">Выполнено задач: 18/20</p>
-        </div>
+        {{#each assignments}}
+            {{> subject_card}}
+        {{/each}}
     </div>
 </div>
 <!-- Subject Modal -->

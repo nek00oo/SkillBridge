@@ -14,11 +14,18 @@ async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
     const configService = app.get(ConfigService);
 
-    app.useStaticAssets(join(__dirname, '..', 'public'));
+    //app.useStaticAssets(join(__dirname, '..', 'public'));
+    app.useStaticAssets(join(__dirname, '..', 'public'), {
+        prefix: '/',
+    });
     app.setBaseViewsDir(join(__dirname, '..', 'views'));
     app.setViewEngine('hbs');
 
     hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
+
+    hbs.registerHelper('percent', (completed, total) => {
+        return ((completed / total) * 100).toFixed(2);
+    });
 
     app.use((req: Request, res: IResponseWithLayout, next: NextFunction) => {
         res.locals.layout = 'layouts/layout';

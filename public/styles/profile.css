@@ -243,11 +243,62 @@ body {
     margin-top: 1rem;
 }
 
-.modal__tasks li {
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     padding: 1rem;
-    background-color: var(--color-light-gray);
     margin-bottom: 0.5rem;
-    border-radius: 4px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.task-item:hover {
+    transform: translateX(2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.task-item.completed {
+    background: #e8f5e9;
+    border-left-color: #2ecc71;
+    opacity: 0.8;
+}
+
+.status-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.9em;
+}
+
+.task-item:not(.completed) .status-icon {
+    background: #ffe082;
+    color: #ffa000;
+}
+
+.task-item.completed .status-icon {
+    background: #2ecc71;
+    color: white;
+}
+
+.task-content {
+    flex-grow: 1;
+}
+
+.task-title {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.task-date {
+    color: #666;
+    font-size: 0.9em;
 }
 
 /* Edit Profile Modal */
