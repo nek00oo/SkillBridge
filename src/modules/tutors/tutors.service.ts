@@ -7,24 +7,16 @@ import { PrismaService } from '../../prisma.service';
 export class TutorsService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async getAllTutorCard() {
-        const tutors = await this.prisma.tutorCard.findMany({
+    async getTutorListBySubjectCategory(category?: Category) {
+        const tutorCards = await this.prisma.tutorCard.findMany({
+            where: category ? { subjectCategories: { some: { category } } } : undefined,
             include: {
-                author: {
-                    select: {
-                        firstname: true,
-                        lastname: true,
-                    },
-                },
-                subjectCategories: {
-                    select: {
-                        category: true,
-                    },
-                },
+                author: { select: { firstname: true, lastname: true } },
+                subjectCategories: { select: { category: true } },
             },
         });
 
-        return tutors.map((tutor) => ({
+        return tutorCards.map((tutor) => ({
             ...tutor,
             name: `${tutor.author.firstname} ${tutor.author.lastname}`,
             subject: tutor.subjectCategories.map((sc) => sc.category).join(', '),
@@ -43,28 +35,6 @@ export class TutorsService {
             throw new NotFoundException(`Tutor card with ID ${id} not found`);
         }
         return tutorCard;
-    }
-
-    async getTutorListBySubjectCategory(category: Category) {
-        const tutorCards = await this.prisma.tutorCard.findMany({
-            where: {
-                subjectCategories: {
-                    some: {
-                        category: category,
-                    },
-                },
-            },
-            include: {
-                subjectCategories: true,
-                author: true,
-            },
-        });
-
-        if (!tutorCards.length) {
-            throw new NotFoundException(`No tutor cards found for category ${category}`);
-        }
-
-        return tutorCards;
     }
 
     async createTutorCard(userId: number, createDto: CreateTutorCardDto) {

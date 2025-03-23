@@ -27,6 +27,8 @@ async function bootstrap() {
         return ((completed / total) * 100).toFixed(2);
     });
 
+    hbs.registerHelper('eq', (a, b) => a === b);
+
     app.use((req: Request, res: IResponseWithLayout, next: NextFunction) => {
         res.locals.layout = 'layouts/layout';
         next();
