@@ -1,7 +1,13 @@
 <div class="tutors-section__tutor-card" data-id="{{id}}">
     <img src="{{imgUrl}}" alt="{{name}}" class="tutor-card__image">
     <h2 class="tutor-card__name">{{name}}</h2>
-    <div class="tutor-card__subject">{{subject}}</div>
+
+    <div class="tutor-card__subjects">
+        {{#each subjects}}
+            <span class="tutor-card__subject-tag">{{this}}</span>
+        {{/each}}
+    </div>
+
     <div class="tutor-card__rating">
         {{rating}}
     </div>

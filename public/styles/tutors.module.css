@@ -104,6 +104,7 @@ main {
 }
 
 .tutors-section__tutor-card {
+    position: relative;
     display: grid;
     grid-row: span 8;
     grid-template-rows: subgrid;
@@ -113,6 +114,30 @@ main {
     overflow: hidden;
     transition: all 0.3s ease;
     margin-bottom: 40px;
+}
+
+.tutor-card__subjects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0 2rem;
+    margin: 0.8rem 0;
+}
+
+.tutor-card__subject-tag {
+    background: #ed1d1d;
+    color: #ffffff;
+    padding: 0.3rem 0.8rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: transform 0.2s ease;
+}
+
+.tutor-card__subject-tag:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(43,45,66,0.1);
 }
 
 .tutors-section__tutor-card:hover {

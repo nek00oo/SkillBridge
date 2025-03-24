@@ -19,7 +19,7 @@ export class TutorsService {
         return tutorCards.map((tutor) => ({
             ...tutor,
             name: `${tutor.author.firstname} ${tutor.author.lastname}`,
-            subject: tutor.subjectCategories.map((sc) => sc.category).join(', '),
+            subjects: tutor.subjectCategories.map((sc) => sc.category), // Изменили field name и структуру
         }));
     }
 
