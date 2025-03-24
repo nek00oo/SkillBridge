@@ -118,6 +118,7 @@ main {
 
 .tutor-card__subjects {
     display: flex;
+    align-items: flex-start;
     flex-wrap: wrap;
     gap: 0.5rem;
     padding: 0 2rem;
@@ -271,7 +272,6 @@ main {
     font-size: 14px;
 }
 
-/* Модальное окно */
 .modal {
     position: fixed;
     top: 0;
@@ -327,7 +327,6 @@ main {
     color: #d90429;
 }
 
-/* Шапка модалки */
 .modal-header {
     border-bottom: 2px solid #8d99ae;
     padding-bottom: 1.5rem;
@@ -370,7 +369,6 @@ main {
     font-weight: bold;
 }
 
-/* Контент */
 .modal-content {
     margin-bottom: 2rem;
 }
@@ -388,7 +386,6 @@ main {
     margin-bottom: 1.5rem;
 }
 
-/* Предметы */
 .subjects-list {
     display: flex;
     flex-wrap: wrap;
@@ -405,7 +402,6 @@ main {
     font-size: 0.9rem;
 }
 
-/* Отзывы */
 .reviews-container {
     margin-top: 1rem;
 }
@@ -454,11 +450,6 @@ main {
     font-style: italic;
 }
 
-.review-form {
-    background: #ffffff;
-    border: 2px solid #8d99ae;
-}
-
 .review-textarea {
     width: 100%;
     min-height: 100px;
@@ -504,16 +495,14 @@ main {
     color: #95a5a6;
 }
 
-/* Форма отзыва */
 .review-form {
-    background: #f9f9f9;
-    padding: 1.5rem;
-    border-radius: 8px;
     margin-top: 2rem;
 }
 
 .review-form h3 {
-    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 1.2rem;
+    font-weight: 500;
     color: #2c3e50;
 }
 
