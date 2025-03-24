@@ -16,8 +16,7 @@ model User {
   assignmentsGiven    Assignment[] @relation("Tutor_Assignments")
   assignmentsReceived Assignment[] @relation("Student_Assignments")
 
-  reviewsGiven    Review[] @relation("Student_Reviews")
-  reviewsReceived Review[] @relation("Tutor_Reviews")
+  reviewsGiven Review[] @relation("Student_Reviews")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

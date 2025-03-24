@@ -25,3 +25,71 @@
         </div>
     {{/if}}
 </section>
+
+<div class="modal hidden" id="TutorModal">
+    <div class="modal-wrapper">
+        <button class="modal-close" onclick="document.getElementById('TutorModal').classList.add('hidden')">
+            &times;
+        </button>
+
+        <div class="modal-header">
+            <img id="tutorModalImage" class="tutor-modal-image" src="" alt="Tutor Photo">
+            <div class="tutor-info">
+                <h2 id="modalTitle" class="tutor-name"></h2>
+                <div id="tutorRating" class="tutor-rating"></div>
+                <div id="tutorPrice" class="tutor-price"></div>
+            </div>
+        </div>
+
+        <div class="modal-content">
+            <h3>О преподавателе</h3>
+            <p id="tutorDescription"></p>
+
+            <div class="tutor-subjects">
+                <h3>Преподаваемые предметы</h3>
+                <div id="tutorSubjects" class="subjects-list"></div>
+            </div>
+
+            <div class="tutor-reviews">
+                <h3>Отзывы</h3>
+                <div id="reviewsList" class="reviews-container">
+                    <!-- Хардкод отзывов -->
+                    <div class="review">
+                        <div class="review-header">
+                            <span class="review-author">Анна</span>
+                            <span class="review-rating">★ 5.0</span>
+                        </div>
+                        <p class="review-text">Отличный преподаватель! Объясняет очень понятно.</p>
+                        <span class="review-date">15 марта 2025</span>
+                    </div>
+                    <div class="review">
+                        <div class="review-header">
+                            <span class="review-author">Иван</span>
+                            <span class="review-rating">★ 4.5</span>
+                        </div>
+                        <p class="review-text">Хорошо объясняет материал, но иногда спешит.</p>
+                        <span class="review-date">10 марта 2025</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <form id="tutorReviewsForm" class="review-form">
+                <h3>Оставить отзыв</h3>
+                <textarea class="review-textarea" placeholder="Ваш отзыв..."></textarea>
+                <div class="rating-select">
+                    <span>Оценка:</span>
+                    <select class="rating-stars">
+                        <option value="5">★ ★ ★ ★ ★</option>
+                        <option value="4">★ ★ ★ ★ ☆</option>
+                        <option value="3">★ ★ ★ ☆ ☆</option>
+                        <option value="2">★ ★ ☆ ☆ ☆</option>
+                        <option value="1">★ ☆ ☆ ☆ ☆</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-review">Отправить отзыв</button>
+            </form>
+        </div>
+    </div>
+</div>

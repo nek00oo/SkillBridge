@@ -3,8 +3,8 @@ model Review {
   student   User @relation("Student_Reviews", fields: [studentId], references: [id], onDelete: Cascade)
   studentId Int  @map("student_id")
 
-  tutor   User @relation("Tutor_Reviews", fields: [tutorId], references: [id], onDelete: Cascade)
-  tutorId Int  @map("tutor_id")
+  tutorCard   TutorCard @relation("Tutor_Reviews", fields: [cardId], references: [id], onDelete: Cascade)
+  cardId Int  @map("card_id")
 
   rating  Int
   comment String?

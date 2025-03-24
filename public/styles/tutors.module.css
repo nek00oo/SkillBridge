@@ -246,6 +246,278 @@ main {
     font-size: 14px;
 }
 
+/* Модальное окно */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.modal:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-wrapper {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+/* Шапка модалки */
+.modal-header {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.tutor-modal-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f0f0f0;
+}
+
+.tutor-info {
+    flex: 1;
+}
+
+.tutor-name {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+}
+
+.tutor-rating {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+    color: #f39c12;
+    font-weight: bold;
+}
+
+.tutor-price {
+    font-size: 1.2rem;
+    color: #27ae60;
+    font-weight: bold;
+}
+
+/* Контент */
+.modal-content {
+    margin-bottom: 2rem;
+}
+
+.modal-content h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.tutor-description {
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* Предметы */
+.subjects-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.subject-tag {
+    background: #3498db;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+/* Отзывы */
+.reviews-container {
+    margin-top: 1rem;
+}
+
+.review {
+    border-bottom: 1px solid #eee;
+    padding: 1rem 0;
+}
+
+.review:last-child {
+    border-bottom: none;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.review-author {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.review-rating {
+    color: #f39c12;
+}
+
+.review-text {
+    margin: 0.5rem 0;
+    line-height: 1.5;
+}
+
+.review-date {
+    font-size: 0.8rem;
+    color: #95a5a6;
+}
+
+.no-reviews {
+    color: #95a5a6;
+    text-align: center;
+    padding: 1rem;
+    font-style: italic;
+}
+
+.review-form {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.review-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.rating-select {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rating-stars {
+    padding: 0.3rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.submit-review {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submit-review:hover {
+    background-color: #2980b9;
+}
+
+.review-date {
+    font-size: 0.8rem;
+    color: #95a5a6;
+}
+
+/* Форма отзыва */
+.review-form {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 2rem;
+}
+
+.review-form h3 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+.review-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    resize: vertical;
+}
+
+.rating-select {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.rating-stars {
+    font-size: 1rem;
+    padding: 0.3rem;
+}
+
+.submit-review {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.submit-review:hover {
+    background: #2980b9;
+}
+
 
 @media (max-width: 768px) {
     .header__nav {

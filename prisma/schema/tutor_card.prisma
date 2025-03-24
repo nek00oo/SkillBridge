@@ -10,6 +10,8 @@ model TutorCard {
   imgUrl      String?
   isPublished Boolean  @default(false)
 
+  reviewsReceived Review[] @relation("Tutor_Reviews")
+
   author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId Int  @unique @map("author_id")
 

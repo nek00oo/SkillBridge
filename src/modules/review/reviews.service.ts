@@ -7,19 +7,49 @@ import { PrismaService } from '../../prisma.service';
 export class ReviewsService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async createReview(studentId: number, tutorId: number, createReviewDto: CreateReviewDto) {
+    async createReview(studentId: number, createReviewDto: CreateReviewDto) {
         return this.prisma.review.create({
             data: {
                 ...createReviewDto,
                 studentId: studentId,
-                tutorId: tutorId,
             },
+            include: {
+                student: {
+                    select: {
+                        firstname: true,
+                        lastname: true,
+                    },
+                },
+            },
+        });
+    }
+
+    async findReviewById(id: number) {
+        return this.prisma.review.findMany({
+            where: { id: id },
         });
     }
 
     async findReviewByStudentId(studentId: number) {
         return this.prisma.review.findMany({
             where: { studentId: studentId },
+        });
+    }
+
+    async findReviewsByCardId(cardId: number) {
+        return this.prisma.review.findMany({
+            where: { cardId },
+            include: {
+                student: {
+                    select: {
+                        firstname: true,
+                        lastname: true,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
         });
     }
 

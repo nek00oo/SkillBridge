@@ -13,13 +13,22 @@ export class ApiReviewsController {
     @Post()
     async createReview(@Req() req: RequestWithUser, @Body() createReviewDto: CreateReviewDto) {
         const studentId = req.user.id;
-        const tutorId: number = 1; //TODO из карточки, куда оставляют отзыв
-        return this.reviewService.createReview(studentId, tutorId, createReviewDto);
+        return this.reviewService.createReview(studentId, createReviewDto);
     }
 
     @Get(':id')
-    async findReview(@Param('id') id: number) {
-        return this.reviewService.findReviewByStudentId(id);
+    async findReviewById(@Param('id') id: number) {
+        return this.reviewService.findReviewById(id);
+    }
+
+    @Get('students/:studentId')
+    async findReviewByStudentId(@Param('studentId') studentId: number) {
+        return this.reviewService.findReviewByStudentId(studentId);
+    }
+
+    @Get('cards/:cardId')
+    async findReviewsByCardId(@Param('cardId') cardId: number) {
+        return this.reviewService.findReviewsByCardId(cardId);
     }
 
     @Patch(':id')
