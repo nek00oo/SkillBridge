@@ -7,9 +7,10 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ApiAuthController } from './api-auth.controller';
 
 @Module({
-    controllers: [AuthController],
+    controllers: [AuthController, ApiAuthController],
     providers: [AuthService, LocalStrategy, JwtStrategy],
     imports: [
         ConfigModule,

@@ -21,7 +21,7 @@ document.getElementById('loginForm').addEventListener('submit', function (e) {
         password: e.target.password.value,
     };
 
-    fetch('/auth/login', {
+    fetch('api/v1/auth/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

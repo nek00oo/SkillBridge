@@ -1,3 +1,5 @@
+import { createHtmlElement } from './utils/index.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const subjectFilter = document.getElementById('subjectFilter');
 
@@ -26,36 +28,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const tutorCards = document.querySelectorAll('.tutors-section__tutor-card');
     let currentTutorId = null;
 
-    // Обработчик клика по карточке
     tutorCards.forEach(card => {
         card.addEventListener('click', async () => {
             currentTutorId = card.dataset.id;
 
             try {
-                // Загрузка данных преподавателя
                 const tutorResponse = await fetch(`/api/v1/tutors/${currentTutorId}`);
                 if (!tutorResponse.ok) console.error('Ошибка загрузки данных преподавателя');
                 const tutor = await tutorResponse.json();
 
-                // Загрузка отзывов
                 const reviewsResponse = await fetch(`/api/v1/reviews/cards/${currentTutorId}`);
                 if (!reviewsResponse.ok) console.error('Ошибка загрузки отзывов');
                 const reviews = await reviewsResponse.json();
 
-                // Заполнение данных преподавателя
                 document.getElementById('modalTitle').textContent = tutor.author.firstname;
                 document.getElementById('tutorModalImage').src = tutor.imgUrl;
                 document.getElementById('tutorRating').innerHTML = `★ ${tutor.rating}`;
                 document.getElementById('tutorPrice').textContent = `${tutor.price} ₽/час`;
                 document.getElementById('tutorDescription').textContent = tutor.content;
 
-                // Заполнение предметов
                 const subjectsContainer = document.getElementById('tutorSubjects');
                 subjectsContainer.innerHTML = tutor.subjectCategories
                     .map(sc => `<span class="subject-tag">${sc.category}</span>`)
                     .join('');
 
-                // Заполнение отзывов
                 renderReviews(reviews);
 
                 tutorModal.classList.remove('hidden');
@@ -67,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Функция рендера отзывов
     function renderReviews(reviews) {
         const reviewsContainer = document.getElementById('reviewsList');
 
@@ -76,26 +71,27 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        reviewsContainer.innerHTML = reviews.map(review => `
-            <div class="review">
-                <div class="review-header">
-                    <span class="review-author">${review.student.firstname}</span>
-                    <span class="review-rating">★ ${review.rating.toFixed(1)}</span>
-                </div>
-                <p class="review-text">${review.comment || 'Без комментария'}</p>
-                <span class="review-date">${new Date(review.createdAt).toLocaleDateString()}</span>
-            </div>
-        `).join('');
+        reviewsContainer.innerHTML = ''
+        reviews.forEach((review) => {
+            const reviewAuthor = createHtmlElement('span', 'review-author', review.student.firstname)
+            const reviewRating = createHtmlElement('span', 'review-rating', `★ ${review.rating.toFixed(1)}`)
+            const reviewText = createHtmlElement('p', 'review-text', `${review.comment || 'Без комментария'}`)
+            const reviewDate = createHtmlElement('span', 'review-date', `${new Date(review.createdAt).toLocaleDateString()}`)
+
+            const reviewHeader = createHtmlElement('div', 'review-header', [reviewAuthor, reviewRating])
+            const reviewModel = createHtmlElement('div', 'review', [reviewHeader, reviewText, reviewDate])
+
+            reviewsContainer.appendChild(reviewModel)
+        })
+
     }
 
-    // Закрытие модалки
     tutorModal.addEventListener('click', (e) => {
         if (e.target === tutorModal) {
             tutorModal.classList.add('hidden');
         }
     });
 
-    // Обработка формы отзыва
     document.getElementById('tutorReviewsForm').addEventListener('submit', async (e) => {
         e.preventDefault();
 
@@ -106,9 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch('/api/v1/reviews', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify({
                     cardId: Number(currentTutorId),
@@ -124,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const newReview = await response.json();
 
-            // Добавляем новый отзыв в список
             const reviewsContainer = document.getElementById('reviewsList');
             const noReviewsMsg = reviewsContainer.querySelector('.no-reviews');
 
@@ -143,15 +138,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `);
 
-            // Очищаем форму
             textarea.value = '';
             ratingSelect.value = '5';
-
-            alert('Отзыв успешно добавлен!');
 
         } catch (error) {
             console.error('Ошибка:', error);
             alert(error.message);
+        }
+    });
+});
+
+document.querySelectorAll('.modal-close').forEach(closeBtn => {
+    closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const modal = e.target.closest('.modal');
+        if (modal) {
+            modal.classList.add('hidden');
         }
     });
 });

@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         overlay.style.display = 'block';
 
 
-        fetch('/auth/registration', {
+        fetch('api/v1/auth/registration', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
