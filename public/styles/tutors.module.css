@@ -274,38 +274,41 @@ main {
 }
 
 .modal-wrapper {
-    background: white;
+    background: #ffffff;
     border-radius: 12px;
     width: 90%;
-    max-width: 700px;
+    max-width: 800px;
+    padding: 2rem;
     max-height: 90vh;
     overflow-y: auto;
-    padding: 2rem;
     position: relative;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
 .modal-close {
+    color: #ef233c;
+    font-size: 2rem;
+    padding: 0 0.5rem;
     position: absolute;
     top: 1rem;
     right: 1rem;
-    font-size: 1.5rem;
     background: none;
     border: none;
     cursor: pointer;
-    color: #666;
     transition: color 0.2s;
 }
 
 .modal-close:hover {
-    color: #333;
+    color: #d90429;
 }
 
 /* Шапка модалки */
 .modal-header {
+    border-bottom: 2px solid #8d99ae;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
     display: flex;
     gap: 1.5rem;
-    margin-bottom: 2rem;
     align-items: center;
 }
 
@@ -322,22 +325,23 @@ main {
 }
 
 .tutor-name {
-    margin: 0;
-    color: #2c3e50;
-    font-size: 1.5rem;
+    color: #2b2d42;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
 }
 
 .tutor-rating {
+    color: #ef233c;
+    font-size: 1.2rem;
     display: flex;
     align-items: center;
     margin: 0.5rem 0;
-    color: #f39c12;
     font-weight: bold;
 }
 
 .tutor-price {
-    font-size: 1.2rem;
-    color: #27ae60;
+    color: #2b2d42;
+    font-size: 1.3rem;
     font-weight: bold;
 }
 
@@ -347,9 +351,11 @@ main {
 }
 
 .modal-content h3 {
-    color: #2c3e50;
+    color: #2b2d42;
+    border-bottom: 2px solid #8d99ae;
+    padding-bottom: 0.5rem;
+    font-size: 1.4rem;
     margin-bottom: 1rem;
-    font-size: 1.2rem;
 }
 
 .tutor-description {
@@ -366,10 +372,11 @@ main {
 }
 
 .subject-tag {
-    background: #3498db;
-    color: white;
+    background: #ed1d1d;
+    color: #ffffff;
+    border-radius: 5px;
+    font-weight: 500;
     padding: 0.3rem 0.8rem;
-    border-radius: 20px;
     font-size: 0.9rem;
 }
 
@@ -379,8 +386,11 @@ main {
 }
 
 .review {
-    border-bottom: 1px solid #eee;
-    padding: 1rem 0;
+    background: #ffffff;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(43,45,66,0.1);
 }
 
 .review:last-child {
@@ -395,11 +405,11 @@ main {
 
 .review-author {
     font-weight: bold;
-    color: #2c3e50;
+    color: #2b2d42;
 }
 
 .review-rating {
-    color: #f39c12;
+    color: #ef233c;
 }
 
 .review-text {
@@ -409,7 +419,7 @@ main {
 
 .review-date {
     font-size: 0.8rem;
-    color: #95a5a6;
+    color: #8d99ae;
 }
 
 .no-reviews {
@@ -420,10 +430,8 @@ main {
 }
 
 .review-form {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background: #f8f9fa;
-    border-radius: 8px;
+    background: #ffffff;
+    border: 2px solid #8d99ae;
 }
 
 .review-textarea {
@@ -451,17 +459,19 @@ main {
 }
 
 .submit-review {
-    background-color: #3498db;
+    background-color: #ef233c;
+    font-weight: bold;
+    padding: 1rem 2rem;
+    transition: all 0.3s ease;
     color: white;
     border: none;
-    padding: 0.7rem 1.5rem;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.2s;
 }
 
 .submit-review:hover {
-    background-color: #2980b9;
+    background-color: #d90429;
+    transform: translateY(-1px);
 }
 
 .review-date {
@@ -483,10 +493,10 @@ main {
 }
 
 .review-textarea {
+    border: 2px solid #8d99ae;
     width: 100%;
     min-height: 100px;
     padding: 0.8rem;
-    border: 1px solid #ddd;
     border-radius: 4px;
     margin-bottom: 1rem;
     resize: vertical;
@@ -500,8 +510,8 @@ main {
 }
 
 .rating-stars {
-    font-size: 1rem;
-    padding: 0.3rem;
+    border: 2px solid #8d99ae;
+    color: #2b2d42;
 }
 
 .submit-review {
