@@ -17,8 +17,12 @@ export class ApiTutorsController {
     }
 
     @Get()
-    async getTutorListBySubjectCategory(@Query('category') category: Category) {
-        return this.tutorsService.getTutorListBySubjectCategory(category);
+    async getTutorListBySubjectCategory(
+        @Query('category') category: Category,
+        @Query('page') page = 1,
+        @Query('limit') limit = 12,
+    ) {
+        return this.tutorsService.getTutorListBySubjectCategory(category, page, limit);
     }
 
     @Get(':id')

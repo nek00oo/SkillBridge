@@ -7,20 +7,31 @@ import { PrismaService } from '../../prisma.service';
 export class TutorsService {
     constructor(private readonly prisma: PrismaService) {}
 
-    async getTutorListBySubjectCategory(category?: Category) {
-        const tutorCards = await this.prisma.tutorCard.findMany({
-            where: category ? { subjectCategories: { some: { category } } } : undefined,
-            include: {
-                author: { select: { firstname: true, lastname: true } },
-                subjectCategories: { select: { category: true } },
-            },
-        });
+    async getTutorListBySubjectCategory(category?: Category, page = 1, limit = 9) {
+        const skip = (page - 1) * limit;
+        const where = category ? { subjectCategories: { some: { category } } } : {};
 
-        return tutorCards.map((tutor) => ({
-            ...tutor,
-            name: `${tutor.author.firstname} ${tutor.author.lastname}`,
-            subjects: tutor.subjectCategories.map((sc) => sc.category), // Изменили field name и структуру
-        }));
+        const [tutorCards, total] = await Promise.all([
+            this.prisma.tutorCard.findMany({
+                where,
+                skip,
+                take: limit,
+                include: {
+                    author: { select: { firstname: true, lastname: true } },
+                    subjectCategories: { select: { category: true } },
+                },
+            }),
+            this.prisma.tutorCard.count({ where }),
+        ]);
+
+        return {
+            tutors: tutorCards.map((tutor) => ({
+                ...tutor,
+                name: `${tutor.author.firstname} ${tutor.author.lastname}`,
+                subjects: tutor.subjectCategories.map((sc) => sc.category),
+            })),
+            total,
+        };
     }
 
     async getTutorCardById(id: number) {

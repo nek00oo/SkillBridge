@@ -26,6 +26,37 @@
     {{/if}}
 </section>
 
+{{#if pagination}}
+    <div class="pagination">
+        {{#if pagination.prev}}
+            <a href="/tutors?page={{pagination.prev}}{{#if selectedCategory}}&category={{selectedCategory}}{{/if}}"
+            class="pagination__link pagination__link--prev">
+            &laquo; Previous
+            </a>
+        {{/if}}
+
+        <div class="pagination__pages">
+            {{#each pagination.pages}}
+                {{#if (eq this ../pagination.current)}}
+                    <span class="pagination__page pagination__page--current">{{this}}</span>
+                {{else}}
+                    <a href="/tutors?page={{this}}{{#if ../selectedCategory}}&category={{../selectedCategory}}{{/if}}"
+                    class="pagination__page">
+                    {{this}}
+                    </a>
+                {{/if}}
+            {{/each}}
+        </div>
+
+        {{#if pagination.next}}
+            <a href="/tutors?page={{pagination.next}}{{#if selectedCategory}}&category={{selectedCategory}}{{/if}}"
+            class="pagination__link pagination__link--next">
+            Next &raquo;
+            </a>
+        {{/if}}
+    </div>
+{{/if}}
+
 <div class="modal hidden" id="TutorModal">
     <div class="modal-wrapper">
         <button class="modal-close" aria-label="Close modal">
