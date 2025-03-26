@@ -16,7 +16,6 @@ export class PrismaExceptionFilter implements ExceptionFilter {
             return response.status(status).json({
                 statusCode: exception.statusCode,
                 message: exception.message,
-                metaData: exception.metaData,
             });
         }
 

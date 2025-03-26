@@ -10,9 +10,12 @@ export class AllExceptionFilter implements ExceptionFilter {
         const status = exception.getStatus();
         const exceptionResponse = exception.getResponse();
 
+        console.log(exceptionResponse);
         const errorResponse: ErrorResponse = {
-            message: (exceptionResponse as ErrorResponse).message || 'Internal server error',
-            error: (exceptionResponse as ErrorResponse).error || 'Unknown error',
+            message:
+                typeof exceptionResponse === 'string'
+                    ? exceptionResponse
+                    : (exceptionResponse as { message?: string }).message || 'Unknown error',
         };
 
         response.status(status).json({
