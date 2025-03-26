@@ -96,8 +96,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
 
         const form = e.target;
-        const textarea = form.querySelector('.review-textarea');
-        const ratingSelect = form.querySelector('.rating-stars');
+        const textarea = form.querySelector('.review__textarea');
+        const ratingSelect = form.querySelector('.rating__stars');
 
         try {
             const response = await fetch('/api/v1/reviews', {
