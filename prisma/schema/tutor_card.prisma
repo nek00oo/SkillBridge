@@ -6,8 +6,8 @@ model TutorCard {
 
   rating      Decimal?
   price       Decimal
-  content     String?
-  imgUrl      String?
+  content     String
+  imgUrl      String
   isPublished Boolean  @default(false)
 
   reviewsReceived Review[] @relation("Tutor_Reviews")

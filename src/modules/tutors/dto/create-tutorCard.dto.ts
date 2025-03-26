@@ -15,6 +15,7 @@ export class CreateTutorCardDto {
     @IsNumber({ maxDecimalPlaces: 2 })
     price: number;
 
+    @IsNotEmpty()
     @IsString()
     content: string;
 
@@ -24,6 +25,7 @@ export class CreateTutorCardDto {
     @IsNumber()
     rating: number;
 
+    @IsNotEmpty()
     @IsString()
     imgUrl: string;
 }
