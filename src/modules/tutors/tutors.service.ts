@@ -1,12 +1,14 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateTutorCardDto, UpdateTutorCardDto } from './dto/create-tutorCard.dto';
-import { Category, Prisma } from '@prisma/client';
+import { Category } from '@prisma/client';
 import { PrismaService } from '../../prisma.service';
+import { PrismaCatch } from '../../common/decorators/prisma-catch.decorator';
 
 @Injectable()
 export class TutorsService {
     constructor(private readonly prisma: PrismaService) {}
 
+    @PrismaCatch()
     async getTutorListBySubjectCategory(category?: Category, page = 1, limit = 9) {
         const skip = (page - 1) * limit;
         const where = category ? { subjectCategories: { some: { category } } } : {};
@@ -34,20 +36,18 @@ export class TutorsService {
         };
     }
 
+    @PrismaCatch()
     async getTutorCardById(id: number) {
-        const tutorCard = await this.prisma.tutorCard.findUnique({
-            where: { id: id },
+        return this.prisma.tutorCard.findUniqueOrThrow({
+            where: { id },
             include: {
                 subjectCategories: true,
                 author: true,
             },
         });
-        if (!tutorCard) {
-            throw new NotFoundException(`Tutor card with ID ${id} not found`);
-        }
-        return tutorCard;
     }
 
+    @PrismaCatch()
     async createTutorCard(userId: number, createDto: CreateTutorCardDto) {
         const { subjectCategories, ...rest } = createDto;
 
@@ -55,33 +55,25 @@ export class TutorsService {
             category: category,
         }));
 
-        try {
-            return this.prisma.tutorCard.create({
-                data: {
-                    ...rest,
-                    authorId: userId,
-                    subjectCategories: { create: subjectCategoryData },
-                },
-            });
-        } catch (error) {
-            if (error instanceof Prisma.PrismaClientValidationError) {
-                throw new BadRequestException('Invalid data provided');
-            }
-            throw error;
-        }
+        return this.prisma.tutorCard.create({
+            data: {
+                ...rest,
+                authorId: userId,
+                subjectCategories: { create: subjectCategoryData },
+            },
+        });
     }
 
-    async updateTutorCard(authorId: number, updateTutorCardDto: UpdateTutorCardDto) {
+    @PrismaCatch()
+    async updateTutorCardById(id: number, updateTutorCardDto: UpdateTutorCardDto) {
         const { subjectCategories, ...rest } = updateTutorCardDto;
 
         const subjectCategoryData = subjectCategories?.map((category: Category) => ({
             category: category,
         }));
 
-        //TODO проверить, что subjectCategories не обнулится и не перезапишется
-        //TODO Нужно сверять с id автора, а не как сейчас, с id карточки
         return this.prisma.tutorCard.update({
-            where: { id: authorId },
+            where: { id: id },
             data: {
                 ...rest,
                 subjectCategories: { create: subjectCategoryData },
@@ -92,17 +84,37 @@ export class TutorsService {
         });
     }
 
-    //TODO Мб ловить ошибки через interceptors
+    @PrismaCatch()
+    async updateTutorCardByAuthorId(authorId: number, updateTutorCardDto: UpdateTutorCardDto) {
+        const { subjectCategories, ...rest } = updateTutorCardDto;
+
+        const subjectCategoryData = subjectCategories?.map((category: Category) => ({
+            category: category,
+        }));
+
+        return this.prisma.tutorCard.update({
+            where: { authorId: authorId },
+            data: {
+                ...rest,
+                subjectCategories: { create: subjectCategoryData },
+            },
+            include: {
+                subjectCategories: true,
+            },
+        });
+    }
+
+    @PrismaCatch()
     async deleteTutorCardById(id: number) {
-        try {
-            return this.prisma.tutorCard.delete({
-                where: { id: id },
-            });
-        } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
-                throw new NotFoundException(`Tutor card with ID ${id} not found`);
-            }
-            throw error;
-        }
+        return this.prisma.tutorCard.delete({
+            where: { id: id },
+        });
+    }
+
+    @PrismaCatch()
+    async deleteTutorCardByAuthorId(authorId: number) {
+        return this.prisma.tutorCard.delete({
+            where: { authorId: authorId },
+        });
     }
 }

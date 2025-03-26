@@ -3,6 +3,7 @@ import { User } from '@prisma/client';
 import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
 import { PrismaService } from '../../prisma.service';
 import { parseDate } from '../../common/utils/date-parser.util';
+import { PrismaCatch } from '../../common/decorators/prisma-catch.decorator';
 
 @Injectable()
 export class UsersService {
@@ -10,6 +11,7 @@ export class UsersService {
 
     //TODO сделать проверки на наличие объекта
 
+    @PrismaCatch()
     async createUser(createUserDto: CreateUserDto): Promise<User> {
         const { birthDate, ...userData } = createUserDto;
 
@@ -21,18 +23,21 @@ export class UsersService {
         });
     }
 
+    @PrismaCatch()
     async getUserById(id: number): Promise<User | null> {
         return this.prisma.user.findUnique({
             where: { id: id },
         });
     }
 
+    @PrismaCatch()
     async getUserByEmail(email: string): Promise<User | null> {
         return this.prisma.user.findUnique({
             where: { email: email },
         });
     }
 
+    @PrismaCatch()
     async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
         const { birthDate, ...userData } = updateUserDto;
 
@@ -45,6 +50,7 @@ export class UsersService {
         });
     }
 
+    @PrismaCatch()
     async deleteUserById(id: number): Promise<User> {
         return this.prisma.user.delete({
             where: { id: id },

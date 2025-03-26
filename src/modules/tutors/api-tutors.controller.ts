@@ -12,8 +12,7 @@ export class ApiTutorsController {
     @UseGuards(JwtAuthGuard)
     @Post()
     async createTutorCard(@Req() req: RequestWithUser, @Body() createTutorCardDto: CreateTutorCardDto) {
-        const authorId = req.user.id;
-        return this.tutorsService.createTutorCard(authorId, createTutorCardDto);
+        return this.tutorsService.createTutorCard(req.user.id, createTutorCardDto);
     }
 
     @Get()
@@ -31,19 +30,24 @@ export class ApiTutorsController {
     }
 
     @Patch(':id')
-    async updateTutorCardById(@Param('id') authorId: number, @Body() createTutorCardDto: UpdateTutorCardDto) {
-        return this.tutorsService.updateTutorCard(authorId, createTutorCardDto);
+    async updateTutorCardById(@Param('id') id: number, @Body() createTutorCardDto: UpdateTutorCardDto) {
+        return this.tutorsService.updateTutorCardById(id, createTutorCardDto);
     }
 
     @UseGuards(JwtAuthGuard)
     @Patch()
-    async updateTutorCard(@Req() req: RequestWithUser, @Body() createTutorCardDto: UpdateTutorCardDto) {
-        const authorId = req.user.id;
-        return this.tutorsService.updateTutorCard(authorId, createTutorCardDto);
+    async updateTutorCardByAuthorId(@Req() req: RequestWithUser, @Body() createTutorCardDto: UpdateTutorCardDto) {
+        return this.tutorsService.updateTutorCardByAuthorId(req.user.id, createTutorCardDto);
     }
 
     @Delete(':id')
     async deleteTutorCardById(@Param('id') id: number) {
         return this.tutorsService.deleteTutorCardById(id);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Delete()
+    async deleteTutorCardByAuthorId(@Req() req: RequestWithUser) {
+        return this.tutorsService.deleteTutorCardByAuthorId(req.user.id);
     }
 }

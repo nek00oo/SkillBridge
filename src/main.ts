@@ -9,12 +9,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionFilter } from './common/filters/exception.filter';
 import { NextFunction, Request } from 'express';
 import { IResponseWithLayout } from './common/interfaces/IResponseWithLayout';
+import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
     const configService = app.get(ConfigService);
 
-    //app.useStaticAssets(join(__dirname, '..', 'public'));
     app.useStaticAssets(join(__dirname, '..', 'public'), {
         prefix: '/',
     });
@@ -47,7 +47,7 @@ async function bootstrap() {
         }),
     );
 
-    app.useGlobalFilters(new AllExceptionFilter());
+    app.useGlobalFilters(new AllExceptionFilter(), new PrismaExceptionFilter());
 
     app.use(cookieParser());
 
@@ -55,9 +55,6 @@ async function bootstrap() {
     await app.listen(port, () => {
         console.log('App start at port: ', port);
     });
-
-    console.log('JWT_SECRET_KEY:', process.env.JWT_SECRET_KEY);
-    console.log('NODE_ENV:', process.env.NODE_ENV);
 }
 
 bootstrap();

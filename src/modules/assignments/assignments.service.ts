@@ -5,6 +5,7 @@ import { CreateAssignmentDto, UpdateAssignmentDto } from './dto/create-assignmen
 import { UpdateAssignment } from './dto/update-assignment.dto';
 import { parseDate } from '../../common/utils/date-parser.util';
 import { Category } from '@prisma/client';
+import { PrismaCatch } from '../../common/decorators/prisma-catch.decorator';
 
 @Injectable()
 export class AssignmentsService {
@@ -12,6 +13,8 @@ export class AssignmentsService {
 
     private assignmentStream = new Subject<UpdateAssignment>();
 
+    //TODO Error - не будет отлавливаться
+    @PrismaCatch()
     async createAssignment(data: CreateAssignmentDto, tutorId: number) {
         const { dueDate, ...assignmentData } = data;
 
@@ -43,28 +46,25 @@ export class AssignmentsService {
         return assignment;
     }
 
+    @PrismaCatch()
     async getAssignmentById(id: number) {
         return this.prisma.assignment.findFirst({
             where: { id: id },
         });
     }
 
+    @PrismaCatch()
     async getTitleCategoryByStudentId(studentId: number, category?: Category) {
         return this.prisma.assignment.findMany({
             where: {
                 studentId: studentId,
                 ...(category && { category }),
             },
-            select: {
-                title: true,
-                dueDate: true,
-                completed: true,
-                grade: true,
-            },
+            select: { title: true, dueDate: true, completed: true, grade: true },
             orderBy: [{ completed: 'asc' }, { dueDate: 'asc' }],
         });
     }
-
+    @PrismaCatch()
     async getAssignmentsByStudentId(studentId: number) {
         return this.prisma.$queryRaw<
             Array<{
@@ -94,6 +94,7 @@ export class AssignmentsService {
         );
     }
 
+    @PrismaCatch()
     async updateAssignmentById(id: number, updateAssignmentDto: UpdateAssignmentDto) {
         return this.prisma.assignment.update({
             where: { id: id },
@@ -101,6 +102,7 @@ export class AssignmentsService {
         });
     }
 
+    @PrismaCatch()
     async deleteAssignmentById(id: number) {
         return this.prisma.assignment.delete({
             where: { id: id },
