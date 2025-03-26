@@ -10,6 +10,7 @@ import { AllExceptionFilter } from './common/filters/exception.filter';
 import { NextFunction, Request } from 'express';
 import { IResponseWithLayout } from './common/interfaces/IResponseWithLayout';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -50,6 +51,14 @@ async function bootstrap() {
     app.useGlobalFilters(new AllExceptionFilter(), new PrismaExceptionFilter());
 
     app.use(cookieParser());
+
+    const config = new DocumentBuilder()
+        .setTitle('SkillBridge')
+        .setDescription('The SkillBridge API description')
+        .setVersion('1.0')
+        .build();
+    const documentFactory = () => SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api-docs', app, documentFactory);
 
     const port = configService.get<number>('PORT', 3000);
     await app.listen(port, () => {

@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { filter, map, Observable, Subject } from 'rxjs';
 import { PrismaService } from '../../prisma.service';
-import { CreateAssignmentDto, UpdateAssignmentDto } from './dto/create-assignment.dto';
-import { UpdateAssignment } from './dto/update-assignment.dto';
+import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { parseDate } from '../../common/utils/date-parser.util';
 import { Category } from '@prisma/client';
 import { PrismaCatch } from '../../common/decorators/prisma-catch.decorator';
+import { IUpdateAssignment } from './interfaces/IUpdateAssigment';
+import { UpdateAssignmentDto } from './dto/update-assignment.dto';
 
 @Injectable()
 export class AssignmentsService {
     constructor(private readonly prisma: PrismaService) {}
 
-    private assignmentStream = new Subject<UpdateAssignment>();
+    private assignmentStream = new Subject<IUpdateAssignment>();
 
     //TODO Error - не будет отлавливаться
     @PrismaCatch()
@@ -48,7 +49,7 @@ export class AssignmentsService {
 
     @PrismaCatch()
     async getAssignmentById(id: number) {
-        return this.prisma.assignment.findFirst({
+        return this.prisma.assignment.findUniqueOrThrow({
             where: { id: id },
         });
     }
@@ -81,14 +82,14 @@ export class AssignmentsService {
         `;
     }
 
-    emitAssignmentUpdate(update: UpdateAssignment) {
+    emitAssignmentUpdate(update: IUpdateAssignment) {
         this.assignmentStream.next(update);
     }
 
     getAssignmentsUpdates(studentId: number): Observable<{ data: string }> {
         return this.assignmentStream.pipe(
-            filter((data: UpdateAssignment) => data.studentId === studentId),
-            map((data: UpdateAssignment) => ({
+            filter((data: IUpdateAssignment) => data.studentId === studentId),
+            map((data: IUpdateAssignment) => ({
                 data: JSON.stringify(data),
             })),
         );

@@ -1,25 +1,32 @@
 import { AssignmentsService } from './assignments.service';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, Request, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CreateAssignmentDto, UpdateAssignmentDto } from './dto/create-assignment.dto';
+import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { Category } from '@prisma/client';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UpdateAssignmentDto } from './dto/update-assignment.dto';
 
+@ApiTags('Assignments')
+@ApiBearerAuth()
 @Controller('api/v1/assignments')
 export class ApiAssignmentsController {
     constructor(private readonly assignmentsService: AssignmentsService) {}
 
+    @ApiOperation({ summary: 'Create a new assignment' })
+    @ApiResponse({ status: 201, description: 'Assignment created successfully' })
+    @ApiResponse({ status: 403, description: 'Unauthorized' })
     @Post()
     @UseGuards(JwtAuthGuard)
     async createAssignment(@Body() createAssignmentDto: CreateAssignmentDto, @Request() req: RequestWithUser) {
-        const tutorId = req.user.id;
-        const assignment = await this.assignmentsService.createAssignment(createAssignmentDto, tutorId);
-
-        return { message: 'Assignment created successfully', assignment };
+        return await this.assignmentsService.createAssignment(createAssignmentDto, req.user.id);
     }
 
-    @UseGuards(JwtAuthGuard)
+    @ApiOperation({ summary: 'Get assignments grouped by category for a student' })
+    @ApiResponse({ status: 200, description: 'Assignments retrieved successfully' })
+    @ApiResponse({ status: 403, description: 'Unauthorized' })
     @Get('/tasks')
+    @UseGuards(JwtAuthGuard)
     async getAssignmentsGroupByCategoryByStudentId(
         @Req() req: RequestWithUser,
         @Query('category') category?: Category,
@@ -27,20 +34,27 @@ export class ApiAssignmentsController {
         return this.assignmentsService.getTitleCategoryByStudentId(req.user.id, category);
     }
 
+    @ApiOperation({ summary: 'Get assignment by ID' })
+    @ApiResponse({ status: 200, description: 'Assignment retrieved successfully' })
+    @ApiResponse({ status: 404, description: 'Assignment not found' })
     @Get(':id')
     async getAssigmentById(@Param('id') id: number) {
-        return this.assignmentsService.getAssignmentById(id);
+        return await this.assignmentsService.getAssignmentById(id);
     }
 
-    //TODO подумать, кто обновляет, если ученик, то ставить выполнено в true, если препод то не менять
-    //нужно ли получать id пользователя, чтобы проверять роль или сделать два разных endpoint ?
+    @ApiOperation({ summary: 'Update assignment by ID' })
+    @ApiResponse({ status: 200, description: 'Assignment updated successfully' })
+    @ApiResponse({ status: 404, description: 'Assignment not found' })
     @Patch(':id')
     async updateAssigmentById(@Param('id') id: number, @Body() updateAssignmentDto: UpdateAssignmentDto) {
-        return this.assignmentsService.updateAssignmentById(id, updateAssignmentDto);
+        return await this.assignmentsService.updateAssignmentById(id, updateAssignmentDto);
     }
 
+    @ApiOperation({ summary: 'Delete assignment by ID' })
+    @ApiResponse({ status: 200, description: 'Assignment deleted successfully' })
+    @ApiResponse({ status: 404, description: 'Assignment not found' })
     @Delete(':id')
     async deleteAssignmentById(@Param('id') id: number) {
-        return this.assignmentsService.deleteAssignmentById(id);
+        return await this.assignmentsService.deleteAssignmentById(id);
     }
 }

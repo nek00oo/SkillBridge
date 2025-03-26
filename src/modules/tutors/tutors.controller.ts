@@ -2,7 +2,9 @@ import { Controller, Get, Query, Render } from '@nestjs/common';
 import { TutorsService } from './tutors.service';
 import { Category } from '@prisma/client';
 import { Pagination } from '../../common/types/pagination';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Controller('tutors')
 export class TutorsController {
     constructor(private readonly tutorsService: TutorsService) {}

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from '../../prisma.service';
 import { parseDate } from '../../common/utils/date-parser.util';
 import { PrismaCatch } from '../../common/decorators/prisma-catch.decorator';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -25,14 +26,14 @@ export class UsersService {
 
     @PrismaCatch()
     async getUserById(id: number): Promise<User | null> {
-        return this.prisma.user.findUnique({
+        return this.prisma.user.findUniqueOrThrow({
             where: { id: id },
         });
     }
 
     @PrismaCatch()
     async getUserByEmail(email: string): Promise<User | null> {
-        return this.prisma.user.findUnique({
+        return this.prisma.user.findUniqueOrThrow({
             where: { email: email },
         });
     }

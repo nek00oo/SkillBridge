@@ -23,7 +23,7 @@ export class ReviewsService {
 
     @PrismaCatch()
     async findReviewById(id: number) {
-        return this.prisma.review.findMany({
+        return this.prisma.review.findUniqueOrThrow({
             where: { id: id },
         });
     }

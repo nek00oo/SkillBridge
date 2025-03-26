@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTutorCardDto, UpdateTutorCardDto } from './dto/create-tutorCard.dto';
+import { CreateTutorCardDto } from './dto/create-tutorCard.dto';
 import { Category } from '@prisma/client';
 import { PrismaService } from '../../prisma.service';
 import { PrismaCatch } from '../../common/decorators/prisma-catch.decorator';
+import { UpdateTutorCardDto } from './dto/update-tutorCard.dto';
 
 @Injectable()
 export class TutorsService {

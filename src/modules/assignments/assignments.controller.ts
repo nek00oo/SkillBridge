@@ -3,7 +3,9 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AssignmentsService } from './assignments.service';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { Observable } from 'rxjs';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Controller('assignments')
 export class AssignmentsController {
     constructor(private readonly assignmentsService: AssignmentsService) {}

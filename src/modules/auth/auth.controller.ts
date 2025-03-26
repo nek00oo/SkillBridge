@@ -1,5 +1,7 @@
 import { Controller, Render, Get } from '@nestjs/common';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Controller('auth')
 export class AuthController {
     @Get()

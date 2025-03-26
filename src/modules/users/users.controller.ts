@@ -4,7 +4,9 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { UnauthorizedRedirectFilter } from '../auth/filters/unauthorized-redirect.filter';
 import { AssignmentsService } from '../assignments/assignments.service';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Controller('profile')
 export class UsersController {
     constructor(

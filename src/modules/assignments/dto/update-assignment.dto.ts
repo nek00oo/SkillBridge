@@ -1,7 +1,4 @@
-import { Assignment } from '@prisma/client';
+import { CreateAssignmentDto } from './create-assignment.dto';
+import { PartialType } from '@nestjs/swagger';
 
-export interface UpdateAssignment {
-    type: 'new' | 'updated';
-    assignment: Assignment;
-    studentId: number;
-}
+export class UpdateAssignmentDto extends PartialType(CreateAssignmentDto) {}
