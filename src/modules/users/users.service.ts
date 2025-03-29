@@ -10,8 +10,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersService {
     constructor(private readonly prisma: PrismaService) {}
 
-    //TODO сделать проверки на наличие объекта
-
     @PrismaCatch()
     async createUser(createUserDto: CreateUserDto): Promise<User> {
         const { birthDate, ...userData } = createUserDto;
@@ -25,14 +23,14 @@ export class UsersService {
     }
 
     @PrismaCatch()
-    async getUserById(id: number): Promise<User | null> {
+    async getUserById(id: number): Promise<User> {
         return this.prisma.user.findUniqueOrThrow({
             where: { id: id },
         });
     }
 
     @PrismaCatch()
-    async getUserByEmail(email: string): Promise<User | null> {
+    async getUserByEmail(email: string): Promise<User> {
         return this.prisma.user.findUniqueOrThrow({
             where: { email: email },
         });

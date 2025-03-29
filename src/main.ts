@@ -48,6 +48,8 @@ async function bootstrap() {
         }),
     );
 
+    //app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
     app.useGlobalFilters(new AllExceptionFilter(), new PrismaExceptionFilter());
 
     app.use(cookieParser());
