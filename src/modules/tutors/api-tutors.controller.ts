@@ -39,7 +39,11 @@ export class ApiTutorsController {
     @ApiQuery({ name: 'category', required: false, description: 'Subject category', enum: Category })
     @ApiQuery({ name: 'page', required: false, description: 'Page number', example: 1 })
     @ApiQuery({ name: 'limit', required: false, description: 'Number of items per page', example: 12 })
-    @ApiResponse({ status: 200, description: 'List of tutor cards retrieved successfully.' })
+    @ApiResponse({
+        status: 200,
+        description: 'List of tutor cards retrieved successfully.',
+        type: [CreateTutorCardDto],
+    })
     @ApiResponse({ status: 400, description: 'Invalid query parameters provided.' })
     @ApiResponse({ status: 404, description: 'No tutor cards found matching the criteria.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
@@ -53,7 +57,11 @@ export class ApiTutorsController {
     }
 
     @ApiOperation({ summary: 'Get a tutor card by ID' })
-    @ApiResponse({ status: 200, description: 'Tutor card retrieved successfully.' })
+    @ApiResponse({
+        status: 200,
+        description: 'Tutor card retrieved successfully.',
+        type: CreateTutorCardDto,
+    })
     @ApiResponse({ status: 400, description: 'Invalid ID provided.' })
     @ApiResponse({ status: 404, description: 'Tutor card not found (e.g. P2001, P2015, P2018, P2025).' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })

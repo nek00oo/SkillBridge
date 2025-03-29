@@ -26,7 +26,7 @@ export class ApiReviewsController {
 
     @ApiOperation({ summary: 'Get a review by its ID' })
     @ApiParam({ name: 'id', type: Number, description: 'Review ID' })
-    @ApiResponse({ status: 200, description: 'Review retrieved successfully.' })
+    @ApiResponse({ status: 200, description: 'Review retrieved successfully.', type: CreateReviewDto })
     @ApiResponse({ status: 404, description: 'Review not found (e.g. P2001, P2025).' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get(':id')
@@ -36,17 +36,17 @@ export class ApiReviewsController {
 
     @ApiOperation({ summary: 'Get reviews by student ID' })
     @ApiParam({ name: 'studentId', type: Number, description: 'Student ID' })
-    @ApiResponse({ status: 200, description: 'Reviews retrieved successfully.' })
+    @ApiResponse({ status: 200, description: 'Reviews retrieved successfully.', type: [CreateReviewDto] })
     @ApiResponse({ status: 404, description: 'No reviews found for the given student.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get('students/:studentId')
-    async findReviewByStudentId(@Param('studentId', ParseIntPipe) studentId: number) {
-        return this.reviewService.findReviewByStudentId(studentId);
+    async findReviewsByStudentId(@Param('studentId', ParseIntPipe) studentId: number) {
+        return this.reviewService.findReviewsByStudentId(studentId);
     }
 
     @ApiOperation({ summary: 'Get reviews by tutor card ID' })
     @ApiParam({ name: 'cardId', type: Number, description: 'Tutor card ID' })
-    @ApiResponse({ status: 200, description: 'Reviews retrieved successfully.' })
+    @ApiResponse({ status: 200, description: 'Reviews retrieved successfully.', type: [CreateReviewDto] })
     @ApiResponse({ status: 404, description: 'No reviews found for the given tutor card.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get('cards/:cardId')

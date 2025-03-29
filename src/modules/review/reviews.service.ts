@@ -29,7 +29,7 @@ export class ReviewsService {
     }
 
     @PrismaCatch()
-    async findReviewByStudentId(studentId: number) {
+    async findReviewsByStudentId(studentId: number) {
         return this.prisma.review.findMany({
             where: { studentId: studentId },
         });

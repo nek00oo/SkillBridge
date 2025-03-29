@@ -35,7 +35,11 @@ export class ApiUsersController {
 
     @ApiOperation({ summary: 'Get a user by ID' })
     @ApiParam({ name: 'id', type: Number, description: 'User ID' })
-    @ApiResponse({ status: 200, description: 'User found.' })
+    @ApiResponse({
+        status: 200,
+        description: 'User found.',
+        type: CreateUserDto,
+    })
     @ApiResponse({ status: 404, description: 'User not found.' })
     @Get(':id')
     async getUser(@Param('id', ParseIntPipe) id: number) {

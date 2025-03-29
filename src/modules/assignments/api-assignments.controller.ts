@@ -15,7 +15,7 @@ export class ApiAssignmentsController {
 
     @ApiOperation({ summary: 'Create a new assignment' })
     @ApiResponse({ status: 201, description: 'Assignment created successfully' })
-    @ApiResponse({ status: 403, description: 'Unauthorized' })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     @Post()
     @UseGuards(JwtAuthGuard)
     async createAssignment(@Body() createAssignmentDto: CreateAssignmentDto, @Request() req: RequestWithUser) {
@@ -23,8 +23,8 @@ export class ApiAssignmentsController {
     }
 
     @ApiOperation({ summary: 'Get assignments grouped by category for a student' })
-    @ApiResponse({ status: 200, description: 'Assignments retrieved successfully' })
-    @ApiResponse({ status: 403, description: 'Unauthorized' })
+    @ApiResponse({ status: 200, description: 'Assignments retrieved successfully', type: [CreateAssignmentDto] })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
     @Get('/tasks')
     @UseGuards(JwtAuthGuard)
     async getAssignmentsGroupByCategoryByStudentId(
@@ -35,7 +35,7 @@ export class ApiAssignmentsController {
     }
 
     @ApiOperation({ summary: 'Get assignment by ID' })
-    @ApiResponse({ status: 200, description: 'Assignment retrieved successfully' })
+    @ApiResponse({ status: 200, description: 'Assignment retrieved successfully', type: CreateAssignmentDto })
     @ApiResponse({ status: 404, description: 'Assignment not found' })
     @Get(':id')
     async getAssigmentById(@Param('id') id: number) {
