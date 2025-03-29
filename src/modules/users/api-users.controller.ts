@@ -9,7 +9,9 @@ import {
     Post,
     UseGuards,
     Req,
-    UseFilters, ClassSerializerInterceptor, UseInterceptors,
+    UseFilters,
+    ClassSerializerInterceptor,
+    UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
 import { UsersService } from './users.service';
