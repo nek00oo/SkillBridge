@@ -65,6 +65,7 @@ export class AssignmentsService {
             orderBy: [{ completed: 'asc' }, { dueDate: 'asc' }],
         });
     }
+
     @PrismaCatch()
     async getAssignmentsByStudentId(studentId: number) {
         return this.prisma.$queryRaw<

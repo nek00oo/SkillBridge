@@ -1,29 +1,17 @@
-const teacherCards = document.querySelectorAll('.teacher-card');
-const featuredCard = document.querySelector('.teacher-card.featured');
-const smallCards = document.querySelectorAll('.teacher-card.small');
-let currentIndex = 0;
+const countDownDate = new Date().getTime() + 15 * 24 * 60 * 60 * 1000;
 
-function rotateTeachers() {
-    const nextIndex = (currentIndex + 1) % smallCards.length;
-    const currentSmallCard = smallCards[currentIndex];
-    const nextSmallCard = smallCards[nextIndex];
+function updateTimer() {
+    const now = new Date().getTime();
+    const distance = countDownDate - now;
 
-    // Fade out current featured card
-    featuredCard.classList.add('fade-out');
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 
-    setTimeout(() => {
-        // Swap content between featured and next small card
-        const featuredContent = featuredCard.innerHTML;
-        featuredCard.innerHTML = nextSmallCard.innerHTML;
-        nextSmallCard.innerHTML = featuredContent;
-
-        // Reset animations
-        featuredCard.classList.remove('fade-out');
-        featuredCard.classList.add('fade-in');
-
-        currentIndex = nextIndex;
-    }, 500);
+    document.getElementById('days').innerText = days.toString().padStart(2, '0');
+    document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+    document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
 }
 
-// Rotate teachers every 10 seconds
-setInterval(rotateTeachers, 10000);
+setInterval(updateTimer, 1000);
+updateTimer();
