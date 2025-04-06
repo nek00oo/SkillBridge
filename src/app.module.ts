@@ -7,17 +7,30 @@ import { UsersModule } from './modules/users/users.module';
 import { ReviewsModule } from './modules/review/reviews.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AssignmentsModule } from './modules/assignments/assignments.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
+import { GraphqlModule } from './graphql/graphql.module';
+import { UserResolver } from './graphql/graphql.resolver';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ envFilePath: `.${process.env.NODE_ENV}.env` }),
+        GraphQLModule.forRoot<ApolloDriverConfig>({
+            driver: ApolloDriver,
+            autoSchemaFile: join(process.cwd(), 'graphql/schema.gql'),
+            introspection: true,
+            sortSchema: true,
+            playground: true,
+        }),
         TutorsModule,
         UsersModule,
         ReviewsModule,
         AuthModule,
         AssignmentsModule,
+        GraphqlModule,
     ],
     controllers: [AppController],
-    providers: [],
+    providers: [UserResolver],
 })
 export class AppModule {}

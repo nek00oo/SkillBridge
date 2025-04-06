@@ -37,6 +37,18 @@ export class UsersService {
     }
 
     @PrismaCatch()
+    async getUsers(limit: number = 10, offset: number = 0): Promise<User[]> {
+        const safeLimit = Math.min(Math.max(1, limit), 100);
+        const safeOffset = Math.max(0, offset);
+
+        return this.prisma.user.findMany({
+            take: safeLimit,
+            skip: safeOffset,
+            orderBy: { createdAt: 'desc' },
+        });
+    }
+
+    @PrismaCatch()
     async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
         const { birthDate, ...userData } = updateUserDto;
 
