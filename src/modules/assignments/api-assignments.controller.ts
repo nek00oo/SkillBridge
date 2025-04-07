@@ -1,6 +1,6 @@
 import { AssignmentsService } from './assignments.service';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, Request, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { Category } from '@prisma/client';

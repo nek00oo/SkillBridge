@@ -1,6 +1,6 @@
 import { Controller, Get, Render, Req, UseFilters, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { UnauthorizedRedirectFilter } from '../auth/filters/unauthorized-redirect.filter';
 import { AssignmentsService } from '../assignments/assignments.service';

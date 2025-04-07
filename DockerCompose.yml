@@ -10,3 +10,13 @@ services:
     ports:
       - "2432:5432"
     restart: unless-stopped
+
+  postgres_test:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=db_skill_test
+    ports:
+      - "3432:5432"
+    restart: unless-stopped
