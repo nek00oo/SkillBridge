@@ -27,12 +27,12 @@ export class CreateTutorCardDto {
     @ApiPropertyOptional({ description: 'Publication status of the card' })
     @IsOptional()
     @IsBoolean()
-    isPublished: boolean;
+    isPublished?: boolean;
 
     @ApiPropertyOptional({ description: 'Card rating' })
     @IsOptional()
     @IsNumber()
-    rating: number;
+    rating?: number;
 
     @ApiProperty({ description: 'Image URL' })
     @IsNotEmpty()

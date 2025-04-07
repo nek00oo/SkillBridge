@@ -33,7 +33,7 @@ export class UsersService {
     // т.к тогда не будет проходить регистрация
     // PrismaCatch сейчас работать не будет, т.к ошибка тут не кинется
     @PrismaCatch()
-    async getUserByEmail(email: string): Promise<User | null> {
+    async findUserByEmail(email: string): Promise<User | null> {
         return this.prisma.user.findUnique({ where: { email } });
     }
 

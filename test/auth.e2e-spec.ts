@@ -1,10 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import * as cookieParser from 'cookie-parser';
-import { AppModule } from '../src/app.module';
 import { PrismaTestService } from './prisma-test.service';
-import { execSync } from 'child_process';
+// import { execSync } from 'child_process';
+import { setupE2eTest } from './setup-e2e';
 
 type ResponseBody = { message: string };
 
@@ -13,38 +11,31 @@ describe('AuthController (e2e)', () => {
     let prisma: PrismaTestService;
 
     beforeAll(async () => {
-        try {
-            execSync('npm run db:test:push', { stdio: 'inherit' });
-        } catch (err) {
-            console.error('❌ Failed to push test DB schema', err);
-            throw err;
-        }
+        // try {
+        //     execSync('npm run db:test:push', { stdio: 'inherit' });
+        // } catch (err) {
+        //     console.error('❌ Failed to push test DB schema', err);
+        //     throw err;
+        // }
 
-        const moduleFixture: TestingModule = await Test.createTestingModule({
-            imports: [AppModule],
-            providers: [PrismaTestService],
-        }).compile();
+        const setup = await setupE2eTest();
+        app = setup.app;
+        prisma = setup.prisma;
 
-        app = moduleFixture.createNestApplication();
-
-        app.use(cookieParser());
-        app.useGlobalPipes(new ValidationPipe({ transform: true }));
-        await app.init();
-
-        prisma = moduleFixture.get(PrismaTestService);
-        await prisma.cleanDatabase();
+        await prisma.cleanAuthTestDatabase();
     });
 
     beforeEach(async () => {
-        await prisma.cleanDatabase();
+        await prisma.cleanAuthTestDatabase();
     });
 
     afterAll(async () => {
+        await prisma.cleanAuthTestDatabase();
         await app.close();
     });
 
     const user = {
-        email: 'e2euser@example.com',
+        email: 'auth_test_e2euser@example.com',
         firstname: 'E2ETest',
         password: 'qwe123',
     };

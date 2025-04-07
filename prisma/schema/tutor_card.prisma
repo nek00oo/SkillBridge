@@ -25,7 +25,7 @@ model SubjectCategory {
   id       Int      @id @default(autoincrement())
   category Category
 
-  tutorCard TutorCard @relation("TutorCard_SubjectCategories", fields: [tutorId], references: [id])
+  tutorCard TutorCard @relation("TutorCard_SubjectCategories", fields: [tutorId], references: [id], onDelete: Cascade)
   tutorId   Int       @map("tutor_id")
 
   @@unique([tutorId, category])

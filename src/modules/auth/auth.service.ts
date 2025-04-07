@@ -16,7 +16,7 @@ export class AuthService {
     ) {}
 
     async validateUser(email: string, password: string): Promise<SanitizedUser | null> {
-        const user = await this.usersService.getUserByEmail(email);
+        const user = await this.usersService.findUserByEmail(email);
 
         if (user && (await this.validatePassword(password, user.password))) {
             const { password: _, ...result } = user;
@@ -34,7 +34,7 @@ export class AuthService {
     }
 
     async registration(createUserDto: CreateUserDto) {
-        const client = await this.usersService.getUserByEmail(createUserDto.email);
+        const client = await this.usersService.findUserByEmail(createUserDto.email);
         if (client) {
             throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
         }
@@ -54,7 +54,7 @@ export class AuthService {
 
         try {
             const { email } = this.jwtService.verify<JwtPayload>(token);
-            const user = await this.usersService.getUserByEmail(email);
+            const user = await this.usersService.findUserByEmail(email);
 
             return !!user;
         } catch {

@@ -15,7 +15,7 @@ export class UserResolver {
 
     @Query(() => GqlUser)
     async userByEmail(@Args('email') email: string) {
-        return this.usersService.getUserByEmail(email);
+        return this.usersService.findUserByEmail(email);
     }
 
     @Query(() => [GqlUser])
