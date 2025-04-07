@@ -43,14 +43,12 @@ async function bootstrap() {
     app.useGlobalPipes(
         new ValidationPipe({
             transform: true,
-            whitelist: true,
-            forbidNonWhitelisted: true,
         }),
     );
 
     //app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-    app.useGlobalFilters(new AllExceptionFilter(), new PrismaExceptionFilter());
+    app.useGlobalFilters(new PrismaExceptionFilter(), new AllExceptionFilter());
 
     app.use(cookieParser());
 

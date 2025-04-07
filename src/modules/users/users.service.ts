@@ -29,11 +29,12 @@ export class UsersService {
         });
     }
 
+    //TODO null нужен, чтобы registration проверял, есть ли пользователь. Использовать findUniqueOrThrow тут не верно,
+    // т.к тогда не будет проходить регистрация
+    // PrismaCatch сейчас работать не будет, т.к ошибка тут не кинется
     @PrismaCatch()
-    async getUserByEmail(email: string): Promise<User> {
-        return this.prisma.user.findUniqueOrThrow({
-            where: { email: email },
-        });
+    async getUserByEmail(email: string): Promise<User | null> {
+        return this.prisma.user.findUnique({ where: { email } });
     }
 
     @PrismaCatch()

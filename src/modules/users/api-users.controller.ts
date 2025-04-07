@@ -4,7 +4,6 @@ import {
     Delete,
     Get,
     Param,
-    ParseIntPipe,
     Patch,
     Post,
     UseGuards,
@@ -46,7 +45,7 @@ export class ApiUsersController {
     })
     @ApiResponse({ status: 404, description: 'User not found.' })
     @Get(':id')
-    async getUser(@Param('id', ParseIntPipe) id: number): Promise<UserResponseDto> {
+    async getUser(@Param('id') id: number): Promise<UserResponseDto> {
         return new UserResponseDto(await this.userService.getUserById(id));
     }
 
@@ -57,10 +56,7 @@ export class ApiUsersController {
     @ApiResponse({ status: 400, description: 'Invalid data provided.' })
     @ApiResponse({ status: 404, description: 'User not found.' })
     @Patch(':id')
-    async updateUserById(
-        @Param('id', ParseIntPipe) userId: number,
-        @Body() updateUserDto: UpdateUserDto,
-    ): Promise<UserResponseDto> {
+    async updateUserById(@Param('id') userId: number, @Body() updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
         return new UserResponseDto(await this.userService.updateUser(userId, updateUserDto));
     }
 
@@ -81,7 +77,7 @@ export class ApiUsersController {
     @ApiResponse({ status: 200, description: 'User successfully deleted.', type: UserResponseDto })
     @ApiResponse({ status: 404, description: 'User not found.' })
     @Delete(':id')
-    async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<UserResponseDto> {
+    async deleteUser(@Param('id') id: number): Promise<UserResponseDto> {
         return new UserResponseDto(await this.userService.deleteUserById(id));
     }
 }

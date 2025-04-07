@@ -22,20 +22,20 @@ export class CreateUserDto {
     @ApiPropertyOptional({ description: 'User role' })
     @IsOptional()
     @IsEnum(Role)
-    role: Role;
+    role?: Role;
 
     @ApiPropertyOptional({ description: 'User last name' })
     @IsOptional()
     @IsString()
-    lastname: string;
+    lastname?: string;
 
     @ApiPropertyOptional({ description: 'User birth date in dd-MM-yyyy format' })
     @IsOptional()
     @Validate(CustomDateString, ['dd-MM-yyyy'])
-    birthDate: string;
+    birthDate?: string;
 
     @ApiPropertyOptional({ description: 'URL of the user profile image' })
     @IsOptional()
     @IsUrl()
-    profileImageUrl: string;
+    profileImageUrl?: string;
 }

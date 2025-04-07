@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
@@ -30,7 +30,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 404, description: 'Review not found (e.g. P2001, P2025).' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get(':id')
-    async findReviewById(@Param('id', ParseIntPipe) id: number) {
+    async findReviewById(@Param('id') id: number) {
         return this.reviewService.findReviewById(id);
     }
 
@@ -40,7 +40,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 404, description: 'No reviews found for the given student.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get('students/:studentId')
-    async findReviewsByStudentId(@Param('studentId', ParseIntPipe) studentId: number) {
+    async findReviewsByStudentId(@Param('studentId') studentId: number) {
         return this.reviewService.findReviewsByStudentId(studentId);
     }
 
@@ -50,7 +50,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 404, description: 'No reviews found for the given tutor card.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get('cards/:cardId')
-    async findReviewsByCardId(@Param('cardId', ParseIntPipe) cardId: number) {
+    async findReviewsByCardId(@Param('cardId') cardId: number) {
         return this.reviewService.findReviewsByCardId(cardId);
     }
 
@@ -63,7 +63,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 409, description: 'Conflict error during update.' })
     @ApiResponse({ status: 500, description: 'Internal server error during update.' })
     @Patch(':id')
-    async updateReview(@Param('id', ParseIntPipe) id: number, @Body() updateReviewDto: UpdateReviewDto) {
+    async updateReview(@Param('id') id: number, @Body() updateReviewDto: UpdateReviewDto) {
         return this.reviewService.updateReviewById(id, updateReviewDto);
     }
 
@@ -73,7 +73,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 404, description: 'Review not found.' })
     @ApiResponse({ status: 500, description: 'Internal server error during deletion.' })
     @Delete(':id')
-    async removeReview(@Param('id', ParseIntPipe) id: number) {
+    async removeReview(@Param('id') id: number) {
         return this.reviewService.removeReviewById(id);
     }
 }
