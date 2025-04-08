@@ -10,6 +10,15 @@ type ResponseWithTutorCard = {
     body: TutorCardResponseInterface;
 };
 
+type ResponseWithTutorList = {
+    body: TutorListCardResponseInterface;
+};
+
+interface TutorListCardResponseInterface {
+    tutors: TutorCardResponseInterface[];
+    total: number;
+}
+
 interface TutorCardResponseInterface {
     id: number;
     title: string;
@@ -25,6 +34,7 @@ interface TutorCardResponseInterface {
 interface Author {
     email: string;
     firstname: string;
+    lastname: string;
     password: string;
     role: Role;
 }
@@ -53,8 +63,9 @@ describe('TutorsController (e2e)', () => {
     };
 
     const author: Author = {
-        email: 'tutor_card_test_tutor@example.com',
-        firstname: 'Anya',
+        email: 'tutor_card_test_tutor1@example.com',
+        firstname: 'Alina1',
+        lastname: 'Visnya',
         password: 'password123',
         role: 'TUTOR',
     };
@@ -147,5 +158,157 @@ describe('TutorsController (e2e)', () => {
         await request(app.getHttpServer()).delete(`/api/v1/tutors/${tutorCardId}`).expect(200);
 
         await request(app.getHttpServer()).get(`/api/v1/tutors/${tutorCardId}`).expect(404);
+    });
+
+    it('should delete tutor card by author ID', async () => {
+        // Регистрация
+        const registration = await request(app.getHttpServer()).post('/api/v1/auth/registration').send({
+            email: 'tutor_card_test_tutor2@example.com',
+            firstname: 'Alina2',
+            password: 'password123',
+            role: 'TUTOR',
+        });
+
+        const currentCookie = registration.headers['set-cookie'][0];
+
+        await request(app.getHttpServer()).post('/api/v1/tutors').set('Cookie', currentCookie).send(dto);
+        await request(app.getHttpServer()).delete('/api/v1/tutors').set('Cookie', currentCookie).expect(200);
+        // Проверяем что карточки больше нет
+        await request(app.getHttpServer()).delete('/api/v1/tutors').set('Cookie', currentCookie).expect(404);
+    });
+});
+
+describe('GET /api/v1/tutors (filter by category)', () => {
+    let app: INestApplication;
+    let prisma: PrismaTestService;
+
+    const authorDto3: Author = {
+        email: 'tutor_card_test_tutor3@example.com',
+        firstname: 'Alina3',
+        lastname: 'Yakovenko',
+        password: 'password123',
+        role: 'TUTOR',
+    };
+
+    const cardDto3 = {
+        title: 'Physics and Math Tutor',
+        price: 5,
+        content: 'I explain physics in easy language.',
+        imgUrl: 'url/image.png',
+        subjectCategories: ['PHYSICS', 'MATHEMATICS'],
+    };
+
+    const authorDto4: Author = {
+        email: 'tutor_card_test_tutor4@example.com',
+        firstname: 'Alina4',
+        lastname: 'Yakovenko',
+        password: 'password123',
+        role: 'TUTOR',
+    };
+
+    const cardDto4 = {
+        title: 'Physics Only Tutor',
+        price: 5,
+        content: 'I explain physics in easy language.',
+        imgUrl: 'url/image.png',
+        subjectCategories: ['PHYSICS'],
+    };
+
+    const authorDto5: Author = {
+        email: 'tutor_card_test_tutor5@example.com',
+        firstname: 'Alina5',
+        lastname: 'Yakovenko',
+        password: 'password123',
+        role: 'TUTOR',
+    };
+
+    const cardDto5 = {
+        title: 'Chemistry Tutor',
+        price: 5,
+        content: 'I explain physics in easy language.',
+        imgUrl: 'url/image.png',
+        subjectCategories: ['CHEMISTRY'],
+    };
+
+    beforeAll(async () => {
+        const setup = await setupE2eTest();
+        app = setup.app;
+        prisma = setup.prisma;
+
+        await prisma.cleanTutorCardTestDatabase();
+
+        const registration3 = await request(app.getHttpServer()).post('/api/v1/auth/registration').send(authorDto3);
+
+        const cookie3 = registration3.headers['set-cookie'][0];
+
+        const registration4 = await request(app.getHttpServer()).post('/api/v1/auth/registration').send(authorDto4);
+
+        const cookie4 = registration4.headers['set-cookie'][0];
+
+        const registration5 = await request(app.getHttpServer()).post('/api/v1/auth/registration').send(authorDto5);
+
+        const cookie5 = registration5.headers['set-cookie'][0];
+
+        // Создаем несколько карточек с разными категориями
+        await Promise.all([
+            // Физика + Математика
+            request(app.getHttpServer()).post('/api/v1/tutors').set('Cookie', cookie3).send(cardDto3),
+
+            // Только Физика
+            request(app.getHttpServer()).post('/api/v1/tutors').set('Cookie', cookie4).send(cardDto4),
+
+            // Химия
+            request(app.getHttpServer()).post('/api/v1/tutors').set('Cookie', cookie5).send(cardDto5),
+        ]);
+    });
+
+    it('should return all tutor cards when no category specified', async () => {
+        const res: ResponseWithTutorList = await request(app.getHttpServer()).get('/api/v1/tutors').expect(200);
+
+        expect(res.body.tutors.length).toBe(3);
+        expect(res.body.total).toBe(3);
+    });
+
+    it('should filter by PHYSICS category', async () => {
+        const res: ResponseWithTutorList = await request(app.getHttpServer())
+            .get('/api/v1/tutors')
+            .query({ category: 'PHYSICS' })
+            .expect(200);
+
+        expect(res.body.tutors.length).toBe(2);
+        expect(res.body.total).toBe(2);
+        expect(res.body.tutors).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({ title: cardDto3.title }),
+                expect.objectContaining({ title: cardDto4.title }),
+            ]),
+        );
+    });
+
+    it('should filter by CHEMISTRY category', async () => {
+        const res: ResponseWithTutorList = await request(app.getHttpServer())
+            .get('/api/v1/tutors')
+            .query({ category: 'CHEMISTRY' })
+            .expect(200);
+
+        const expectedCategories = cardDto5.subjectCategories.map((category) => ({ category }));
+
+        expect(res.body.tutors.length).toBe(1);
+        expect(res.body.total).toBe(1);
+        expect(res.body.tutors[0].title).toBe(cardDto5.title);
+        expect(res.body.tutors[0].author?.firstname).toBe(authorDto5.firstname);
+        expect(res.body.tutors[0].author?.lastname).toBe(authorDto5.lastname);
+
+        expect(res.body.tutors[0].subjectCategories).toEqual(expectedCategories);
+    });
+
+    it('should return empty array for non-existent category', async () => {
+        const res: ResponseWithTutorList = await request(app.getHttpServer())
+            .get('/api/v1/tutors')
+            .query({ category: 'BIOLOGY' })
+            .expect(200);
+
+        expect(res.body.tutors.length).toBe(0);
+        expect(res.body.total).toBe(0);
     });
 });
