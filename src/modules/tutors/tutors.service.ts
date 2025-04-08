@@ -42,8 +42,8 @@ export class TutorsService {
         return this.prisma.tutorCard.findUniqueOrThrow({
             where: { id },
             include: {
-                subjectCategories: true,
-                author: true,
+                subjectCategories: { select: { category: true } },
+                author: { select: { firstname: true } },
             },
         });
     }
@@ -61,6 +61,9 @@ export class TutorsService {
                 ...rest,
                 authorId: userId,
                 subjectCategories: { create: subjectCategoryData },
+            },
+            include: {
+                subjectCategories: { select: { category: true } },
             },
         });
     }
