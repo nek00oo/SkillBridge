@@ -1,4 +1,4 @@
-import { IsArray, IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Category } from '@prisma/client';
 
@@ -17,6 +17,7 @@ export class CreateTutorCardDto {
     @ApiProperty({ description: 'Price for the tutoring session', example: 2700 })
     @IsNotEmpty()
     @IsNumber({ maxDecimalPlaces: 2 })
+    @Min(0, { message: 'Price cannot be negative' })
     price: number;
 
     @ApiProperty({ description: 'Card content description' })

@@ -11,6 +11,8 @@ export class PrismaExceptionFilter implements ExceptionFilter {
         const request = ctx.getRequest<Request>();
         const status = exception.statusCode;
 
+        console.log('PISM_EXC:', exception.statusCode, exception.message, exception.metaData);
+
         // Для API-роутов
         if (request.path.startsWith('/api')) {
             return response.status(status).json({

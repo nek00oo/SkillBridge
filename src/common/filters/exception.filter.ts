@@ -10,7 +10,7 @@ export class AllExceptionFilter implements ExceptionFilter {
         const status = exception.getStatus();
         const exceptionResponse = exception.getResponse();
 
-        //console.log(exceptionResponse);
+        console.log('ALL_EXC:', exceptionResponse);
         const errorResponse: ErrorResponse = {
             message:
                 typeof exceptionResponse === 'string'

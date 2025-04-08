@@ -83,7 +83,7 @@ export class TutorsService {
                 subjectCategories: { create: subjectCategoryData },
             },
             include: {
-                subjectCategories: true,
+                subjectCategories: { select: { category: true } },
             },
         });
     }
@@ -103,7 +103,7 @@ export class TutorsService {
                 subjectCategories: { create: subjectCategoryData },
             },
             include: {
-                subjectCategories: true,
+                subjectCategories: { select: { category: true } },
             },
         });
     }

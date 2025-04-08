@@ -4,6 +4,7 @@ import { PrismaTestService } from './prisma-test.service';
 import { Category, Role } from '@prisma/client';
 import { CreateTutorCardDto } from '../src/modules/tutors/dto/create-tutorCard.dto';
 import { setupE2eTest } from './setup-e2e';
+import { UpdateTutorCardDto } from '../src/modules/tutors/dto/update-tutorCard.dto';
 
 type ResponseWithTutorCard = {
     body: TutorCardResponseInterface;
@@ -40,6 +41,15 @@ describe('TutorsController (e2e)', () => {
         content: 'I explain physics in easy language.',
         subjectCategories: ['PHYSICS'],
         imgUrl: 'url/image.png',
+    };
+
+    const updateDto: UpdateTutorCardDto = {
+        title: 'Advanced Physics Help',
+        price: 10,
+        content: 'Updated content with more details',
+        subjectCategories: ['MATHEMATICS'],
+        imgUrl: 'url/new-image.png',
+        isPublished: true,
     };
 
     const author: Author = {
@@ -79,7 +89,7 @@ describe('TutorsController (e2e)', () => {
         expect(res.body).toHaveProperty('id');
         expect(res.body.title).toBe(dto.title);
         expect(res.body.content).toBe(dto.content);
-        expect(res.body.price).toBe('5');
+        expect(res.body.price).toBe(dto.price.toString());
         expect(res.body.isPublished).toBe(false);
         expect(res.body.imgUrl).toBe(dto.imgUrl);
         expect(res.body.subjectCategories).toEqual(expectedCategories);
@@ -96,12 +106,41 @@ describe('TutorsController (e2e)', () => {
         expect(res.body).toHaveProperty('id');
         expect(res.body.title).toBe(dto.title);
         expect(res.body.content).toBe(dto.content);
-        expect(res.body.price).toBe('5');
+        expect(res.body.price).toBe(dto.price.toString());
         expect(res.body.isPublished).toBe(false);
         expect(res.body.subjectCategories).toEqual(expectedCategories);
         expect(res.body.imgUrl).toBe(dto.imgUrl);
 
         expect(res.body.author?.firstname).toEqual(author.firstname);
+    });
+
+    it('should update tutor card by ID', async () => {
+        const res: ResponseWithTutorCard = await request(app.getHttpServer())
+            .patch(`/api/v1/tutors/${tutorCardId}`)
+            .send(updateDto)
+            .expect(200);
+
+        const newExpectedCategories = updateDto.subjectCategories
+            ? updateDto.subjectCategories.map((category) => ({ category }))
+            : [];
+        const oldExpectedCategories = dto.subjectCategories.map((category) => ({ category }));
+        const allCategory = oldExpectedCategories.concat(newExpectedCategories);
+
+        expect(res.body.title).toBe(updateDto.title);
+        expect(res.body.content).toBe(updateDto.content);
+        expect(res.body.price).toBe(updateDto.price?.toString());
+        expect(res.body.isPublished).toBe(updateDto.isPublished);
+        expect(res.body.imgUrl).toBe(updateDto.imgUrl);
+
+        expect(res.body.subjectCategories).toEqual(allCategory);
+    });
+
+    it('should return 404 for non-existent tutor card', async () => {
+        await request(app.getHttpServer()).patch('/api/v1/tutors/999999').send(updateDto).expect(404);
+    });
+
+    it('should return 400 for invalid data', async () => {
+        await request(app.getHttpServer()).patch(`/api/v1/tutors/${tutorCardId}`).send({ price: -10 }).expect(400);
     });
 
     it('should delete the tutor card by id', async () => {
