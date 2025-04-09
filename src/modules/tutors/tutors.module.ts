@@ -7,5 +7,6 @@ import { ApiTutorsController } from './api-tutors.controller';
 @Module({
     controllers: [TutorsController, ApiTutorsController],
     providers: [TutorsService, PrismaService],
+    exports: [TutorsService],
 })
 export class TutorsModule {}

@@ -41,15 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!reviewsResponse.ok) console.error('Ошибка загрузки отзывов');
                 const reviews = await reviewsResponse.json();
 
-                document.getElementById('modalTitle').textContent = tutor.author.firstname;
+                document.getElementById('modalTitle').textContent = tutor.firstname;
                 document.getElementById('tutorModalImage').src = tutor.imgUrl;
                 document.getElementById('tutorRating').innerHTML = `★ ${tutor.rating}`;
                 document.getElementById('tutorPrice').textContent = `${tutor.price} ₽/час`;
                 document.getElementById('tutorDescription').textContent = tutor.content;
 
                 const subjectsContainer = document.getElementById('tutorSubjects');
-                subjectsContainer.innerHTML = tutor.subjectCategories
-                    .map(sc => `<span class="subject-tag">${sc.category}</span>`)
+                subjectsContainer.innerHTML = tutor.subjects
+                    .map(category => `<span class="subject-tag">${category}</span>`)
                     .join('');
 
                 renderReviews(reviews);

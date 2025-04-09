@@ -2,6 +2,34 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+enum Category {
+  ART
+  BIOLOGY
+  CHEMISTRY
+  COMPUTER_SCIENCE
+  ECONOMICS
+  ENGLISH
+  GEOGRAPHY
+  HISTORY
+  LAW
+  LITERATURE
+  MATHEMATICS
+  MUSIC
+  PHYSICS
+  PROGRAMMING
+  RUSSIAN
+}
+
+input CreateTutorCardInput {
+  content: String!
+  imgUrl: String!
+  isPublished: Boolean
+  price: Float!
+  rating: Float
+  subjectCategories: [Category!]!
+  title: String!
+}
+
 input CreateUserInput {
   birthDate: String
   email: String!
@@ -30,12 +58,19 @@ type GqlUser {
 }
 
 type Mutation {
+  createTutorCard(input: CreateTutorCardInput!, userId: Float!): TutorCardEntity!
   createUser(input: CreateUserInput!): GqlUser!
+  deleteTutorCard(id: Float!): TutorCardEntity!
+  deleteTutorCardByAuthor(authorId: Float!): TutorCardEntity!
   deleteUser(id: Float!): GqlUser!
+  updateTutorCard(id: Float!, input: UpdateTutorCardInput!): TutorCardEntity!
+  updateTutorCardByAuthor(authorId: Float!, input: UpdateTutorCardInput!): TutorCardEntity!
   updateUser(id: Float!, input: UpdateUserInput!): GqlUser!
 }
 
 type Query {
+  tutorCard(id: Float!): TutorCardEntity!
+  tutorCards(category: String, limit: Float! = 9, page: Float! = 1): TutorCardsResponse!
   user(id: Float!): GqlUser!
   userByEmail(email: String!): GqlUser!
   users(limit: Float! = 10, offset: Float! = 0): [GqlUser!]!
@@ -45,6 +80,35 @@ enum Role {
   ADMIN
   STUDENT
   TUTOR
+}
+
+type TutorCardEntity {
+  content: String!
+  createdAt: DateTime!
+  firstname: String
+  id: ID!
+  imgUrl: String!
+  isPublished: Boolean
+  price: Float!
+  rating: Float
+  subjects: [Category!]!
+  title: String!
+  updatedAt: DateTime!
+}
+
+type TutorCardsResponse {
+  total: Float!
+  tutors: [TutorCardEntity!]!
+}
+
+input UpdateTutorCardInput {
+  content: String
+  imgUrl: String
+  isPublished: Boolean
+  price: Float
+  rating: Float
+  subjectCategories: [Category!]
+  title: String
 }
 
 input UpdateUserInput {

@@ -1,6 +1,6 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { Validate } from 'class-validator';
-import { CustomDateString } from '../../common/decorators/date-string.decorator';
+import { CustomDateString } from '../../../common/decorators/date-string.decorator';
 
 @InputType()
 export class UpdateUserInput {

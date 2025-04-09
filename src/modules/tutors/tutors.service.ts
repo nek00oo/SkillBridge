@@ -39,13 +39,21 @@ export class TutorsService {
 
     @PrismaCatch()
     async getTutorCardById(id: number) {
-        return this.prisma.tutorCard.findUniqueOrThrow({
+        const tutorCard = await this.prisma.tutorCard.findUniqueOrThrow({
             where: { id },
             include: {
                 subjectCategories: { select: { category: true } },
                 author: { select: { firstname: true } },
             },
         });
+
+        const { author, subjectCategories: tutorCardSubjects, ...restTutorCard } = tutorCard;
+
+        return {
+            ...restTutorCard,
+            firstname: author.firstname,
+            subjects: tutorCardSubjects.map((sc) => sc.category),
+        };
     }
 
     @PrismaCatch()
@@ -56,7 +64,7 @@ export class TutorsService {
             category: category,
         }));
 
-        return this.prisma.tutorCard.create({
+        const tutorCard = await this.prisma.tutorCard.create({
             data: {
                 ...rest,
                 authorId: userId,
@@ -66,6 +74,13 @@ export class TutorsService {
                 subjectCategories: { select: { category: true } },
             },
         });
+
+        const { subjectCategories: tutorCardSubjects, ...restTutorCard } = tutorCard;
+
+        return {
+            ...restTutorCard,
+            subjects: tutorCardSubjects.map((sc) => sc.category),
+        };
     }
 
     @PrismaCatch()
@@ -76,7 +91,7 @@ export class TutorsService {
             category: category,
         }));
 
-        return this.prisma.tutorCard.update({
+        const tutorCard = await this.prisma.tutorCard.update({
             where: { id: id },
             data: {
                 ...rest,
@@ -86,6 +101,13 @@ export class TutorsService {
                 subjectCategories: { select: { category: true } },
             },
         });
+
+        const { subjectCategories: tutorCardSubjects, ...restTutorCard } = tutorCard;
+
+        return {
+            ...restTutorCard,
+            subjects: tutorCardSubjects.map((sc) => sc.category),
+        };
     }
 
     @PrismaCatch()
@@ -96,7 +118,7 @@ export class TutorsService {
             category: category,
         }));
 
-        return this.prisma.tutorCard.update({
+        const tutorCard = await this.prisma.tutorCard.update({
             where: { authorId: authorId },
             data: {
                 ...rest,
@@ -106,6 +128,13 @@ export class TutorsService {
                 subjectCategories: { select: { category: true } },
             },
         });
+
+        const { subjectCategories: tutorCardSubjects, ...restTutorCard } = tutorCard;
+
+        return {
+            ...restTutorCard,
+            subjects: tutorCardSubjects.map((sc) => sc.category),
+        };
     }
 
     @PrismaCatch()

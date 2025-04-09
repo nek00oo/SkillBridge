@@ -22,12 +22,13 @@ interface TutorListCardResponseInterface {
 interface TutorCardResponseInterface {
     id: number;
     title: string;
-    subjectCategories: Category[];
+    subjects: Category[];
     price: number;
     content: string;
     isPublished?: boolean;
     rating?: number;
     imgUrl: string;
+    firstname?: string;
     author?: Author;
 }
 
@@ -95,15 +96,13 @@ describe('TutorsController (e2e)', () => {
             .send(dto)
             .expect(201);
 
-        const expectedCategories = dto.subjectCategories.map((category) => ({ category }));
-
         expect(res.body).toHaveProperty('id');
         expect(res.body.title).toBe(dto.title);
         expect(res.body.content).toBe(dto.content);
         expect(res.body.price).toBe(dto.price.toString());
         expect(res.body.isPublished).toBe(false);
         expect(res.body.imgUrl).toBe(dto.imgUrl);
-        expect(res.body.subjectCategories).toEqual(expectedCategories);
+        expect(res.body.subjects).toEqual(dto.subjectCategories);
         tutorCardId = res.body.id;
     });
 
@@ -112,17 +111,15 @@ describe('TutorsController (e2e)', () => {
             .get(`/api/v1/tutors/${tutorCardId}`)
             .expect(200);
 
-        const expectedCategories = dto.subjectCategories.map((category) => ({ category }));
-
         expect(res.body).toHaveProperty('id');
         expect(res.body.title).toBe(dto.title);
         expect(res.body.content).toBe(dto.content);
         expect(res.body.price).toBe(dto.price.toString());
         expect(res.body.isPublished).toBe(false);
-        expect(res.body.subjectCategories).toEqual(expectedCategories);
+        expect(res.body.subjects).toEqual(dto.subjectCategories);
         expect(res.body.imgUrl).toBe(dto.imgUrl);
 
-        expect(res.body.author?.firstname).toEqual(author.firstname);
+        expect(res.body.firstname).toEqual(author.firstname);
     });
 
     it('should update tutor card by ID', async () => {
@@ -131,19 +128,13 @@ describe('TutorsController (e2e)', () => {
             .send(updateDto)
             .expect(200);
 
-        const newExpectedCategories = updateDto.subjectCategories
-            ? updateDto.subjectCategories.map((category) => ({ category }))
-            : [];
-        const oldExpectedCategories = dto.subjectCategories.map((category) => ({ category }));
-        const allCategory = oldExpectedCategories.concat(newExpectedCategories);
-
         expect(res.body.title).toBe(updateDto.title);
         expect(res.body.content).toBe(updateDto.content);
         expect(res.body.price).toBe(updateDto.price?.toString());
         expect(res.body.isPublished).toBe(updateDto.isPublished);
         expect(res.body.imgUrl).toBe(updateDto.imgUrl);
 
-        expect(res.body.subjectCategories).toEqual(allCategory);
+        expect(res.body.subjects).toEqual(dto.subjectCategories.concat(...(updateDto.subjectCategories ?? [])));
     });
 
     it('should return 404 for non-existent tutor card', async () => {
@@ -291,7 +282,7 @@ describe('GET /api/v1/tutors (filter by category)', () => {
             .query({ category: 'CHEMISTRY' })
             .expect(200);
 
-        const expectedCategories = cardDto5.subjectCategories.map((category) => ({ category }));
+        console.log(res);
 
         expect(res.body.tutors.length).toBe(1);
         expect(res.body.total).toBe(1);
@@ -299,7 +290,7 @@ describe('GET /api/v1/tutors (filter by category)', () => {
         expect(res.body.tutors[0].author?.firstname).toBe(authorDto5.firstname);
         expect(res.body.tutors[0].author?.lastname).toBe(authorDto5.lastname);
 
-        expect(res.body.tutors[0].subjectCategories).toEqual(expectedCategories);
+        expect(res.body.tutors[0].subjects).toEqual(cardDto5.subjectCategories);
     });
 
     it('should return empty array for non-existent category', async () => {

@@ -3,15 +3,16 @@ import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import * as process from 'node:process';
 import { TutorsModule } from './modules/tutors/tutors.module';
-import { UsersModule } from './modules/users/users.module';
 import { ReviewsModule } from './modules/review/reviews.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AssignmentsModule } from './modules/assignments/assignments.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { GraphqlModule } from './graphql/graphql.module';
-import { UserResolver } from './graphql/graphql.resolver';
+import { UsersModuleGraphQL } from './graphql/users/users.module';
+import { UserResolver } from './graphql/users/user.resolver';
+import { TutorsModuleGraphQL } from './graphql/tutors/tutors.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
     imports: [
@@ -28,7 +29,8 @@ import { UserResolver } from './graphql/graphql.resolver';
         ReviewsModule,
         AuthModule,
         AssignmentsModule,
-        GraphqlModule,
+        UsersModuleGraphQL,
+        TutorsModuleGraphQL,
     ],
     controllers: [AppController],
     providers: [UserResolver],
