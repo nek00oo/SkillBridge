@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         reviewsContainer.innerHTML = ''
         reviews.forEach((review) => {
-            const reviewAuthor = createHtmlElement('span', 'review-author', review.student.firstname)
+            const reviewAuthor = createHtmlElement('span', 'review-author', review.firstname)
             const reviewRating = createHtmlElement('span', 'review-rating', `★ ${review.rating.toFixed(1)}`)
             const reviewText = createHtmlElement('p', 'review-text', `${review.comment || 'Без комментария'}`)
             const reviewDate = createHtmlElement('span', 'review-date', `${new Date(review.createdAt).toLocaleDateString()}`)

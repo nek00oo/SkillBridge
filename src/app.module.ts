@@ -13,6 +13,8 @@ import { UsersModuleGraphQL } from './graphql/users/users.module';
 import { UserResolver } from './graphql/users/user.resolver';
 import { TutorsModuleGraphQL } from './graphql/tutors/tutors.module';
 import { UsersModule } from './modules/users/users.module';
+import { AssignmentsModuleGraphQL } from './graphql/assigments/assignments.module';
+import { ReviewsModuleGraphQL } from './graphql/reviews/reviews.module';
 
 @Module({
     imports: [
@@ -31,6 +33,8 @@ import { UsersModule } from './modules/users/users.module';
         AssignmentsModule,
         UsersModuleGraphQL,
         TutorsModuleGraphQL,
+        AssignmentsModuleGraphQL,
+        ReviewsModuleGraphQL,
     ],
     controllers: [AppController],
     providers: [UserResolver],

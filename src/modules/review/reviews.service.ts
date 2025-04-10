@@ -10,7 +10,7 @@ export class ReviewsService {
 
     @PrismaCatch()
     async createReview(studentId: number, createReviewDto: CreateReviewDto) {
-        return this.prisma.review.create({
+        const review = await this.prisma.review.create({
             data: {
                 ...createReviewDto,
                 studentId: studentId,
@@ -19,6 +19,14 @@ export class ReviewsService {
                 student: { select: { firstname: true, lastname: true } },
             },
         });
+
+        const { student, ...rest } = review;
+
+        return {
+            ...rest,
+            firstname: student.firstname,
+            lastname: student.lastname,
+        };
     }
 
     @PrismaCatch()
@@ -37,7 +45,7 @@ export class ReviewsService {
 
     @PrismaCatch()
     async findReviewsByCardId(cardId: number) {
-        return this.prisma.review.findMany({
+        const reviews = await this.prisma.review.findMany({
             where: { cardId },
             include: {
                 student: { select: { firstname: true, lastname: true } },
@@ -45,6 +53,14 @@ export class ReviewsService {
             orderBy: {
                 createdAt: 'desc',
             },
+        });
+
+        return reviews.map(({ student, ...rest }) => {
+            return {
+                ...rest,
+                firstname: student.firstname,
+                lastname: student.lastname,
+            };
         });
     }
 

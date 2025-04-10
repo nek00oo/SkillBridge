@@ -4,6 +4,7 @@ import { ApiReviewsController } from './api-reviews.controller';
 import { PrismaService } from '../../prisma.service';
 
 @Module({
+    exports: [ReviewsService],
     controllers: [ApiReviewsController],
     providers: [ReviewsService, PrismaService],
 })
