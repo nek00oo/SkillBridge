@@ -47,16 +47,16 @@ import { HttpCacheModule } from './common/modules/cache.module';
     providers: [
         {
             provide: APP_INTERCEPTOR,
+            useClass: EtagInterceptor,
+        },
+        {
+            provide: APP_INTERCEPTOR,
             useClass: ElapsedTimeInterceptor,
         },
         {
             provide: APP_INTERCEPTOR,
             useClass: CacheControlInterceptor,
         },
-        // {
-        //     provide: APP_INTERCEPTOR,
-        //     useClass: EtagInterceptor,
-        // },
     ],
 })
 export class AppModule {}

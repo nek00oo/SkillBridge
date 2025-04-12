@@ -46,7 +46,7 @@ export class ApiUsersController {
     })
     @ApiResponse({ status: 404, description: 'User not found.' })
     @Get(':id')
-    @CacheControl('private', 3600)
+    @CacheControl('public', 36000)
     async getUserById(@Param('id') id: number): Promise<UserResponseDto> {
         return new UserResponseDto(await this.userService.getUserById(id));
     }

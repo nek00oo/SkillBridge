@@ -19,14 +19,11 @@ export class ElapsedTimeInterceptor implements NestInterceptor {
                     const gqlCtx = GqlExecutionContext.create(context);
                     const gqlContext: GqlContext = gqlCtx.getContext<GqlContext>();
 
-                    if (gqlContext?.res?.setHeader) {
-                        gqlContext.res.setHeader('X-Elapsed-Time', `${elapsed}ms`);
-                    }
+                    gqlContext.res.setHeader('X-Elapsed-Time', `${elapsed}ms`);
                 } else if (contextType === 'http') {
                     const res = context.switchToHttp().getResponse<Response>();
-                    if (res?.setHeader) {
-                        res.setHeader('X-Elapsed-Time', `${elapsed}ms`);
-                    }
+
+                    res.setHeader('X-Elapsed-Time', `${elapsed}ms`);
                 }
             }),
         );
