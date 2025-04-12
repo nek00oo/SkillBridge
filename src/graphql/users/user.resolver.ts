@@ -1,43 +1,45 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { GqlUser } from './entities/user.entity';
+import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UserEntity } from './entities/user.entity';
 import { UsersService } from '../../modules/users/users.service';
 import { UpdateUserInput } from './dto/update-user.input';
 import { CreateUserInput } from './dto/create-user.input';
+import { CacheControl } from '../../common/decorators/cache-control.decorator';
 
-@Resolver(() => GqlUser)
+@Resolver(() => UserEntity)
 export class UserResolver {
     constructor(private readonly usersService: UsersService) {}
 
-    @Query(() => GqlUser)
-    async user(@Args('id') id: number) {
+    @Mutation(() => UserEntity)
+    async createUser(@Args('input') input: CreateUserInput) {
+        return this.usersService.createUser(input);
+    }
+
+    @Query(() => UserEntity)
+    @CacheControl('private', 3600)
+    async getUserById(@Args('id', { type: () => Int }) id: number) {
         return this.usersService.getUserById(id);
     }
 
-    @Query(() => GqlUser)
-    async userByEmail(@Args('email') email: string) {
+    @Query(() => UserEntity)
+    async getUserByEmail(@Args('email') email: string) {
         return this.usersService.findUserByEmail(email);
     }
 
-    @Query(() => [GqlUser])
-    async users(
+    @Query(() => [UserEntity])
+    async getUsers(
         @Args('limit', { defaultValue: 10 }) limit: number,
         @Args('offset', { defaultValue: 0 }) offset: number,
     ) {
         return this.usersService.getUsers(limit, offset);
     }
 
-    @Mutation(() => GqlUser)
-    async createUser(@Args('input') input: CreateUserInput) {
-        return this.usersService.createUser(input);
-    }
-
-    @Mutation(() => GqlUser)
-    async updateUser(@Args('id') id: number, @Args('input') input: UpdateUserInput) {
+    @Mutation(() => UserEntity)
+    async updateUserById(@Args('id', { type: () => Int }) id: number, @Args('input') input: UpdateUserInput) {
         return this.usersService.updateUser(id, input);
     }
 
-    @Mutation(() => GqlUser)
-    async deleteUser(@Args('id') id: number) {
+    @Mutation(() => UserEntity)
+    async deleteUserById(@Args('id', { type: () => Int }) id: number) {
         return this.usersService.deleteUserById(id);
     }
 }

@@ -36,6 +36,21 @@ export class ApiTutorsController {
         return this.tutorsService.createTutorCard(req.user.id, createTutorCardDto);
     }
 
+    @ApiOperation({ summary: 'Get a tutor card by ID' })
+    @ApiResponse({
+        status: 200,
+        description: 'Tutor card retrieved successfully.',
+        type: CreateTutorCardDto,
+    })
+    @ApiResponse({ status: 400, description: 'Invalid ID provided.' })
+    @ApiResponse({ status: 404, description: 'Tutor card not found (e.g. P2001, P2015, P2018, P2025).' })
+    @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
+    @Get(':id')
+    @CacheControl('public', 3600)
+    async getTutorCardById(@Param('id') id: number) {
+        return this.tutorsService.getTutorCardById(id);
+    }
+
     @ApiOperation({ summary: 'Get list of tutor cards by subject category' })
     @ApiQuery({ name: 'category', required: false, description: 'Subject category', enum: Category })
     @ApiQuery({ name: 'page', required: false, description: 'Page number', example: 1 })
@@ -50,27 +65,12 @@ export class ApiTutorsController {
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get()
     @CacheControl('public', 3600)
-    async getTutorListBySubjectCategory(
+    async getTutorCardListBySubjectCategory(
         @Query('category') category: Category,
         @Query('page') page = 1,
         @Query('limit') limit = 12,
     ) {
         return this.tutorsService.getTutorListBySubjectCategory(category, page, limit);
-    }
-
-    @ApiOperation({ summary: 'Get a tutor card by ID' })
-    @ApiResponse({
-        status: 200,
-        description: 'Tutor card retrieved successfully.',
-        type: CreateTutorCardDto,
-    })
-    @ApiResponse({ status: 400, description: 'Invalid ID provided.' })
-    @ApiResponse({ status: 404, description: 'Tutor card not found (e.g. P2001, P2015, P2018, P2025).' })
-    @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
-    @Get(':id')
-    @CacheControl('public', 3600)
-    async getTutorCardById(@Param('id') id: number) {
-        return this.tutorsService.getTutorCardById(id);
     }
 
     @ApiOperation({ summary: 'Update a tutor card by ID' })

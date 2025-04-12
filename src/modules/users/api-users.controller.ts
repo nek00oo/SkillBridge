@@ -47,7 +47,7 @@ export class ApiUsersController {
     @ApiResponse({ status: 404, description: 'User not found.' })
     @Get(':id')
     @CacheControl('private', 3600)
-    async getUser(@Param('id') id: number): Promise<UserResponseDto> {
+    async getUserById(@Param('id') id: number): Promise<UserResponseDto> {
         return new UserResponseDto(await this.userService.getUserById(id));
     }
 
@@ -69,7 +69,10 @@ export class ApiUsersController {
     @Patch()
     @UseGuards(JwtAuthGuard)
     @UseFilters(UnauthorizedRedirectFilter)
-    async updateUser(@Req() req: RequestWithUser, @Body() updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
+    async updateUserByAuthId(
+        @Req() req: RequestWithUser,
+        @Body() updateUserDto: UpdateUserDto,
+    ): Promise<UserResponseDto> {
         const userId = req.user.id;
         return new UserResponseDto(await this.userService.updateUser(userId, updateUserDto));
     }
@@ -79,7 +82,7 @@ export class ApiUsersController {
     @ApiResponse({ status: 200, description: 'User successfully deleted.', type: UserResponseDto })
     @ApiResponse({ status: 404, description: 'User not found.' })
     @Delete(':id')
-    async deleteUser(@Param('id') id: number): Promise<UserResponseDto> {
+    async deleteUserById(@Param('id') id: number): Promise<UserResponseDto> {
         return new UserResponseDto(await this.userService.deleteUserById(id));
     }
 }

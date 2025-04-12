@@ -5,7 +5,7 @@ import { Role } from '@prisma/client';
 registerEnumType(Role, { name: 'Role' });
 
 @ObjectType()
-export class GqlUser {
+export class UserEntity {
     @Field(() => ID)
     id: number;
 

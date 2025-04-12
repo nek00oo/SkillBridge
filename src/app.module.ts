@@ -19,6 +19,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { Request, Response } from 'express';
 import { CacheControlInterceptor } from './common/interceptors/cache-control.interceptor';
 import { EtagInterceptor } from './common/interceptors/etag.interceptor';
+import { HttpCacheModule } from './common/modules/cache.module';
 
 @Module({
     imports: [
@@ -32,6 +33,7 @@ import { EtagInterceptor } from './common/interceptors/etag.interceptor';
             context: ({ req, res }: { req: Request; res: Response }) => ({ req, res }),
         }),
         TutorsModule,
+        HttpCacheModule,
         UsersModule,
         ReviewsModule,
         AuthModule,
@@ -47,10 +49,10 @@ import { EtagInterceptor } from './common/interceptors/etag.interceptor';
             provide: APP_INTERCEPTOR,
             useClass: ElapsedTimeInterceptor,
         },
-        // {
-        //     provide: APP_INTERCEPTOR,
-        //     useClass: CacheControlInterceptor,
-        // },
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: CacheControlInterceptor,
+        },
         // {
         //     provide: APP_INTERCEPTOR,
         //     useClass: EtagInterceptor,

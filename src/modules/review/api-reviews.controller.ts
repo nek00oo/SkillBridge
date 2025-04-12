@@ -32,7 +32,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get(':id')
     @CacheControl('public', 3600)
-    async findReviewById(@Param('id') id: number) {
+    async getReviewById(@Param('id') id: number) {
         return this.reviewService.findReviewById(id);
     }
 
@@ -43,7 +43,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get('students/:studentId')
     @CacheControl('public', 3600)
-    async findReviewsByStudentId(@Param('studentId') studentId: number) {
+    async getReviewsByStudentId(@Param('studentId') studentId: number) {
         return this.reviewService.findReviewsByStudentId(studentId);
     }
 
@@ -54,7 +54,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get('cards/:cardId')
     @CacheControl('public', 3600)
-    async findReviewsByCardId(@Param('cardId') cardId: number) {
+    async getReviewsByCardId(@Param('cardId') cardId: number) {
         return this.reviewService.findReviewsByCardId(cardId);
     }
 
@@ -67,7 +67,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 409, description: 'Conflict error during update.' })
     @ApiResponse({ status: 500, description: 'Internal server error during update.' })
     @Patch(':id')
-    async updateReview(@Param('id') id: number, @Body() updateReviewDto: UpdateReviewDto) {
+    async updateReviewById(@Param('id') id: number, @Body() updateReviewDto: UpdateReviewDto) {
         return this.reviewService.updateReviewById(id, updateReviewDto);
     }
 
@@ -77,7 +77,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 404, description: 'Review not found.' })
     @ApiResponse({ status: 500, description: 'Internal server error during deletion.' })
     @Delete(':id')
-    async removeReview(@Param('id') id: number) {
+    async deleteReviewById(@Param('id') id: number) {
         return this.reviewService.removeReviewById(id);
     }
 }

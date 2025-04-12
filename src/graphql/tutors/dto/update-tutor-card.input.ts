@@ -1,26 +1,34 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { Category } from '@prisma/client';
+import { IsOptional } from 'class-validator';
 
 @InputType()
 export class UpdateTutorCardInput {
-    @Field()
+    @Field({ nullable: true })
+    @IsOptional()
     title?: string;
 
-    @Field(() => [Category])
+    @Field(() => [Category], { nullable: true })
+    @IsOptional()
     subjectCategories?: Category[];
 
-    @Field()
+    @Field({ nullable: true })
+    @IsOptional()
     price?: number;
 
-    @Field()
+    @Field({ nullable: true })
+    @IsOptional()
     content?: string;
 
     @Field({ nullable: true })
+    @IsOptional()
     isPublished?: boolean;
 
     @Field({ nullable: true })
+    @IsOptional()
     rating?: number;
 
-    @Field()
+    @Field({ nullable: true })
+    @IsOptional()
     imgUrl?: string;
 }

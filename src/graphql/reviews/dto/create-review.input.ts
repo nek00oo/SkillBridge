@@ -18,6 +18,6 @@ export class CreateReviewInput {
     @Field({ nullable: true })
     @IsOptional()
     @IsString()
-    @MaxLength(500)
+    @MaxLength(150)
     comment?: string;
 }

@@ -23,6 +23,15 @@ export class ApiAssignmentsController {
         return await this.assignmentsService.createAssignment(createAssignmentDto, req.user.id);
     }
 
+    @ApiOperation({ summary: 'Get assignment by ID' })
+    @ApiResponse({ status: 200, description: 'Assignment retrieved successfully', type: CreateAssignmentDto })
+    @ApiResponse({ status: 404, description: 'Assignment not found' })
+    @Get(':id')
+    @CacheControl('private', 3600)
+    async getAssigmentById(@Param('id') id: number) {
+        return await this.assignmentsService.getAssignmentById(id);
+    }
+
     @ApiOperation({ summary: 'Get assignments grouped by category for a student' })
     @ApiResponse({ status: 200, description: 'Assignments retrieved successfully', type: [CreateAssignmentDto] })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
@@ -34,15 +43,6 @@ export class ApiAssignmentsController {
         @Query('category') category?: Category,
     ) {
         return this.assignmentsService.getTitleCategoryByStudentId(req.user.id, category);
-    }
-
-    @ApiOperation({ summary: 'Get assignment by ID' })
-    @ApiResponse({ status: 200, description: 'Assignment retrieved successfully', type: CreateAssignmentDto })
-    @ApiResponse({ status: 404, description: 'Assignment not found' })
-    @Get(':id')
-    @CacheControl('private', 3600)
-    async getAssigmentById(@Param('id') id: number) {
-        return await this.assignmentsService.getAssignmentById(id);
     }
 
     @ApiOperation({ summary: 'Update assignment by ID' })

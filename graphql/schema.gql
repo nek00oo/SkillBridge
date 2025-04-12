@@ -79,49 +79,37 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type GqlUser {
-  birthDate: DateTime
-  createdAt: DateTime!
-  email: String!
-  firstname: String!
-  id: ID!
-  lastname: String
-  profileImageUrl: String
-  role: Role!
-  updatedAt: DateTime!
-}
-
 type Mutation {
   createAssignment(input: CreateAssignmentInput!, tutorId: Float!): AssignmentEntity!
-  createReview(createReviewInput: CreateReviewInput!, studentId: Float!): Review!
-  createTutorCard(input: CreateTutorCardInput!, userId: Float!): TutorCardEntity!
-  createUser(input: CreateUserInput!): GqlUser!
-  deleteAssignment(id: Float!): AssignmentEntity!
-  deleteReview(id: Int!): Review!
-  deleteTutorCard(id: Float!): TutorCardEntity!
-  deleteTutorCardByAuthor(authorId: Float!): TutorCardEntity!
-  deleteUser(id: Float!): GqlUser!
-  updateAssignment(id: Float!, input: UpdateAssignmentInput!): AssignmentEntity!
-  updateReviewById(id: Int!, updateReviewInput: UpdateReviewInput!): Review!
-  updateTutorCard(id: Float!, input: UpdateTutorCardInput!): TutorCardEntity!
-  updateTutorCardByAuthor(authorId: Float!, input: UpdateTutorCardInput!): TutorCardEntity!
-  updateUser(id: Float!, input: UpdateUserInput!): GqlUser!
+  createReview(createReviewInput: CreateReviewInput!, studentId: Int!): ReviewEntity!
+  createTutorCard(input: CreateTutorCardInput!, userId: Int!): TutorCardEntity!
+  createUser(input: CreateUserInput!): UserEntity!
+  deleteAssignmentById(id: Int!): AssignmentEntity!
+  deleteReviewById(id: Int!): ReviewEntity!
+  deleteTutorCardByAuthor(authorId: Int!): TutorCardEntity!
+  deleteTutorCardById(id: Int!): TutorCardEntity!
+  deleteUserById(id: Int!): UserEntity!
+  updateAssignmentById(id: Int!, input: UpdateAssignmentInput!): AssignmentEntity!
+  updateReviewById(id: Int!, updateReviewInput: UpdateReviewInput!): ReviewEntity!
+  updateTutorCardByAuthor(authorId: Int!, input: UpdateTutorCardInput!): TutorCardEntity!
+  updateTutorCardById(id: Int!, input: UpdateTutorCardInput!): TutorCardEntity!
+  updateUserById(id: Int!, input: UpdateUserInput!): UserEntity!
 }
 
 type Query {
-  assignment(id: Float!): AssignmentEntity!
-  assignmentsStats(studentId: Float!): [AssignmentStats!]!
-  review(id: Float!): Review!
-  reviewsByCard(cardId: Float!): [Review!]!
-  reviewsByStudent(studentId: Float!): [Review!]!
-  tutorCard(id: Float!): TutorCardEntity!
-  tutorCards(category: String, limit: Float! = 9, page: Float! = 1): TutorCardsResponse!
-  user(id: Float!): GqlUser!
-  userByEmail(email: String!): GqlUser!
-  users(limit: Float! = 10, offset: Float! = 0): [GqlUser!]!
+  getAssignmentById(id: Int!): AssignmentEntity!
+  getAssignmentsByStudentId(studentId: Int!): [AssignmentStats!]!
+  getReviewById(id: Int!): ReviewEntity!
+  getReviewsByCardId(cardId: Int!): [ReviewEntity!]!
+  getReviewsByStudentId(studentId: Int!): [ReviewEntity!]!
+  getTutorCardById(id: Int!): TutorCardEntity!
+  getTutorCards(category: String, limit: Float! = 9, page: Float! = 1): TutorCardsResponse!
+  getUserByEmail(email: String!): UserEntity!
+  getUserById(id: Int!): UserEntity!
+  getUsers(limit: Float! = 10, offset: Float! = 0): [UserEntity!]!
 }
 
-type Review {
+type ReviewEntity {
   cardId: Int!
   comment: String
   createdAt: DateTime!
@@ -157,29 +145,27 @@ type TutorCardsResponse {
 }
 
 input UpdateAssignmentInput {
-  category: Category!
+  category: Category
   completed: Boolean
-  content: String!
-  dueDate: String!
+  content: String
+  dueDate: String
   grade: Int
-  studentId: Int!
-  title: String!
+  title: String
 }
 
 input UpdateReviewInput {
-  cardId: Int!
   comment: String
-  rating: Int!
+  rating: Int
 }
 
 input UpdateTutorCardInput {
-  content: String!
-  imgUrl: String!
+  content: String
+  imgUrl: String
   isPublished: Boolean
-  price: Float!
+  price: Float
   rating: Float
-  subjectCategories: [Category!]!
-  title: String!
+  subjectCategories: [Category!]
+  title: String
 }
 
 input UpdateUserInput {
@@ -188,4 +174,16 @@ input UpdateUserInput {
   lastname: String
   password: String
   profileImageUrl: String
+}
+
+type UserEntity {
+  birthDate: DateTime
+  createdAt: DateTime!
+  email: String!
+  firstname: String!
+  id: ID!
+  lastname: String
+  profileImageUrl: String
+  role: Role!
+  updatedAt: DateTime!
 }

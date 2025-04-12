@@ -4,7 +4,7 @@ import { Category } from '@prisma/client';
 import { Pagination } from '../../common/types/pagination';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { CacheControl } from '../../common/decorators/cache-control.decorator';
-import { CacheInterceptor, CacheKey } from '@nestjs/cache-manager';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @ApiExcludeController()
 @Controller('tutors')
@@ -12,16 +12,14 @@ export class TutorsController {
     constructor(private readonly tutorsService: TutorsService) {}
 
     @Get()
-    //@UseInterceptors(CacheInterceptor)
-    //@CacheKey('tutors_list')
-    //@CacheControl('public', 3600)
+    @UseInterceptors(CacheInterceptor)
+    @CacheControl('public', 3600)
     @Render('tutors')
     async getTutorCards(
         @Query('category') category?: Category,
         @Query('page') page = '1',
         @Query('limit') limit = '12',
     ) {
-        console.log('Fetching tutors from DB...');
         const parsedPage = parseInt(page, 10) || 1;
         const parsedLimit = parseInt(limit, 10) || 9;
 

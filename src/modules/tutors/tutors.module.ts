@@ -1,27 +1,14 @@
 import { Module } from '@nestjs/common';
-import { TutorsController } from './tutors.controller';
 import { TutorsService } from './tutors.service';
 import { PrismaService } from '../../prisma.service';
 import { ApiTutorsController } from './api-tutors.controller';
-import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { HttpCacheModule } from '../../common/modules/cache.module';
+import { TutorsController } from './tutors.controller';
 
 @Module({
-    // imports: [
-    //     CacheModule.register({
-    //         ttl: 40,
-    //         max: 100,
-    //     }),
-    // ],
-    controllers: [TutorsController, ApiTutorsController],
-    providers: [
-        TutorsService,
-        PrismaService,
-        // {
-        //     provide: APP_INTERCEPTOR,
-        //     useClass: CacheInterceptor,
-        // },
-    ],
+    controllers: [ApiTutorsController, TutorsController],
+    providers: [TutorsService, PrismaService],
     exports: [TutorsService],
+    imports: [HttpCacheModule],
 })
 export class TutorsModule {}

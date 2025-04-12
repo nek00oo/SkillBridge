@@ -1,37 +1,37 @@
 import { ReviewsService } from '../../modules/review/reviews.service';
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { Review } from './entities/review.entity';
+import { ReviewEntity } from './entities/review.entity';
 import { CreateReviewInput } from './dto/create-review.input';
 import { UpdateReviewInput } from './dto/update-review.input';
 
-@Resolver(() => Review)
+@Resolver(() => ReviewEntity)
 export class ReviewsResolver {
     constructor(private readonly reviewsService: ReviewsService) {}
 
-    @Mutation(() => Review)
+    @Mutation(() => ReviewEntity)
     async createReview(
-        @Args('studentId') studentId: number,
+        @Args('studentId', { type: () => Int }) studentId: number,
         @Args('createReviewInput') createReviewInput: CreateReviewInput,
     ) {
         return this.reviewsService.createReview(studentId, createReviewInput);
     }
 
-    @Query(() => Review, { name: 'review' })
-    async findReviewById(@Args('id') id: number) {
+    @Query(() => ReviewEntity)
+    async getReviewById(@Args('id', { type: () => Int }) id: number) {
         return this.reviewsService.findReviewById(id);
     }
 
-    @Query(() => [Review], { name: 'reviewsByStudent' })
-    async findReviewsByStudentId(@Args('studentId') studentId: number) {
+    @Query(() => [ReviewEntity])
+    async getReviewsByStudentId(@Args('studentId', { type: () => Int }) studentId: number) {
         return this.reviewsService.findReviewsByStudentId(studentId);
     }
 
-    @Query(() => [Review], { name: 'reviewsByCard' })
-    async findReviewsByCardId(@Args('cardId') cardId: number) {
+    @Query(() => [ReviewEntity])
+    async getReviewsByCardId(@Args('cardId', { type: () => Int }) cardId: number) {
         return this.reviewsService.findReviewsByCardId(cardId);
     }
 
-    @Mutation(() => Review)
+    @Mutation(() => ReviewEntity)
     updateReviewById(
         @Args('id', { type: () => Int }) id: number,
         @Args('updateReviewInput') updateReviewInput: UpdateReviewInput,
@@ -39,8 +39,8 @@ export class ReviewsResolver {
         return this.reviewsService.updateReviewById(id, updateReviewInput);
     }
 
-    @Mutation(() => Review)
-    deleteReview(@Args('id', { type: () => Int }) id: number) {
+    @Mutation(() => ReviewEntity)
+    deleteReviewById(@Args('id', { type: () => Int }) id: number) {
         return this.reviewsService.removeReviewById(id);
     }
 }
