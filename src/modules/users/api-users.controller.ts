@@ -20,6 +20,7 @@ import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { UnauthorizedRedirectFilter } from '../auth/filters/unauthorized-redirect.filter';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResponseDto } from './dto/response-user.dto';
+import { CacheControl } from '../../common/decorators/cache-control.decorator';
 
 @ApiTags('Users')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -45,6 +46,7 @@ export class ApiUsersController {
     })
     @ApiResponse({ status: 404, description: 'User not found.' })
     @Get(':id')
+    @CacheControl('private', 3600)
     async getUser(@Param('id') id: number): Promise<UserResponseDto> {
         return new UserResponseDto(await this.userService.getUserById(id));
     }

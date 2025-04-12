@@ -6,6 +6,7 @@ import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { Category } from '@prisma/client';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
+import { CacheControl } from '../../common/decorators/cache-control.decorator';
 
 @ApiTags('Assignments')
 @ApiBearerAuth()
@@ -26,6 +27,7 @@ export class ApiAssignmentsController {
     @ApiResponse({ status: 200, description: 'Assignments retrieved successfully', type: [CreateAssignmentDto] })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
     @Get('/tasks')
+    @CacheControl('private', 3600)
     @UseGuards(JwtAuthGuard)
     async getAssignmentsGroupByCategoryByStudentId(
         @Req() req: RequestWithUser,
@@ -38,6 +40,7 @@ export class ApiAssignmentsController {
     @ApiResponse({ status: 200, description: 'Assignment retrieved successfully', type: CreateAssignmentDto })
     @ApiResponse({ status: 404, description: 'Assignment not found' })
     @Get(':id')
+    @CacheControl('private', 3600)
     async getAssigmentById(@Param('id') id: number) {
         return await this.assignmentsService.getAssignmentById(id);
     }

@@ -10,11 +10,15 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { UsersModuleGraphQL } from './graphql/users/users.module';
-import { UserResolver } from './graphql/users/user.resolver';
 import { TutorsModuleGraphQL } from './graphql/tutors/tutors.module';
 import { UsersModule } from './modules/users/users.module';
 import { AssignmentsModuleGraphQL } from './graphql/assigments/assignments.module';
 import { ReviewsModuleGraphQL } from './graphql/reviews/reviews.module';
+import { ElapsedTimeInterceptor } from './common/interceptors/elapsed-time.interceptor';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { Request, Response } from 'express';
+import { CacheControlInterceptor } from './common/interceptors/cache-control.interceptor';
+import { EtagInterceptor } from './common/interceptors/etag.interceptor';
 
 @Module({
     imports: [
@@ -25,6 +29,7 @@ import { ReviewsModuleGraphQL } from './graphql/reviews/reviews.module';
             introspection: true,
             sortSchema: true,
             playground: true,
+            context: ({ req, res }: { req: Request; res: Response }) => ({ req, res }),
         }),
         TutorsModule,
         UsersModule,
@@ -37,6 +42,19 @@ import { ReviewsModuleGraphQL } from './graphql/reviews/reviews.module';
         ReviewsModuleGraphQL,
     ],
     controllers: [AppController],
-    providers: [UserResolver],
+    providers: [
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: ElapsedTimeInterceptor,
+        },
+        // {
+        //     provide: APP_INTERCEPTOR,
+        //     useClass: CacheControlInterceptor,
+        // },
+        // {
+        //     provide: APP_INTERCEPTOR,
+        //     useClass: EtagInterceptor,
+        // },
+    ],
 })
 export class AppModule {}

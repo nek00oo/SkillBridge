@@ -6,6 +6,7 @@ import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { CreateTutorCardDto } from './dto/create-tutorCard.dto';
 import { UpdateTutorCardDto } from './dto/update-tutorCard.dto';
 import { Category } from '@prisma/client';
+import { CacheControl } from '../../common/decorators/cache-control.decorator';
 
 @ApiTags('Tutors')
 @Controller('/api/v1/tutors')
@@ -48,6 +49,7 @@ export class ApiTutorsController {
     @ApiResponse({ status: 404, description: 'No tutor cards found matching the criteria.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get()
+    @CacheControl('public', 3600)
     async getTutorListBySubjectCategory(
         @Query('category') category: Category,
         @Query('page') page = 1,
@@ -66,6 +68,7 @@ export class ApiTutorsController {
     @ApiResponse({ status: 404, description: 'Tutor card not found (e.g. P2001, P2015, P2018, P2025).' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get(':id')
+    @CacheControl('public', 3600)
     async getTutorCardById(@Param('id') id: number) {
         return this.tutorsService.getTutorCardById(id);
     }

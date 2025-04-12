@@ -5,6 +5,7 @@ import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
+import { CacheControl } from '../../common/decorators/cache-control.decorator';
 
 @ApiTags('Reviews')
 @Controller('/api/v1/reviews')
@@ -30,6 +31,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 404, description: 'Review not found (e.g. P2001, P2025).' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get(':id')
+    @CacheControl('public', 3600)
     async findReviewById(@Param('id') id: number) {
         return this.reviewService.findReviewById(id);
     }
@@ -40,6 +42,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 404, description: 'No reviews found for the given student.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get('students/:studentId')
+    @CacheControl('public', 3600)
     async findReviewsByStudentId(@Param('studentId') studentId: number) {
         return this.reviewService.findReviewsByStudentId(studentId);
     }
@@ -50,6 +53,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 404, description: 'No reviews found for the given tutor card.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
     @Get('cards/:cardId')
+    @CacheControl('public', 3600)
     async findReviewsByCardId(@Param('cardId') cardId: number) {
         return this.reviewService.findReviewsByCardId(cardId);
     }
