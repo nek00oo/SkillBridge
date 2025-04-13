@@ -16,13 +16,16 @@ async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
     const configService = app.get(ConfigService);
 
-    app.useStaticAssets(join(__dirname, '..', 'public'), {
+    app.useStaticAssets(join(process.cwd(), 'public'), {
         prefix: '/',
     });
-    app.setBaseViewsDir(join(__dirname, '..', 'views'));
+    app.setBaseViewsDir(join(process.cwd(), 'views'));
     app.setViewEngine('hbs');
 
-    hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
+    hbs.registerPartials(join(process.cwd(), 'views', 'partials'));
+
+    console.log('Views dir:', join(process.cwd(), 'views'));
+    console.log('Partials dir:', join(process.cwd(), 'views', 'partials'));
 
     hbs.registerHelper('percent', (completed, total) => {
         return ((completed / total) * 100).toFixed(2);

@@ -1,6 +1,17 @@
-import { Controller, Post, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import {
+    Controller,
+    Post,
+    UseInterceptors,
+    UploadedFile,
+    BadRequestException,
+    Get,
+    Delete,
+    Param,
+    Res,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { S3Service } from './image-storage.service';
+import { Response } from 'express';
 
 @Controller('files')
 export class FilesController {
@@ -31,5 +42,17 @@ export class FilesController {
 
         const fileUrl = await this.s3Service.uploadFile(file.buffer, file.originalname, file.mimetype);
         return { url: fileUrl };
+    }
+
+    @Get(':key')
+    async getFile(@Param('key') key: string, @Res() res: Response) {
+        const signedUrl = await this.s3Service.getSignedUrl(key);
+        return res.redirect(signedUrl);
+    }
+
+    @Delete(':key')
+    async deleteFile(@Param('key') key: string) {
+        await this.s3Service.deleteFile(key);
+        return { message: 'File deleted successfully' };
     }
 }

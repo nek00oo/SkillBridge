@@ -8,7 +8,7 @@ import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { CacheControl } from '../../common/decorators/cache-control.decorator';
 
 @ApiTags('Reviews')
-@Controller('/api/v1/reviews')
+@Controller('/api/v1')
 export class ApiReviewsController {
     constructor(private readonly reviewService: ReviewsService) {}
 
@@ -19,7 +19,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 400, description: 'Invalid data provided (e.g. P2000, P2007, P2012).' })
     @ApiResponse({ status: 409, description: 'Conflict error (e.g. unique constraint failure).' })
     @ApiResponse({ status: 500, description: 'Internal server error during review creation.' })
-    @Post()
+    @Post('reviews')
     @UseGuards(JwtAuthGuard)
     async createReview(@Req() req: RequestWithUser, @Body() createReviewDto: CreateReviewDto) {
         return this.reviewService.createReview(req.user.id, createReviewDto);
@@ -30,7 +30,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 200, description: 'Review retrieved successfully.', type: CreateReviewDto })
     @ApiResponse({ status: 404, description: 'Review not found (e.g. P2001, P2025).' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
-    @Get(':id')
+    @Get('reviews/:id')
     @CacheControl('public', 3600)
     async getReviewById(@Param('id') id: number) {
         return this.reviewService.findReviewById(id);
@@ -41,7 +41,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 200, description: 'Reviews retrieved successfully.', type: [CreateReviewDto] })
     @ApiResponse({ status: 404, description: 'No reviews found for the given student.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
-    @Get('students/:studentId')
+    @Get('students/:studentId/reviews')
     @CacheControl('public', 3600)
     async getReviewsByStudentId(@Param('studentId') studentId: number) {
         return this.reviewService.findReviewsByStudentId(studentId);
@@ -52,7 +52,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 200, description: 'Reviews retrieved successfully.', type: [CreateReviewDto] })
     @ApiResponse({ status: 404, description: 'No reviews found for the given tutor card.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
-    @Get('cards/:cardId')
+    @Get('tutor-cards/:cardId/reviews')
     @CacheControl('public', 3600)
     async getReviewsByCardId(@Param('cardId') cardId: number) {
         return this.reviewService.findReviewsByCardId(cardId);
@@ -66,7 +66,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 404, description: 'Review not found.' })
     @ApiResponse({ status: 409, description: 'Conflict error during update.' })
     @ApiResponse({ status: 500, description: 'Internal server error during update.' })
-    @Patch(':id')
+    @Patch('reviews/:id')
     async updateReviewById(@Param('id') id: number, @Body() updateReviewDto: UpdateReviewDto) {
         return this.reviewService.updateReviewById(id, updateReviewDto);
     }
@@ -76,7 +76,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 200, description: 'Review deleted successfully.' })
     @ApiResponse({ status: 404, description: 'Review not found.' })
     @ApiResponse({ status: 500, description: 'Internal server error during deletion.' })
-    @Delete(':id')
+    @Delete('reviews/:id')
     async deleteReviewById(@Param('id') id: number) {
         return this.reviewService.removeReviewById(id);
     }

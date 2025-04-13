@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!tutorResponse.ok) console.error('Ошибка загрузки данных преподавателя');
                 const tutor = await tutorResponse.json();
 
-                const reviewsResponse = await fetch(`/api/v1/reviews/cards/${currentTutorId}`);
+                const reviewsResponse = await fetch(`/api/v1/tutor-cards/${currentTutorId}/reviews`);
                 if (!reviewsResponse.ok) console.error('Ошибка загрузки отзывов');
                 const reviews = await reviewsResponse.json();
 
