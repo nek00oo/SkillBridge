@@ -20,10 +20,9 @@ export class ImageStorageController {
     @Post('upload')
     @UseInterceptors(
         FileInterceptor('file', {
-            // Используем in-memory storage, чтобы работать с file.buffer
             storage: undefined,
             limits: {
-                fileSize: 5 * 1024 * 1024, // Ограничение: 5 MB
+                fileSize: 5 * 1024 * 1024,
             },
             fileFilter: (req, file, cb) => {
                 // Разрешаем только JPEG, PNG и GIF (пример)

@@ -3,7 +3,7 @@
         <img
             id="profileImage"
             class="profile__image"
-            src="../images/default-avatar.png"
+            src="{{#if user.profileImageUrl}}{{user.profileImageUrl}}{{else}}../images/default-avatar.png{{/if}}"
             alt="Profile Photo"
         />
     </div>
