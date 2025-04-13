@@ -14,7 +14,7 @@ import { S3Service } from './image-storage.service';
 import { Response } from 'express';
 
 @Controller('files')
-export class FilesController {
+export class ImageStorageController {
     constructor(private readonly s3Service: S3Service) {}
 
     @Post('upload')
@@ -47,6 +47,7 @@ export class FilesController {
     @Get(':key')
     async getFile(@Param('key') key: string, @Res() res: Response) {
         const signedUrl = await this.s3Service.getSignedUrl(key);
+        console.log(signedUrl);
         return res.redirect(signedUrl);
     }
 

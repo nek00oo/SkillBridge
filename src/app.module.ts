@@ -20,6 +20,7 @@ import { Request, Response } from 'express';
 import { CacheControlInterceptor } from './common/interceptors/cache-control.interceptor';
 import { EtagInterceptor } from './common/interceptors/etag.interceptor';
 import { HttpCacheModule } from './common/modules/cache.module';
+import { S3Module } from './modules/images/image-storage.module';
 
 @Module({
     imports: [
@@ -32,6 +33,7 @@ import { HttpCacheModule } from './common/modules/cache.module';
             playground: true,
             context: ({ req, res }: { req: Request; res: Response }) => ({ req, res }),
         }),
+        S3Module,
         TutorsModule,
         HttpCacheModule,
         UsersModule,
