@@ -21,6 +21,9 @@ import { UnauthorizedRedirectFilter } from '../auth/filters/unauthorized-redirec
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResponseDto } from './dto/response-user.dto';
 import { CacheControl } from '../../common/decorators/cache-control.decorator';
+import { RolesGuard } from '../../common/duards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { Role } from '@prisma/client';
 
 @ApiTags('Users')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -45,8 +48,8 @@ export class ApiUsersController {
         type: UserResponseDto,
     })
     @ApiResponse({ status: 404, description: 'User not found.' })
-    @Get(':id')
     @CacheControl('public', 36000)
+    @Get(':id')
     async getUserById(@Param('id') id: number): Promise<UserResponseDto> {
         return new UserResponseDto(await this.userService.getUserById(id));
     }
@@ -57,6 +60,8 @@ export class ApiUsersController {
     @ApiResponse({ status: 200, description: 'User successfully updated.', type: UserResponseDto })
     @ApiResponse({ status: 400, description: 'Invalid data provided.' })
     @ApiResponse({ status: 404, description: 'User not found.' })
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.ADMIN)
     @Patch(':id')
     async updateUserById(@Param('id') userId: number, @Body() updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
         return new UserResponseDto(await this.userService.updateUser(userId, updateUserDto));
@@ -66,9 +71,10 @@ export class ApiUsersController {
     @ApiBody({ type: UpdateUserDto })
     @ApiResponse({ status: 200, description: 'User successfully updated.', type: UserResponseDto })
     @ApiResponse({ status: 401, description: 'Unauthorized.' })
-    @Patch()
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.STUDENT, Role.TUTOR)
     @UseFilters(UnauthorizedRedirectFilter)
+    @Patch()
     async updateUserByAuthId(
         @Req() req: RequestWithUser,
         @Body() updateUserDto: UpdateUserDto,
@@ -81,6 +87,8 @@ export class ApiUsersController {
     @ApiParam({ name: 'id', type: Number, description: 'User ID' })
     @ApiResponse({ status: 200, description: 'User successfully deleted.', type: UserResponseDto })
     @ApiResponse({ status: 404, description: 'User not found.' })
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.ADMIN)
     @Delete(':id')
     async deleteUserById(@Param('id') id: number): Promise<UserResponseDto> {
         return new UserResponseDto(await this.userService.deleteUserById(id));

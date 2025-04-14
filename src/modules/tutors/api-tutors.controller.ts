@@ -5,8 +5,10 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { CreateTutorCardDto } from './dto/create-tutorCard.dto';
 import { UpdateTutorCardDto } from './dto/update-tutorCard.dto';
-import { Category } from '@prisma/client';
+import { Category, Role } from '@prisma/client';
 import { CacheControl } from '../../common/decorators/cache-control.decorator';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { RolesGuard } from '../../common/duards/roles.guard';
 
 @ApiTags('Tutors')
 @Controller('/api/v1/tutors')
@@ -30,8 +32,9 @@ export class ApiTutorsController {
         status: 500,
         description: 'Internal server error during query execution (e.g. P2010, P2024, P2027).',
     })
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.TUTOR)
     @Post()
-    @UseGuards(JwtAuthGuard)
     async createTutorCard(@Req() req: RequestWithUser, @Body() createTutorCardDto: CreateTutorCardDto) {
         return this.tutorsService.createTutorCard(req.user.id, createTutorCardDto);
     }
@@ -45,8 +48,8 @@ export class ApiTutorsController {
     @ApiResponse({ status: 400, description: 'Invalid ID provided.' })
     @ApiResponse({ status: 404, description: 'Tutor card not found (e.g. P2001, P2015, P2018, P2025).' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
-    @Get(':id')
     @CacheControl('public', 3600)
+    @Get(':id')
     async getTutorCardById(@Param('id') id: number) {
         return this.tutorsService.getTutorCardById(id);
     }
@@ -63,8 +66,8 @@ export class ApiTutorsController {
     @ApiResponse({ status: 400, description: 'Invalid query parameters provided.' })
     @ApiResponse({ status: 404, description: 'No tutor cards found matching the criteria.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
-    @Get()
     @CacheControl('public', 3600)
+    @Get()
     async getTutorCardListBySubjectCategory(
         @Query('category') category: Category,
         @Query('page') page = 1,
@@ -83,6 +86,8 @@ export class ApiTutorsController {
         description: 'Conflict error due to unique or foreign key constraint failure during update.',
     })
     @ApiResponse({ status: 500, description: 'Internal server error during update.' })
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.ADMIN)
     @Patch(':id')
     async updateTutorCardById(@Param('id') id: number, @Body() updateTutorCardDto: UpdateTutorCardDto) {
         return this.tutorsService.updateTutorCardById(id, updateTutorCardDto);
@@ -99,8 +104,9 @@ export class ApiTutorsController {
         description: 'Conflict error due to unique or foreign key constraint failure during update.',
     })
     @ApiResponse({ status: 500, description: 'Internal server error during update.' })
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.TUTOR)
     @Patch()
-    @UseGuards(JwtAuthGuard)
     async updateTutorCardByAuthorId(@Req() req: RequestWithUser, @Body() updateTutorCardDto: UpdateTutorCardDto) {
         return this.tutorsService.updateTutorCardByAuthorId(req.user.id, updateTutorCardDto);
     }
@@ -109,6 +115,8 @@ export class ApiTutorsController {
     @ApiResponse({ status: 200, description: 'Tutor card deleted successfully.' })
     @ApiResponse({ status: 404, description: 'Tutor card not found.' })
     @ApiResponse({ status: 500, description: 'Internal server error during deletion.' })
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.ADMIN)
     @Delete(':id')
     async deleteTutorCardById(@Param('id') id: number) {
         return this.tutorsService.deleteTutorCardById(id);
@@ -119,7 +127,8 @@ export class ApiTutorsController {
     @ApiResponse({ status: 200, description: 'Tutor card deleted successfully.' })
     @ApiResponse({ status: 404, description: 'Tutor card not found for the given author.' })
     @ApiResponse({ status: 500, description: 'Internal server error during deletion.' })
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.TUTOR)
     @Delete()
     async deleteTutorCardByAuthorId(@Req() req: RequestWithUser) {
         return this.tutorsService.deleteTutorCardByAuthorId(req.user.id);

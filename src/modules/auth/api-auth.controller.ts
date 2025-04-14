@@ -25,8 +25,8 @@ export class ApiAuthController {
     })
     @ApiResponse({ status: 200, description: 'Authenticated successfully. Auth token is set in cookie.' })
     @ApiResponse({ status: 401, description: 'Invalid credentials.' })
-    @Post('/login')
     @UseGuards(LocalAuthGuard)
+    @Post('/login')
     login(@Req() req: RequestWithUser, @Res() res: Response) {
         const { access_token } = this.authService.login(req.user);
 

@@ -8,16 +8,17 @@ import {
     Delete,
     Param,
     Res,
+    UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { S3Service } from './image-storage.service';
 import { Response } from 'express';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('files')
 export class ImageStorageController {
     constructor(private readonly s3Service: S3Service) {}
 
-    @Post('upload')
     @UseInterceptors(
         FileInterceptor('file', {
             storage: undefined,
@@ -25,8 +26,7 @@ export class ImageStorageController {
                 fileSize: 5 * 1024 * 1024,
             },
             fileFilter: (req, file, cb) => {
-                // Разрешаем только JPEG, PNG и GIF (пример)
-                if (!file.mimetype.match(/^image\/(jpeg|png|gif)$/)) {
+                if (!file.mimetype.match(/^image\/(jpeg|png)$/)) {
                     cb(new BadRequestException('Unsupported file type'), false);
                 } else {
                     cb(null, true);
@@ -34,6 +34,8 @@ export class ImageStorageController {
             },
         }),
     )
+    @UseGuards(JwtAuthGuard)
+    @Post('upload')
     async uploadFile(@UploadedFile() file: Express.Multer.File) {
         if (!file) {
             throw new BadRequestException('No file provided');
@@ -43,6 +45,7 @@ export class ImageStorageController {
         return { url: fileUrl };
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get(':key')
     async getFile(@Param('key') key: string, @Res() res: Response) {
         const signedUrl = await this.s3Service.getSignedUrl(key);
@@ -50,6 +53,7 @@ export class ImageStorageController {
         return res.redirect(signedUrl);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':key')
     async deleteFile(@Param('key') key: string) {
         await this.s3Service.deleteFile(key);

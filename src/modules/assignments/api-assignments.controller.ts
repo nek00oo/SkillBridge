@@ -3,10 +3,12 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, Request,
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
-import { Category } from '@prisma/client';
+import { Category, Role } from '@prisma/client';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
 import { CacheControl } from '../../common/decorators/cache-control.decorator';
+import { RolesGuard } from '../../common/duards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
 
 @ApiTags('Assignments')
 @ApiBearerAuth()
@@ -17,8 +19,9 @@ export class ApiAssignmentsController {
     @ApiOperation({ summary: 'Create a new assignment' })
     @ApiResponse({ status: 201, description: 'Assignment created successfully' })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.TUTOR, Role.ADMIN)
     @Post()
-    @UseGuards(JwtAuthGuard)
     async createAssignment(@Body() createAssignmentDto: CreateAssignmentDto, @Request() req: RequestWithUser) {
         return await this.assignmentsService.createAssignment(createAssignmentDto, req.user.id);
     }
@@ -26,8 +29,8 @@ export class ApiAssignmentsController {
     @ApiOperation({ summary: 'Get assignment by ID' })
     @ApiResponse({ status: 200, description: 'Assignment retrieved successfully', type: CreateAssignmentDto })
     @ApiResponse({ status: 404, description: 'Assignment not found' })
-    @Get(':id')
     @CacheControl('private', 3600)
+    @Get(':id')
     async getAssigmentById(@Param('id') id: number) {
         return await this.assignmentsService.getAssignmentById(id);
     }
@@ -35,9 +38,9 @@ export class ApiAssignmentsController {
     @ApiOperation({ summary: 'Get assignments grouped by category for a student' })
     @ApiResponse({ status: 200, description: 'Assignments retrieved successfully', type: [CreateAssignmentDto] })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
-    @Get('/tasks')
     @CacheControl('private', 3600)
     @UseGuards(JwtAuthGuard)
+    @Get('/tasks')
     async getAssignmentsGroupByCategoryByStudentId(
         @Req() req: RequestWithUser,
         @Query('category') category?: Category,
@@ -48,6 +51,8 @@ export class ApiAssignmentsController {
     @ApiOperation({ summary: 'Update assignment by ID' })
     @ApiResponse({ status: 200, description: 'Assignment updated successfully' })
     @ApiResponse({ status: 404, description: 'Assignment not found' })
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.TUTOR, Role.ADMIN)
     @Patch(':id')
     async updateAssigmentById(@Param('id') id: number, @Body() updateAssignmentDto: UpdateAssignmentDto) {
         return await this.assignmentsService.updateAssignmentById(id, updateAssignmentDto);
@@ -56,6 +61,8 @@ export class ApiAssignmentsController {
     @ApiOperation({ summary: 'Delete assignment by ID' })
     @ApiResponse({ status: 200, description: 'Assignment deleted successfully' })
     @ApiResponse({ status: 404, description: 'Assignment not found' })
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(Role.TUTOR, Role.ADMIN)
     @Delete(':id')
     async deleteAssignmentById(@Param('id') id: number) {
         return await this.assignmentsService.deleteAssignmentById(id);
