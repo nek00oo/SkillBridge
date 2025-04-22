@@ -5,16 +5,11 @@ const editProfileModal = document.getElementById('editProfileModal');
 const modalTitle = document.getElementById('modalTitle');
 const tasksList = document.getElementById('tasksList');
 const editModeBtn = document.getElementById('editModeBtn');
-//const imageUpload = document.getElementById('imageUpload');
-//const imagePreview = document.getElementById('imagePreview');
 const profileImage = document.getElementById('profileImage');
-//const studentName = document.getElementById('studentName');
 const studentNameDisplay = document.getElementById('studentNameDisplay');
-//const studentSurname = document.getElementById('studentSurname');
 const studentSurnameDisplay = document.getElementById('studentSurnameDisplay');
 const studentAge = document.getElementById('studentAge');
 const studentAgeDisplay = document.getElementById('studentAgeDisplay');
-//const saveProfileBtn = document.getElementById('saveProfileBtn');
 
 document.addEventListener('DOMContentLoaded', () => {
     const eventSource = new EventSource('/assignments/sse', { withCredentials: true });

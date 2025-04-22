@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { PrismaTestService } from './prisma-test.service';
-// import { execSync } from 'child_process';
+import { execSync } from 'child_process';
 import { setupE2eTest } from './setup-e2e';
 
 type ResponseBody = { message: string };

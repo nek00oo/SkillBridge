@@ -49,8 +49,6 @@ async function bootstrap() {
         }),
     );
 
-    //app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-
     app.useGlobalFilters(new PrismaExceptionFilter(), new AllExceptionFilter());
 
     app.use(cookieParser());

@@ -44,6 +44,7 @@ describe('TutorsController (e2e)', () => {
     let app: INestApplication;
     let prisma: PrismaTestService;
     let tutorCardId: number;
+    let adminCookie: string;
     let cookie: string;
 
     const dto: CreateTutorCardDto = {
@@ -82,6 +83,7 @@ describe('TutorsController (e2e)', () => {
         const registrationRes = await request(app.getHttpServer()).post('/api/v1/auth/registration').send(author);
 
         cookie = registrationRes.headers['set-cookie'][0];
+        adminCookie = await registerAdmin(app);
     });
 
     afterAll(async () => {
@@ -126,6 +128,7 @@ describe('TutorsController (e2e)', () => {
         const res: ResponseWithTutorCard = await request(app.getHttpServer())
             .patch(`/api/v1/tutors/${tutorCardId}`)
             .send(updateDto)
+            .set('Cookie', adminCookie)
             .expect(200);
 
         expect(res.body.title).toBe(updateDto.title);
@@ -138,17 +141,28 @@ describe('TutorsController (e2e)', () => {
     });
 
     it('should return 404 for non-existent tutor card', async () => {
-        await request(app.getHttpServer()).patch('/api/v1/tutors/999999').send(updateDto).expect(404);
+        await request(app.getHttpServer())
+            .patch('/api/v1/tutors/999999')
+            .send(updateDto)
+            .set('Cookie', adminCookie)
+            .expect(404);
     });
 
     it('should return 400 for invalid data', async () => {
-        await request(app.getHttpServer()).patch(`/api/v1/tutors/${tutorCardId}`).send({ price: -10 }).expect(400);
+        await request(app.getHttpServer())
+            .patch(`/api/v1/tutors/${tutorCardId}`)
+            .send({ price: -10 })
+            .set('Cookie', adminCookie)
+            .expect(400);
     });
 
     it('should delete the tutor card by id', async () => {
-        await request(app.getHttpServer()).delete(`/api/v1/tutors/${tutorCardId}`).expect(200);
+        await request(app.getHttpServer())
+            .delete(`/api/v1/tutors/${tutorCardId}`)
+            .set('Cookie', adminCookie)
+            .expect(200);
 
-        await request(app.getHttpServer()).get(`/api/v1/tutors/${tutorCardId}`).expect(404);
+        await request(app.getHttpServer()).get(`/api/v1/tutors/${tutorCardId}`).set('Cookie', adminCookie).expect(404);
     });
 
     it('should delete tutor card by author ID', async () => {
@@ -253,6 +267,11 @@ describe('GET /api/v1/tutors (filter by category)', () => {
         ]);
     });
 
+    afterAll(async () => {
+        await prisma.cleanTutorCardTestDatabase();
+        await app.close();
+    });
+
     it('should return all tutor cards when no category specified', async () => {
         const res: ResponseWithTutorList = await request(app.getHttpServer()).get('/api/v1/tutors').expect(200);
 
@@ -282,8 +301,6 @@ describe('GET /api/v1/tutors (filter by category)', () => {
             .query({ category: 'CHEMISTRY' })
             .expect(200);
 
-        console.log(res);
-
         expect(res.body.tutors.length).toBe(1);
         expect(res.body.total).toBe(1);
         expect(res.body.tutors[0].title).toBe(cardDto5.title);
@@ -303,3 +320,16 @@ describe('GET /api/v1/tutors (filter by category)', () => {
         expect(res.body.total).toBe(0);
     });
 });
+
+async function registerAdmin(app: INestApplication): Promise<string> {
+    const admin: Author = {
+        email: 'tutor_card_test_admin@example.com',
+        firstname: 'Admin',
+        lastname: 'Super',
+        password: 'password123',
+        role: 'ADMIN',
+    };
+
+    const res = await request(app.getHttpServer()).post('/api/v1/auth/registration').send(admin);
+    return res.headers['set-cookie'][0];
+}

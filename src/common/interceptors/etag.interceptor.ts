@@ -1,7 +1,7 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
 import { Observable, EMPTY } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Response, Request } from 'express';
+import { Response, Request, json } from 'express';
 import { createHash } from 'crypto';
 
 @Injectable()
@@ -14,12 +14,15 @@ export class EtagInterceptor implements NestInterceptor {
                 if (contextType === 'http') {
                     const req: Request = context.switchToHttp().getRequest();
                     const res: Response = context.switchToHttp().getResponse();
+                    if (req.url.startsWith('/api/v1/auth')) {
+                        return next.handle(); // пропусти без ETag
+                    }
 
                     const etag = generateETag(body);
                     const clientETag = req.headers['if-none-match'];
 
                     if (etag === clientETag) {
-                        res.status(304);
+                        res.status(304).end();
                         return EMPTY;
                     } else {
                         res.setHeader('ETag', etag);

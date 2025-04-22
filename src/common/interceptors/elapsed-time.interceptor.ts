@@ -22,8 +22,9 @@ export class ElapsedTimeInterceptor implements NestInterceptor {
                     gqlContext.res.setHeader('X-Elapsed-Time', `${elapsed}ms`);
                 } else if (contextType === 'http') {
                     const res = context.switchToHttp().getResponse<Response>();
-
-                    res.setHeader('X-Elapsed-Time', `${elapsed}ms`);
+                    if (!res.headersSent) {
+                        res.setHeader('X-Elapsed-Time', `${elapsed}ms`);
+                    }
                 }
             }),
         );
