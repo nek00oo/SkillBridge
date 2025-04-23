@@ -24,9 +24,6 @@ async function bootstrap() {
 
     hbs.registerPartials(join(process.cwd(), 'views', 'partials'));
 
-    console.log('Views dir:', join(process.cwd(), 'views'));
-    console.log('Partials dir:', join(process.cwd(), 'views', 'partials'));
-
     hbs.registerHelper('percent', (completed, total) => {
         return ((completed / total) * 100).toFixed(2);
     });

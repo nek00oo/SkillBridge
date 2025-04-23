@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, UseFilters } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
@@ -6,9 +6,10 @@ import { UpdateReviewDto } from './dto/update-review.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RequestWithUser } from '../auth/interfaces/requestWithUser';
 import { CacheControl } from '../../common/decorators/cache-control.decorator';
-import { RolesGuard } from '../../common/duards/roles.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { Role } from '@prisma/client';
+import { UnauthorizedRedirectFilter } from '../auth/filters/unauthorized-redirect.filter';
 
 @ApiTags('Reviews')
 @Controller('/api/v1')
@@ -33,7 +34,7 @@ export class ApiReviewsController {
     @ApiResponse({ status: 200, description: 'Review retrieved successfully.', type: CreateReviewDto })
     @ApiResponse({ status: 404, description: 'Review not found (e.g. P2001, P2025).' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
-    @CacheControl('public', 3600)
+    @CacheControl('public', 360)
     @Get('reviews/:id')
     async getReviewById(@Param('id') id: number) {
         return this.reviewService.findReviewById(id);
@@ -44,7 +45,6 @@ export class ApiReviewsController {
     @ApiResponse({ status: 200, description: 'Reviews retrieved successfully.', type: [CreateReviewDto] })
     @ApiResponse({ status: 404, description: 'No reviews found for the given student.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
-    @CacheControl('public', 3600)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles(Role.ADMIN)
     @Get('students/:studentId/reviews')
@@ -57,7 +57,6 @@ export class ApiReviewsController {
     @ApiResponse({ status: 200, description: 'Reviews retrieved successfully.', type: [CreateReviewDto] })
     @ApiResponse({ status: 404, description: 'No reviews found for the given tutor card.' })
     @ApiResponse({ status: 500, description: 'Internal server error during retrieval.' })
-    @CacheControl('public', 3600)
     @Get('tutor-cards/:cardId/reviews')
     async getReviewsByCardId(@Param('cardId') cardId: number) {
         return this.reviewService.findReviewsByCardId(cardId);

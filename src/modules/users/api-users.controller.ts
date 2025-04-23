@@ -21,7 +21,7 @@ import { UnauthorizedRedirectFilter } from '../auth/filters/unauthorized-redirec
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResponseDto } from './dto/response-user.dto';
 import { CacheControl } from '../../common/decorators/cache-control.decorator';
-import { RolesGuard } from '../../common/duards/roles.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { Role } from '@prisma/client';
 
@@ -48,7 +48,7 @@ export class ApiUsersController {
         type: UserResponseDto,
     })
     @ApiResponse({ status: 404, description: 'User not found.' })
-    @CacheControl('public', 36000)
+    @CacheControl('public', 3600)
     @Get(':id')
     async getUserById(@Param('id') id: number): Promise<UserResponseDto> {
         return new UserResponseDto(await this.userService.getUserById(id));

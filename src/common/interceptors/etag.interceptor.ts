@@ -15,7 +15,11 @@ export class EtagInterceptor implements NestInterceptor {
                     const req: Request = context.switchToHttp().getRequest();
                     const res: Response = context.switchToHttp().getResponse();
                     if (req.url.startsWith('/api/v1/auth')) {
-                        return next.handle(); // пропусти без ETag
+                        return body;
+                    }
+
+                    if (res.headersSent) {
+                        return body;
                     }
 
                     const etag = generateETag(body);

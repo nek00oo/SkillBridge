@@ -8,7 +8,7 @@ import { UpdateTutorCardDto } from './dto/update-tutorCard.dto';
 import { Category, Role } from '@prisma/client';
 import { CacheControl } from '../../common/decorators/cache-control.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
-import { RolesGuard } from '../../common/duards/roles.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
 
 @ApiTags('Tutors')
 @Controller('/api/v1/tutors')

@@ -7,7 +7,7 @@ import { Category, Role } from '@prisma/client';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UpdateAssignmentDto } from './dto/update-assignment.dto';
 import { CacheControl } from '../../common/decorators/cache-control.decorator';
-import { RolesGuard } from '../../common/duards/roles.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 
 @ApiTags('Assignments')
@@ -26,19 +26,9 @@ export class ApiAssignmentsController {
         return await this.assignmentsService.createAssignment(createAssignmentDto, req.user.id);
     }
 
-    @ApiOperation({ summary: 'Get assignment by ID' })
-    @ApiResponse({ status: 200, description: 'Assignment retrieved successfully', type: CreateAssignmentDto })
-    @ApiResponse({ status: 404, description: 'Assignment not found' })
-    @CacheControl('private', 3600)
-    @Get(':id')
-    async getAssigmentById(@Param('id') id: number) {
-        return await this.assignmentsService.getAssignmentById(id);
-    }
-
     @ApiOperation({ summary: 'Get assignments grouped by category for a student' })
     @ApiResponse({ status: 200, description: 'Assignments retrieved successfully', type: [CreateAssignmentDto] })
     @ApiResponse({ status: 401, description: 'Unauthorized' })
-    @CacheControl('private', 3600)
     @UseGuards(JwtAuthGuard)
     @Get('/tasks')
     async getAssignmentsGroupByCategoryByStudentId(
@@ -46,6 +36,15 @@ export class ApiAssignmentsController {
         @Query('category') category?: Category,
     ) {
         return this.assignmentsService.getTitleCategoryByStudentId(req.user.id, category);
+    }
+
+    @ApiOperation({ summary: 'Get assignment by ID' })
+    @ApiResponse({ status: 200, description: 'Assignment retrieved successfully', type: CreateAssignmentDto })
+    @ApiResponse({ status: 404, description: 'Assignment not found' })
+    @CacheControl('private', 360)
+    @Get(':id')
+    async getAssigmentById(@Param('id') id: number) {
+        return await this.assignmentsService.getAssignmentById(id);
     }
 
     @ApiOperation({ summary: 'Update assignment by ID' })
