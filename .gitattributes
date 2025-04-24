@@ -1,2 +1,2 @@
-*.handlebars linguist-vendored
+*.hbs linguist-vendored
 *.css linguist-vendored
